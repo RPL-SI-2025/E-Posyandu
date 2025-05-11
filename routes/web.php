@@ -1,5 +1,8 @@
 <?php
 use App\Http\Controllers\AuthController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\DashboardController;
+
 
 // Route untuk halaman utama (welcome)
 Route::get('/', function () {
@@ -21,8 +24,5 @@ Route::post('/register', [AuthController::class, 'register'])->name('register.po
 // Route untuk logout
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-use Illuminate\Support\Facades\Route;
-
-Route::get('/dashboard', function () {
-    return view('dashboard.admin.index');
-});
+// Route untuk halaman dashboard admin
+Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('dashboard.admin.index');
