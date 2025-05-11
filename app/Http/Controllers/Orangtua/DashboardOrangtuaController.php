@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Orangtua;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class DashboardController extends Controller
+class DashboardOrangtuaController extends Controller
 {
     /**
      * Tampilkan halaman dashboard untuk orangtua.
