@@ -26,7 +26,7 @@
                     </a>
                     <a class="nav-link {{ request()->routeIs('admin.inspection.index') ? 'active' : '' }}" href="{{ route('admin.inspection.index') }}">
                         <img src="{{ asset('assets/home.png') }}" alt="Logo" style="height: 25px; margin-right: 8px;">
-                        Kunjungan 
+                        Visited
                     </a>
                 </div>
             </div>
