@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Orangtua\DashboardOrangtuaController;
 use App\Http\Controllers\Petugas\DashboardPetugasController;
-
+use App\Http\Controllers\InspectionController;
 
 // Route untuk halaman utama (welcome)
 Route::get('/', function () {
@@ -28,6 +28,16 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Route untuk halaman dashboard admin
 Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('dashboard.admin.index');
+
+Route::prefix('admin')->name('dashboard.admin.inspection.')->group(function () {
+    Route::get('/kunjungan', [InspectionController::class, 'index'])->name('index');
+    Route::get('/kunjungan/create', [InspectionController::class, 'create'])->name('create');
+    Route::post('/kunjungan', [InspectionController::class, 'store'])->name('store');
+    Route::get('/kunjungan/{inspection}/edit', [InspectionController::class, 'edit'])->name('edit');
+    Route::put('/kunjungan/{inspection}', [InspectionController::class, 'update'])->name('update');
+    Route::delete('/kunjungan/{inspection}', [InspectionController::class, 'destroy'])->name('destroy');
+});
+
 
 // Route untuk halaman dashboard petugas
 

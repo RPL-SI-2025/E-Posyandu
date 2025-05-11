@@ -20,8 +20,8 @@
                         <img src="{{ asset('assets/home.png') }}" alt="Logo" style="height: 25px; margin-right: 8px;">
                         Jadwal Kegiatan
                     </a>
-                    <a class="nav-link" href="#">
-                        <img src="{{ asset('assets/home.png') }}" alt="Logo" style="height: 25px; margin-right: 8px;">
+                    <a class="nav-link {{ request()->routeIs('dashboard.admin.inspection.index') ? 'active' : '' }}" href="{{ route('dashboard.admin.inspection.index') }}">
+                        <img src="{{ asset('assets/hospital.png') }}" alt="Logo" style="height: 25px; margin-right: 8px;">
                         Kunjungan 
                     </a>
                 </div>

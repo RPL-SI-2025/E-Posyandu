@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Inspection;
+use App\Models\Child;
+use App\Models\Eventtime;
+
 
 class InspectionController extends Controller
 {
@@ -13,7 +17,7 @@ class InspectionController extends Controller
     {
         // Mendapatkan semua data pemeriksaan dengan relasi anak dan jadwal
         $inspections = Inspection::with(['child', 'eventtime', 'user'])->get();
-        return response()->json($inspections);
+        return view('dashboard.admin.inspection.index', compact('inspections'));
     }
 
     /**
@@ -24,7 +28,7 @@ class InspectionController extends Controller
         // Jika menggunakan view untuk form create
         $children = Child::all();
         $eventtimes = Eventtime::all();
-        return view('inspections.create', compact('children', 'eventtimes'));
+        return view('dashboard.admin.inspections.create', compact('children', 'eventtimes'));
     }
 
     /**
@@ -67,7 +71,7 @@ class InspectionController extends Controller
         // Jika menggunakan view untuk form edit
         $children = Child::all();
         $eventtimes = Eventtime::all();
-        return view('inspections.edit', compact('inspection', 'children', 'eventtimes'));
+        return view('dashboard.admin.inspections.edit', compact('inspection', 'children', 'eventtimes'));
     }
 
     /**
