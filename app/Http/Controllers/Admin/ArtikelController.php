@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Artikel;
 use Illuminate\Http\Request;
 
@@ -10,12 +11,12 @@ class ArtikelController extends Controller
     public function index()
     {
         $artikels = Artikel::all();
-        return view('admin-side.artikel.index', compact('artikels'));
+        return view('dashboard.admin.artikel.index', compact('artikels'));
     }
 
     public function create()
     {
-        return view('admin-side.artikel.create');
+        return view('dashboard.admin.artikel.create');
     }
 
     public function store(Request $request)
@@ -23,45 +24,52 @@ class ArtikelController extends Controller
         $request->validate([
             'judul' => 'required|string|max:255',
             'isi' => 'required',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('artikel', 'public');
+        }
 
         Artikel::create([
             'judul' => $request->judul,
             'isi' => $request->isi,
             'author' => 'Admin',
             'is_show' => $request->has('is_show') ? 1 : 0,
+            // 'gambar' => $imagePath, // Uncomment jika ada kolom gambar di tabel
         ]);
 
-        return redirect()->route('artikel.index')->with('success', 'Artikel berhasil disimpan');
+        return redirect()->route('dashboard.admin.artikel.index')->with('success', 'Artikel berhasil disimpan');
     }
 
     public function show($id)
     {
         $artikel = Artikel::findOrFail($id);
-        return view('admin-side.artikel.show', compact('artikel'));
+        return view('dashboard.admin.artikel.show', compact('artikel'));
     }
 
     public function edit($id)
     {
         $artikel = Artikel::findOrFail($id);
-        return view('admin-side.artikel.edit', compact('artikel'));
+        return view('dashboard.admin.artikel.edit', compact('artikel'));
     }
 
     public function update(Request $request, $id)
     {
         $request->validate([
             'judul' => 'required|string|max:255',
-            'content' => 'required',
+            'isi' => 'required',
         ]);
 
         $artikel = Artikel::findOrFail($id);
         $artikel->update([
             'judul' => $request->judul,
-            'isi' => $request->content,
+            'isi' => $request->isi,
             'is_show' => $request->has('is_show') ? 1 : 0,
         ]);
 
-        return redirect()->route('artikel.index')->with('success', 'Artikel berhasil diperbarui');
+        return redirect()->route('dashboard.admin.artikel.index')->with('success', 'Artikel berhasil diperbarui');
     }
 
     public function destroy($id)
@@ -69,6 +77,6 @@ class ArtikelController extends Controller
         $artikel = Artikel::findOrFail($id);
         $artikel->delete();
 
-        return redirect()->route('artikel.index');
+        return redirect()->route('dashboard.admin.artikel.index')->with('success', 'Artikel berhasil dihapus');
     }
 }
