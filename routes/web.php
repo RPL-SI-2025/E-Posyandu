@@ -1,14 +1,22 @@
 <?php
+use App\Http\Controllers\AuthController;
 
-use Illuminate\Support\Facades\Route;
+// Route untuk halaman utama (welcome)
+Route::get('/', function () {
+    return view('welcome'); // Mengarahkan ke view welcome.blade.php
+})->name('welcome');
 
-Route::get('/dashboard', function () {
-    $role = auth()->user()->role;
+// Route untuk menampilkan halaman login
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 
-    return match ($role) {
-        'admin' => view('dashboards.admin.index'),
-        'petugas' => view('dashboards.petugas.index'),
-        'orangtua' => view('dashboards.orangtua.index'),
-        default => redirect('/')
-    };
-})->name('dashboard');
+// Route untuk menampilkan halaman register
+Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
+
+// Route untuk proses login
+Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+
+// Route untuk proses register
+Route::post('/register', [AuthController::class, 'register'])->name('register.post');
+
+// Route untuk logout
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

@@ -41,13 +41,23 @@ class AuthController extends Controller
 
         // Cek kredensial
         if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-            $token = $user->createToken('auth_token')->plainTextToken;
+            $request->session()->regenerate();
 
-            return response()->json(['message' => 'Login successful', 'token' => $token, 'user' => $user]);
+            // Arahkan ke dashboard sesuai role
+            $role = Auth::user()->role;
+
+            return match ($role) {
+                'admin' => redirect()->route('admin.dashboard'),
+                'petugas' => redirect()->route('petugas.dashboard'),
+                'orangtua' => redirect()->route('orangtua.dashboard'),
+                default => redirect('/'),
+            };
         }
 
-        return response()->json(['message' => 'Invalid credentials'], 401);
+        // Jika login gagal
+        return back()->withErrors([
+            'email' => 'Email atau password salah.',
+        ]);
     }
 
     /**
@@ -67,5 +77,21 @@ class AuthController extends Controller
     public function me(Request $request)
     {
         return response()->json($request->user());
+    }
+
+    /**
+     * Tampilkan halaman login.
+     */
+    public function showLoginForm()
+    {
+        return view('auth.login'); // Mengarahkan ke view auth/login.blade.php
+    }
+
+    /**
+     * Tampilkan halaman register.
+     */
+    public function showRegisterForm()
+    {
+        return view('auth.register'); // Mengarahkan ke view auth/register.blade.php
     }
 }
