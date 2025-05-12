@@ -1,7 +1,7 @@
 <div id="layoutSidenav_nav">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-white">
         <!-- Navbar Brand-->
-        <a class="navbar-brand ps-3" href="#">
+        <a class="navbar-brand ps-3" href="{{ route('dashboard.admin.index') }}">
             <img src="{{ asset('assets/logo.png') }}" alt="Logo" style="height: 47px;">
         </a>
 

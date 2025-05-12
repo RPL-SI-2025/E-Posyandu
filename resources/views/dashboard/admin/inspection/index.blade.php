@@ -18,7 +18,7 @@
         {{-- Card Daftar Pemeriksaan --}}
         <div class="card">
         <div class="card-header d-flex justify-content-between align-items-center flex-wrap">
-            <h5 class="mb-0"><i class="fas fa-table"></i> Daftar Pemeriksaan</h5>
+            <h7 class="mb-0"><i class="fas fa-table"></i> Daftar Pemeriksaan</h7>
 
             {{-- Filter, Search, Tambah --}}
             <div class="d-flex align-items-center gap-3 flex-wrap">
@@ -37,8 +37,6 @@
                     <button type="submit" class="btn btn-primary px-3">Search</button>
                     </div>
                 </form>
-
-                {{-- Tombol Refresh --}}
 
                 {{-- Tombol Filter --}}
                 <div class="dropdown">
@@ -66,7 +64,8 @@
                                 </select>
                             </div>
 
-                            <button type="submit" class="btn btn-primary w-100">Terapkan Filter</button>
+                            <button type="submit" class="btn btn-primary w-100 mb-2">Terapkan Filter</button>
+                            <a href="{{ route('dashboard.admin.inspection.index') }}" class="btn btn-secondary w-100">Hapus Filter</a>
                         </form>
                     </div>
                 </div>
