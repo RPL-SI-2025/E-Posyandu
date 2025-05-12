@@ -10,7 +10,8 @@
                         Dashboard
                     </a>
 
-                    <a class="nav-link" href="#">
+                    <a class="nav-link {{ request()->routeIs('dashboard.admin.balita.*') ? 'active' : '' }}" 
+                       href="{{ route('dashboard.admin.balita.index') }}">
                         <img src="{{ asset('assets/home.png') }}" alt="Logo" style="height: 25px; margin-right: 8px;">
                         Balita
                     </a>
