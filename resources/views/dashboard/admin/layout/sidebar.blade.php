@@ -21,7 +21,7 @@
                         Artikel
                     </a>
 
-                    <a class="nav-link" href="#">
+                    <a class="nav-link {{ request()->routeIs('dashboard.admin.event.*') ? 'active' : '' }}" href="{{ route('dashboard.admin.event.index') }}">
                         <img src="{{ asset('assets/home.png') }}" alt="Logo" style="height: 25px; margin-right: 8px;">
                         Jadwal Kegiatan
                     </a>
