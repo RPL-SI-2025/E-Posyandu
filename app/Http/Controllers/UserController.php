@@ -3,17 +3,40 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
 
 class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        // Mendapatkan semua data pengguna
-        $users = User::all();
-        return response()->json($users);
+        // Start with base query
+        $query = User::query();
+        
+        // Filter by role if specified
+        if ($request->filled('role') && in_array($request->role, ['admin', 'petugas', 'orangtua'])) {
+            $query->where('role', $request->role);
+        }
+        
+        // Search by name, email, or phone if search term is provided
+        if ($request->filled('search')) {
+            $searchTerm = '%' . $request->search . '%';
+            $query->where(function($q) use ($searchTerm) {
+                $q->where('name', 'like', $searchTerm)
+                  ->orWhere('email', 'like', $searchTerm)
+                  ->orWhere('phone', 'like', $searchTerm);
+            });
+        }
+        
+        // Get users with applied filters and search
+        $users = $query->get();
+        
+        // Pass the current filter values to the view for form persistence
+        return view('dashboard.admin.users.index', compact('users'))
+            ->with('selectedRole', $request->role)
+            ->with('searchTerm', $request->search);
     }
 
     /**
@@ -21,8 +44,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        // Jika menggunakan view untuk form create
-        return view('users.create');
+        return view('dashboard.admin.users.create');
     }
 
     /**
@@ -40,11 +62,13 @@ class UserController extends Controller
             'address' => 'nullable|string',
         ]);
 
-        // Simpan data pengguna
-        $validated['password'] = Hash::make($validated['password']);
+        // Hash the password before storing
+        $validated['password'] = bcrypt($validated['password']);
+
+        // Create user
         $user = User::create($validated);
 
-        return response()->json(['message' => 'User created successfully', 'data' => $user], 201);
+        return redirect()->route('user.index')->with('success', 'User berhasil ditambahkan.');
     }
 
     /**
@@ -52,7 +76,6 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        // Menampilkan detail pengguna
         return response()->json($user);
     }
 
@@ -61,8 +84,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        // Jika menggunakan view untuk form edit
-        return view('users.edit', compact('user'));
+        return view('dashboard.admin.users.edit', compact('user'));
     }
 
     /**
@@ -80,16 +102,17 @@ class UserController extends Controller
             'address' => 'nullable|string',
         ]);
 
-        // Update data pengguna
-        if ($request->filled('password')) {
-            $validated['password'] = Hash::make($validated['password']);
-        } else {
+        // Jika password dikosongkan, jangan update field password
+        if (!$request->filled('password')) {
             unset($validated['password']);
+        } else {
+            // Hash the password if provided
+            $validated['password'] = bcrypt($validated['password']);
         }
 
         $user->update($validated);
 
-        return response()->json(['message' => 'User updated successfully', 'data' => $user]);
+        return redirect()->route('user.index')->with('success', 'User berhasil diperbarui.');
     }
 
     /**
@@ -97,9 +120,8 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        // Hapus data pengguna
         $user->delete();
 
-        return response()->json(['message' => 'User deleted successfully']);
+        return redirect()->route('user.index')->with('success', 'User berhasil dihapus.');
     }
 }

@@ -23,7 +23,11 @@
                     <a class="nav-link" href="#">
                         <img src="{{ asset('assets/home.png') }}" alt="Logo" style="height: 25px; margin-right: 8px;">
                         Kunjungan 
-                    </a>
+                        <a class="nav-link" href="{{ route('user.index') }}">
+    <img src="{{ asset('assets/home.png') }}" alt="Logo" style="height: 25px; margin-right: 8px;">
+    User 
+</a>
+
                 </div>
             </div>
         </nav>

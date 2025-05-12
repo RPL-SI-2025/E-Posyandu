@@ -1,28 +1,23 @@
 <?php
-use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\UserController;
 
+Route::resource('user', UserController::class);
 
-// Route untuk halaman utama (welcome)
-Route::get('/', function () {
-    return view('welcome'); // Mengarahkan ke view welcome.blade.php
-})->name('welcome');
+// Halaman utama
+Route::get('/', fn () => view('welcome'))->name('welcome');
 
-// Route untuk menampilkan halaman login
+// Auth routes
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-
-// Route untuk menampilkan halaman register
-Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
-
-// Route untuk proses login
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
-
-// Route untuk proses register
+Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
 Route::post('/register', [AuthController::class, 'register'])->name('register.post');
-
-// Route untuk logout
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Route untuk halaman dashboard admin
+// Dashboard admin
 Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('dashboard.admin.index');
+
+// Alias agar route('dashboard') tidak error
+Route::get('/dashboard', fn () => redirect()->route('dashboard.admin.index'))->name('dashboard');
