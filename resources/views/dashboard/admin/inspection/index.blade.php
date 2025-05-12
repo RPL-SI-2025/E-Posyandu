@@ -21,16 +21,17 @@
         <div class="card">
             <div class="card-body">
                 <table class="table table-bordered table-striped mb-0">
-                    <thead class="table-light">
+                    <thead class="table-light text-center">
                         <tr>
                             <th>No</th>
                             <th>Nama Anak</th>
+                            <th>Nama Orangtua</th>
                             <th>Tanggal Pemeriksaan</th>
                             <th>Berat Badan (kg)</th>
                             <th>Tinggi Badan (cm)</th>
                             <th>Lingkar Kepala (cm)</th>
-                            <th>Posyandu</th>
-                            <th>Petugas</th>
+                            <th>Catatan</th>
+                            <th>Lokasi Penimbangan</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -38,13 +39,15 @@
                         @forelse ($inspections as $index => $inspection)
                             <tr>
                                 <td>{{ $index + 1 }}</td>
-                                <td>{{ $inspection->child->nama ?? '-' }}</td>
+                                <td>{{ $inspection->child->nama_anak ?? '-' }}</td>
+                                <td>{{ $inspection->user->name ?? '-' }}</td>
                                 <td>{{ \Carbon\Carbon::parse($inspection->tanggal_pemeriksaan)->format('d-m-Y') }}</td>
                                 <td>{{ $inspection->berat_badan }}</td>
                                 <td>{{ $inspection->tinggi_badan }}</td>
                                 <td>{{ $inspection->lingkar_kepala ?? '-' }}</td>
-                                <td>{{ $inspection->eventtime->nama_event ?? '-' }}</td>
-                                <td>{{ $inspection->user->name ?? '-' }}</td>
+                                <td>{{ $inspection->catatan ?? '-'}}</td>
+                                <td>{{ $inspection->eventtime->lokasi ?? '-' }}</td>
+                                
                                 <td>
                                     <a href="{{ route('dashboard.admin.inspection.edit', $inspection->id) }}" class="btn btn-sm btn-warning">Edit</a>
 

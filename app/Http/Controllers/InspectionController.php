@@ -28,7 +28,7 @@ class InspectionController extends Controller
         // Jika menggunakan view untuk form create
         $children = Child::all();
         $eventtimes = Eventtime::all();
-        return view('dashboard.admin.inspections.create', compact('children', 'eventtimes'));
+        return view('dashboard.admin.inspection.create', compact('children', 'eventtimes'));
     }
 
     /**
@@ -51,7 +51,7 @@ class InspectionController extends Controller
         // Simpan data pemeriksaan
         $inspection = Inspection::create($validated);
 
-        return response()->json(['message' => 'Inspection created successfully', 'data' => $inspection], 201);
+        return redirect()->route('dashboard.admin.inspection.index')->with('success', 'Data berhasil ditambahkan');
     }
 
     /**
@@ -71,7 +71,7 @@ class InspectionController extends Controller
         // Jika menggunakan view untuk form edit
         $children = Child::all();
         $eventtimes = Eventtime::all();
-        return view('dashboard.admin.inspections.edit', compact('inspection', 'children', 'eventtimes'));
+        return view('dashboard.admin.inspection.edit', compact('inspection', 'children', 'eventtimes'));
     }
 
     /**
