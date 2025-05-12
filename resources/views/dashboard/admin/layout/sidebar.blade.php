@@ -13,7 +13,7 @@
                         Balita
                     </a>
                     <a class="nav-link {{ request()->routeIs('dashboard.admin.artikel.*') ? 'active' : '' }}" href="{{ route('dashboard.admin.artikel.index') }}">
-                        <img src="{{ asset('assets/home.png') }}" alt="Logo" style="height: 25px; margin-right: 8px;">
+                        <img src="{{ asset('assets/News.png') }}" alt="Logo" style="height: 25px; margin-right: 8px;">
                         Artikel
                     </a>
                     <a class="nav-link" href="#">

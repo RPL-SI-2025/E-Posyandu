@@ -17,10 +17,70 @@
 
         {{-- Card Daftar Pemeriksaan --}}
         <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0"><i class="fas fa-table"></i> Daftar Pemeriksaan</h5>
-                <a href="{{ route('dashboard.admin.inspection.create') }}" class="btn btn-primary">+ Tambah Pemeriksaan</a>
+        <div class="card-header d-flex justify-content-between align-items-center flex-wrap">
+            <h5 class="mb-0"><i class="fas fa-table"></i> Daftar Pemeriksaan</h5>
+
+            {{-- Filter, Search, Tambah --}}
+            <div class="d-flex align-items-center gap-3 flex-wrap">
+                
+                {{-- Search bar --}}
+                <form method="GET" action="{{ route('dashboard.admin.inspection.index') }}" class="d-flex align-items-center" style="border: 1px solid #ccc; border-radius: 6px; overflow: hidden;">
+                    <div class="d-flex align-items-center">
+                    <input 
+                        type="text" 
+                        name="search" 
+                        value="{{ request('search') }}" 
+                        class="form-control border-0" 
+                        placeholder="Search with name" 
+                        style="width: 180px;"
+                    >
+                    <button type="submit" class="btn btn-primary px-3">Search</button>
+                    </div>
+                </form>
+
+                {{-- Tombol Refresh --}}
+
+                {{-- Tombol Filter --}}
+                <div class="dropdown">
+                    <button style="border: none; background: none; padding: 0;" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="{{ asset('assets/filter.png') }}" alt="Filter" width="30">
+                    </button>
+                    <div class="dropdown-menu p-4" style="min-width: 300px;" aria-labelledby="filterDropdown">
+                        <form method="GET" action="{{ route('dashboard.admin.inspection.index') }}">
+                            {{-- Tanggal Pemeriksaan --}}
+                            <div class="mb-3">
+                                <label for="tanggal_pemeriksaan" class="form-label">Tanggal Pemeriksaan</label>
+                                <input type="date" name="tanggal_pemeriksaan" id="tanggal_pemeriksaan" class="form-control" value="{{ request('tanggal_pemeriksaan') }}">
+                            </div>
+
+                            {{-- Lokasi Penimbangan --}}
+                            <div class="mb-3">
+                                <label for="lokasi" class="form-label">Lokasi Penimbangan</label>
+                                <select name="lokasi" id="lokasi" class="form-select">
+                                    <option value="">-- Semua Lokasi --</option>
+                                    @foreach ($eventtimes as $et)
+                                        <option value="{{ $et->lokasi }}" {{ request('lokasi') == $et->lokasi ? 'selected' : '' }}>
+                                            {{ $et->lokasi }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">Terapkan Filter</button>
+                        </form>
+                    </div>
+                </div>
+
+                {{-- Tombol Tambah --}}
+                <a href="{{ route('dashboard.admin.inspection.create') }}">
+                    <img src="{{ asset('assets/more.png') }}" alt="Tambah" width="30"> 
+                </a>
             </div>
+        </div>
+
+
+            {{-- Error Validation --}}
+
             <div class="card-body">
 
                 {{-- Flash message --}}
@@ -57,19 +117,26 @@
                                 <td>{{ $inspection->catatan ?? '-'}}</td>
                                 <td>{{ $inspection->eventtime->lokasi ?? '-' }}</td>
                                 
-                                <td>
-                                    <a href="{{ route('dashboard.admin.inspection.edit', $inspection->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                                <td class="text-center">
+                                    <div class="d-flex justify-content-center align-items-center gap-2">
+                                        <a href="{{ route('dashboard.admin.inspection.edit', $inspection->id) }}">
+                                            <img src="{{ asset('assets/edit.png') }}" alt="Edit" width="25">
+                                        </a>
 
-                                    <form action="{{ route('dashboard.admin.inspection.destroy', $inspection->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="btn btn-sm btn-danger">Hapus</button>
-                                    </form>
+                                        <form action="{{ route('dashboard.admin.inspection.destroy', $inspection->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button style="border: none; background: none; padding: 0;" type="submit">
+                                                <img src="{{ asset('assets/bin.png') }}" alt="Hapus" width="25">
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
+
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="text-center">Belum ada data pemeriksaan</td>
+                                <td colspan="10" class="text-center">Belum ada data pemeriksaan</td>
                             </tr>
                         @endforelse
                     </tbody>

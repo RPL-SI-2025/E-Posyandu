@@ -7,6 +7,7 @@ use App\Http\Controllers\Orangtua\DashboardOrangtuaController;
 use App\Http\Controllers\Petugas\DashboardPetugasController;
 use App\Http\Controllers\InspectionController;
 
+
 // Route untuk halaman utama (welcome)
 Route::get('/', function () {
     return view('welcome'); // Mengarahkan ke view welcome.blade.php

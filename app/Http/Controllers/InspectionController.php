@@ -13,12 +13,33 @@ class InspectionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        // Mendapatkan semua data pemeriksaan dengan relasi anak dan jadwal
-        $inspections = Inspection::with(['child', 'eventtime', 'user'])->get();
-        return view('dashboard.admin.inspection.index', compact('inspections'));
+        // Ambil lokasi unik dari tabel eventtime
+        $eventtimes = Eventtime::select('lokasi')->distinct()->get();
+
+        // Filter data jika ada request filter
+        $inspections = Inspection::query()
+            ->with(['child', 'eventtime', 'user'])
+            ->when($request->tanggal_pemeriksaan, function ($query) use ($request) {
+                $query->whereDate('tanggal_pemeriksaan', $request->tanggal_pemeriksaan);
+            })
+            ->when($request->lokasi, function ($query) use ($request) {
+                $query->whereHas('eventtime', function ($q) use ($request) {
+                    $q->where('lokasi', $request->lokasi);
+                });
+            })
+            ->when($request->search, function ($query) use ($request) {
+                $query->whereHas('child', function ($q) use ($request) {
+                    $q->where('nama_anak', 'like', '%' . $request->search . '%');
+                });
+            })
+            ->get();
+
+        return view('dashboard.admin.inspection.index', compact('inspections', 'eventtimes'));
     }
+
+
 
     /**
      * Show the form for creating a new resource.
