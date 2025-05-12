@@ -1,9 +1,14 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ArtikelController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\Orangtua\DashboardOrangtuaController;
+use App\Http\Controllers\Petugas\DashboardPetugasController;
 
+// Resource route untuk user
 Route::resource('user', UserController::class);
 
 // Halaman utama
@@ -21,3 +26,18 @@ Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('das
 
 // Alias agar route('dashboard') tidak error
 Route::get('/dashboard', fn () => redirect()->route('dashboard.admin.index'))->name('dashboard');
+
+// Artikel routes
+Route::get('/admin/artikel', [ArtikelController::class, 'index'])->name('dashboard.admin.artikel.index');
+Route::get('/admin/artikel/create', [ArtikelController::class, 'create'])->name('dashboard.admin.artikel.create');
+Route::post('/admin/artikel', [ArtikelController::class, 'store'])->name('dashboard.admin.artikel.store');
+Route::get('/admin/artikel/{id}', [ArtikelController::class, 'show'])->name('dashboard.admin.artikel.show');
+Route::get('/admin/artikel/{id}/edit', [ArtikelController::class, 'edit'])->name('dashboard.admin.artikel.edit');
+Route::delete('/admin/artikel/{id}', [ArtikelController::class, 'destroy'])->name('dashboard.admin.artikel.destroy');
+Route::put('/admin/artikel/{id}', [ArtikelController::class, 'update'])->name('dashboard.admin.artikel.update');
+
+// Dashboard petugas
+Route::get('/petugas/dashboard', [DashboardPetugasController::class, 'index'])->name('dashboard.petugas.index');
+
+// Dashboard orangtua
+Route::get('/orangtua/dashboard', [DashboardOrangtuaController::class, 'index'])->name('dashboard.orangtua.index');
