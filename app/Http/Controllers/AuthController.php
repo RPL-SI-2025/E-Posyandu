@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -25,7 +28,10 @@ class AuthController extends Controller
         $validated['password'] = Hash::make($validated['password']);
         $user = User::create($validated);
 
-        return response()->json(['message' => 'User registered successfully', 'data' => $user], 201);
+        // Assign role using Spatie
+        $user->assignRole($validated['role']);
+
+        return redirect()->route('login')->with('success', 'Registration successful! Please login to continue.');
     }
 
     /**
@@ -47,9 +53,9 @@ class AuthController extends Controller
             $role = Auth::user()->role;
 
             return match ($role) {
-                'admin' => redirect()->route('admin.dashboard'),
-                'petugas' => redirect()->route('petugas.dashboard'),
-                'orangtua' => redirect()->route('orangtua.dashboard'),
+                'admin' => redirect()->route('dashboard.admin.index'),
+                'petugas' => redirect()->route('dashboard.petugas.index'),
+                'orangtua' => redirect()->route('dashboard.orangtua.index'),
                 default => redirect('/'),
             };
         }
@@ -65,10 +71,12 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
-        // Hapus token autentikasi
-        $request->user()->currentAccessToken()->delete();
-
-        return response()->json(['message' => 'Logout successful']);
+        Auth::logout();
+        
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        
+        return redirect('/');
     }
 
     /**

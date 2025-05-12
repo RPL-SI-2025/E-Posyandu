@@ -84,11 +84,11 @@
                                             Dashboard
                                         </a>
                                     @else
-                                        <a href="{{ route('login') }}" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-red-600 bg-white hover:bg-gray-50 border-red-600">
+                                        <a href="{{ route('login') }}" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-red-600 bg-white hover:bg-gray-50 border-red-600 shadow-lg">
                                             Login
                                         </a>
                                         @if (Route::has('register'))
-                                            <a href="{{ route('register') }}" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-red-600 hover:bg-red-700">
+                                            <a href="{{ route('register') }}" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-red-600 hover:bg-red-700 shadow-lg">
                                                 Register
                                             </a>
                                         @endif
@@ -157,14 +157,14 @@
                 
                 <div class="relative">
                     <!-- Timeline Line -->
-                    <div class="absolute h-full w-1 bg-white left-1/2 transform -translate-x-1/2"></div>
+                    <div class="absolute h-full w-1 bg-white rounded left-1/2 transform -translate-x-1/2"></div>
                     
                     <!-- Timeline Items -->
                     <div class="space-y-12">
                         <!-- Timeline Item 1 -->
                         <div class="flex justify-center items-center">
-                            <div class="relative w-full md:w-1/2 flex">
-                                <div class="w-full md:w-1/2 p-4">
+                            <div class="relative w-full md:w-2/3 flex">
+                                <div class="w-full md:w-2/3 p-4">
                                     <div class="bg-white bg-opacity-20 backdrop-blur-lg rounded-xl p-6 shadow-lg">
                                         <img src="{{ asset('assets/jpg2png/profile.jpg') }}" alt="Event 1" class="w-full h-48 object-cover rounded-lg mb-4">
                                         <div class="text-white">
@@ -179,8 +179,8 @@
 
                         <!-- Timeline Item 2 -->
                         <div class="flex justify-center items-center">
-                            <div class="relative w-full md:w-1/2 flex md:ml-auto">
-                                <div class="w-full md:w-1/2 p-4">
+                            <div class="relative w-full md:w-2/3 flex md:ml-auto">
+                                <div class="w-full md:w-2/3 p-4">
                                     <div class="bg-white bg-opacity-20 backdrop-blur-lg rounded-xl p-6 shadow-lg">
                                         <img src="{{ asset('assets/jpg2png/profile.jpg') }}" alt="Event 2" class="w-full h-48 object-cover rounded-lg mb-4">
                                         <div class="text-white">
@@ -195,8 +195,8 @@
 
                         <!-- Timeline Item 3 -->
                         <div class="flex justify-center items-center">
-                            <div class="relative w-full md:w-1/2 flex">
-                                <div class="w-full md:w-1/2 p-4">
+                            <div class="relative w-full md:w-2/3 flex">
+                                <div class="w-full md:w-2/3 p-4">
                                     <div class="bg-white bg-opacity-20 backdrop-blur-lg rounded-xl p-6 shadow-lg">
                                         <img src="{{ asset('assets/jpg2png/profile.jpg') }}" alt="Event 3" class="w-full h-48 object-cover rounded-lg mb-4">
                                         <div class="text-white">
