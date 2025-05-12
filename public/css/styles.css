@@ -357,12 +357,14 @@ th {
     text-align: -webkit-match-parent;
 }
 
+
 thead,
 tbody,
 tfoot,
 tr,
 td,
 th {
+    vertical-align: middle;
     border-color: inherit;
     border-style: solid;
     border-width: 0;

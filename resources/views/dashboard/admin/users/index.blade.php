@@ -1,4 +1,5 @@
 @extends('dashboard.admin.layout.app')
+
 @include('dashboard.admin.layout.sidebar')
 
 @section('content')
@@ -174,3 +175,4 @@
     </div>
 </div>
 @endsection
+

@@ -1,4 +1,5 @@
-@extends('dashboard.admin.users.app')
+@extends('dashboard.admin.layout.app')
+
 @section('content')
 <div class="container">
     <div class="row">
