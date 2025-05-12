@@ -1,7 +1,5 @@
 @extends('dashboard.admin.layout.app')
 
-@include('dashboard.admin.layout.sidebar')
-
 @section('content')
 <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -9,30 +7,41 @@
         <a href="{{ route('user.create') }}" class="btn btn-primary">Tambah Akun</a>
     </div>
 
-    <!-- Filter and Search Section -->
+    <!-- Filter dan Pencarian -->
     <div class="card mb-4">
         <div class="card-body">
-            <form action="{{ route('user.index') }}" method="GET" class="row g-3">
-                <div class="col-md-4">
-                    <label for="role" class="form-label">Filter berdasarkan Role:</label>
-                    <select name="role" id="role" class="form-select" onchange="this.form.submit()">
-                        <option value="">Semua Role</option>
-                        @foreach(['admin', 'petugas', 'orangtua'] as $role)
-                            <option value="{{ $role }}" {{ isset($selectedRole) && $selectedRole == $role ? 'selected' : '' }}>
-                                {{ ucfirst($role) }}
-                            </option>
-                        @endforeach
-                    </select>
+            <form action="{{ route('user.index') }}" method="GET" class="d-flex gap-3">
+                <div class="d-flex gap-2">
+                    <div class="col-md-4">
+                        <label for="role" class="form-label">Role:</label>
+                        <select name="role" id="role" class="form-select" onchange="this.form.submit()">
+                            <option value="">Semua Role</option>
+                            @foreach(['admin', 'petugas', 'orangtua'] as $role)
+                                <option value="{{ $role }}" {{ isset($selectedRole) && $selectedRole == $role ? 'selected' : '' }}>
+                                    {{ ucfirst($role) }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="verifikasi" class="form-label">Verifikasi:</label>
+                        <select name="verifikasi" id="verifikasi" class="form-select" onchange="this.form.submit()">
+                            <option value="">Semua Status</option>
+                            <option value="waiting" {{ isset($selectedVerifikasi) && $selectedVerifikasi == 'waiting' ? 'selected' : '' }}>Menunggu</option>
+                            <option value="approved" {{ isset($selectedVerifikasi) && $selectedVerifikasi == 'approved' ? 'selected' : '' }}>Disetujui</option>
+                            <option value="rejected" {{ isset($selectedVerifikasi) && $selectedVerifikasi == 'rejected' ? 'selected' : '' }}>Ditolak</option>
+                        </select>
+                    </div>
                 </div>
 
-                <div class="col-md-8">
-                    <label for="search" class="form-label">Cari berdasarkan Nama, Email, atau Telepon:</label>
+                <div class="col-md-4">
+                    <label for="search" class="form-label">Cari:</label>
                     <div class="input-group">
-                        <input type="text" name="search" id="search" class="form-control" placeholder="Cari..." value="{{ $searchTerm ?? '' }}">
+                        <input type="text" name="search" class="form-control" placeholder="Cari..." value="{{ $searchTerm ?? '' }}">
                         <button class="btn btn-outline-secondary" type="submit">
                             <i class="bi bi-search"></i> Cari
                         </button>
-                        @if(request()->has('search') || request()->has('role'))
+                        @if(request()->has('search') || request()->has('role') || request()->has('verifikasi'))
                             <a href="{{ route('user.index') }}" class="btn btn-outline-danger">
                                 <i class="bi bi-x-circle"></i> Reset
                             </a>
@@ -43,11 +52,7 @@
         </div>
     </div>
 
-    <div class="mb-3">
-        <p>Menampilkan {{ $users->count() }} pengguna</p>
-    </div>
-
-    <!-- Users Table -->
+    <!-- Daftar Pengguna -->
     <div class="card">
         <div class="card-body">
             <div class="table-responsive">
@@ -76,9 +81,9 @@
                                 <td>{{ $user->phone }}</td>
                                 <td>{{ Str::limit($user->address, 30) }}</td>
                                 <td>
-                                    @if($user->status_akun == 'approved')
-                                        <span class="badge bg-success">Terverifikasi</span>
-                                    @elseif($user->status_akun == 'rejected')
+                                    @if($user->verifikasi == 'approved')
+                                        <span class="badge bg-success">Disetujui</span>
+                                    @elseif($user->verifikasi == 'rejected')
                                         <span class="badge bg-danger">Ditolak</span>
                                     @else
                                         <span class="badge bg-secondary">Menunggu</span>
@@ -97,10 +102,11 @@
                                                 </a>
                                             </li>
 
+                                            <!-- Verifikasi -->
                                             @if(auth()->user()->role === 'admin')
-                                                @if($user->status_akun !== 'approved')
+                                                @if($user->verifikasi !== 'approved')
                                                     <li>
-                                                        <form action="{{ route('user.updateStatus', $user->id) }}" method="POST" onsubmit="return confirm('Setujui pengguna ini?')">
+                                                        <form action="{{ route('user.updateStatus', $user->id) }}" method="POST">
                                                             @csrf
                                                             @method('PUT')
                                                             <input type="hidden" name="status_akun" value="approved">
@@ -111,9 +117,9 @@
                                                     </li>
                                                 @endif
 
-                                                @if($user->status_akun !== 'rejected')
+                                                @if($user->verifikasi !== 'rejected')
                                                     <li>
-                                                        <form action="{{ route('user.updateStatus', $user->id) }}" method="POST" onsubmit="return confirm('Tolak pengguna ini?')">
+                                                        <form action="{{ route('user.updateStatus', $user->id) }}" method="POST">
                                                             @csrf
                                                             @method('PUT')
                                                             <input type="hidden" name="status_akun" value="rejected">
@@ -144,7 +150,7 @@
                                 <td colspan="7" class="text-center py-4">
                                     <div class="alert alert-info mb-0">
                                         Tidak ada data pengguna yang ditemukan
-                                        @if(request()->has('search') || request()->has('role'))
+                                        @if(request()->has('search') || request()->has('role') || request()->has('verifikasi'))
                                             dengan filter yang dipilih.
                                             <a href="{{ route('user.index') }}" class="alert-link">Reset filter</a>
                                         @endif
@@ -157,22 +163,5 @@
             </div>
         </div>
     </div>
-
-    <!-- Status Filter Section -->
-    <div class="card mb-4">
-        <div class="card-body">
-            <form method="GET" action="{{ route('user.index') }}" class="d-flex flex-wrap gap-2">
-                <input type="text" name="search" value="{{ request()->search }}" class="form-control" placeholder="Search...">
-                <select name="status_akun" class="form-select">
-                    <option value="">Semua Status</option>
-                    <option value="waiting" {{ request()->status_akun == 'waiting' ? 'selected' : '' }}>Waiting</option>
-                    <option value="approved" {{ request()->status_akun == 'approved' ? 'selected' : '' }}>Approved</option>
-                    <option value="rejected" {{ request()->status_akun == 'rejected' ? 'selected' : '' }}>Rejected</option>
-                </select>
-                <button type="submit" class="btn btn-primary">Filter</button>
-            </form>
-        </div>
-    </div>
 </div>
 @endsection
-
