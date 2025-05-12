@@ -46,10 +46,10 @@
                                 <tr>
                                     <th>Jenis Kelamin</th>
                                     <td>: 
-                                        @if($balita->jenis_kelamin == 'L')
-                                            <span class="badge bg-primary">Laki-laki</span>
-                                        @else
+                                        @if($balita->jenis_kelamin == 'perempuan')
                                             <span class="badge bg-info">Perempuan</span>
+                                        @else
+                                            <span class="badge bg-primary">Laki-laki</span>
                                         @endif
                                     </td>
                                 </tr>
