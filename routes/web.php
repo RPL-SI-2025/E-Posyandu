@@ -41,3 +41,4 @@ Route::get('/petugas/dashboard', [DashboardPetugasController::class, 'index'])->
 
 // Dashboard orangtua
 Route::get('/orangtua/dashboard', [DashboardOrangtuaController::class, 'index'])->name('dashboard.orangtua.index');
+
