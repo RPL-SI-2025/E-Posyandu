@@ -3,18 +3,43 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Inspection;
+use App\Models\Child;
+use App\Models\Eventtime;
+
 
 class InspectionController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        // Mendapatkan semua data pemeriksaan dengan relasi anak dan jadwal
-        $inspections = Inspection::with(['child', 'eventtime', 'user'])->get();
-        return response()->json($inspections);
+        // Ambil lokasi unik dari tabel eventtime
+        $eventtimes = Eventtime::select('lokasi')->distinct()->get();
+
+        // Filter data jika ada request filter
+        $inspections = Inspection::query()
+            ->with(['child', 'eventtime', 'user'])
+            ->when($request->tanggal_pemeriksaan, function ($query) use ($request) {
+                $query->whereDate('tanggal_pemeriksaan', $request->tanggal_pemeriksaan);
+            })
+            ->when($request->lokasi, function ($query) use ($request) {
+                $query->whereHas('eventtime', function ($q) use ($request) {
+                    $q->where('lokasi', $request->lokasi);
+                });
+            })
+            ->when($request->search, function ($query) use ($request) {
+                $query->whereHas('child', function ($q) use ($request) {
+                    $q->where('nama_anak', 'like', '%' . $request->search . '%');
+                });
+            })
+            ->get();
+
+        return view('dashboard.admin.inspection.index', compact('inspections', 'eventtimes'));
     }
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -24,7 +49,7 @@ class InspectionController extends Controller
         // Jika menggunakan view untuk form create
         $children = Child::all();
         $eventtimes = Eventtime::all();
-        return view('inspections.create', compact('children', 'eventtimes'));
+        return view('dashboard.admin.inspection.create', compact('children', 'eventtimes'));
     }
 
     /**
@@ -47,7 +72,7 @@ class InspectionController extends Controller
         // Simpan data pemeriksaan
         $inspection = Inspection::create($validated);
 
-        return response()->json(['message' => 'Inspection created successfully', 'data' => $inspection], 201);
+        return redirect()->route('dashboard.admin.inspection.index')->with('success', 'Data berhasil ditambahkan');
     }
 
     /**
@@ -67,7 +92,7 @@ class InspectionController extends Controller
         // Jika menggunakan view untuk form edit
         $children = Child::all();
         $eventtimes = Eventtime::all();
-        return view('inspections.edit', compact('inspection', 'children', 'eventtimes'));
+        return view('dashboard.admin.inspection.edit', compact('inspection', 'children', 'eventtimes'));
     }
 
     /**
@@ -90,7 +115,7 @@ class InspectionController extends Controller
         // Update data pemeriksaan
         $inspection->update($validated);
 
-        return response()->json(['message' => 'Inspection updated successfully', 'data' => $inspection]);
+        return redirect()->route('dashboard.admin.inspection.index')->with('success', 'Data pemeriksaan berhasil diperbarui');
     }
 
     /**
@@ -101,6 +126,6 @@ class InspectionController extends Controller
         // Hapus data pemeriksaan
         $inspection->delete();
 
-        return response()->json(['message' => 'Inspection deleted successfully']);
+        return redirect()->route('dashboard.admin.inspection.index')->with('success', 'Data pemeriksaan berhasil dihapus');
     }
 }

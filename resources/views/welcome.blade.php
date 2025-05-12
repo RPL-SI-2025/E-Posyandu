@@ -47,7 +47,7 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between h-16">
                     <div class="flex items-center">
-                        <h1 class="text-2xl font-bold text-red-600">E-Posyandu</h1>
+                        <h1 class="text-2xl font-bold text-blue-600">E-Posyandu</h1>
                     </div>
                     
                     <div class="flex items-center">
@@ -56,7 +56,7 @@
                         @else
                             <a href="{{ route('login') }}" class="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900">Login</a>
                             @if (Route::has('register'))
-                                <a href="{{ route('register') }}" class="ml-4 px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700">Register</a>
+                                <a href="{{ route('register') }}" class="ml-4 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700">Register</a>
                             @endif
                         @endauth
                     </div>
@@ -73,22 +73,22 @@
                             <div class="text-center lg:text-left lg:max-w-xl">
                                 <h1 class="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
                                     <span class="block">Selamat Datang di</span>
-                                    <span class="block text-red-600">E-Posyandu</span>
+                                    <span class="block text-blue-600">E-Posyandu</span>
                                 </h1>
                                 <p class="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
                                     Sistem informasi posyandu digital untuk memudahkan pemantauan kesehatan ibu dan anak.
                                 </p>
                                 <div class="mt-8 flex justify-center lg:justify-start space-x-4">
                                     @auth
-                                        <a href="{{ url('/dashboard') }}" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-red-600 hover:bg-red-700">
+                                        <a href="{{ url('/dashboard') }}" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
                                             Dashboard
                                         </a>
                                     @else
-                                        <a href="{{ route('login') }}" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-red-600 bg-white hover:bg-gray-50 border-red-600 shadow-lg">
+                                        <a href="{{ route('login') }}" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-blue-600 bg-white hover:bg-gray-50 border-blue-600" Dusk="Login-button1">
                                             Login
                                         </a>
                                         @if (Route::has('register'))
-                                            <a href="{{ route('register') }}" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-red-600 hover:bg-red-700 shadow-lg">
+                                            <a href="{{ route('register') }}" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
                                                 Register
                                             </a>
                                         @endif
@@ -107,7 +107,7 @@
         <!-- About Section -->
         <div class="py-12 bg-gray-50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center bg-red-600 text-white rounded-xl p-8 shadow-lg bg-grainy">
+                <div class="text-center bg-blue-600 text-white rounded-xl p-8 shadow-lg bg-grainy">
                     <h2 class="text-3xl font-extrabold">Tentang E-Posyandu</h2>
                     <p class="mt-4 text-lg">
                         E-Posyandu adalah sistem informasi digital yang membantu dalam pencatatan dan pemantauan kesehatan ibu dan anak. Sistem Infromasi ini mencakup role admin, petugas, dan user orangtua. Sistem ini mempermudah petugas kader dan orangtua dalam melihat report dan perkembangan anak secara daily, weekly, monthly, dan yearly.
@@ -124,21 +124,21 @@
                     <div class="mt-10">
                         <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3">
                             <div class="p-6 bg-gray-50 rounded-lg shadow-lg">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-600 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                 </svg>
                                 <h3 class="text-lg font-medium text-gray-900">Pencatatan Digital</h3>
                                 <p class="mt-2 text-base text-gray-500">Pencatatan data kesehatan ibu dan anak secara digital</p>
                             </div>
                             <div class="p-6 bg-gray-50 rounded-lg shadow-lg">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-600 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
                                 </svg>
                                 <h3 class="text-lg font-medium text-gray-900">Pemantauan Kesehatan</h3>
                                 <p class="mt-2 text-base text-gray-500">Pemantauan tumbuh kembang anak secara berkala</p>
                             </div>
                             <div class="p-6 bg-gray-50 rounded-lg shadow-lg">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-600 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
                                 <h3 class="text-lg font-medium text-gray-900">Reminder Jadwal</h3>
@@ -151,7 +151,7 @@
         </div>
 
         <!-- Documentation Section -->
-        <div class="py-12 bg-red-600">
+        <div class="py-12 bg-blue-600">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <h2 class="text-3xl font-extrabold text-white text-center mb-12">Dokumentasi Kegiatan</h2>
                 
@@ -260,7 +260,7 @@
         <footer class="bg-white">
             <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
                 <div class="text-center">
-                    <p class="text-base text-gray-400">&copy; 2024 E-Posyandu. All rights reserved.</p>
+                    <p class="text-base text-gray-400">&copy; 2025 E-Posyandu. All rights reserved.</p>
                 </div>
             </div>
         </footer>
