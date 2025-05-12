@@ -9,6 +9,15 @@
     </ol>
     <div class="card mb-4">
         <div class="card-body">
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
             <form action="{{ route('dashboard.admin.artikel.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="mb-3">
@@ -17,7 +26,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="isi" class="form-label">Konten</label>
-                    <textarea class="form-control" id="isi" name="isi" rows="5" required>{{ old('isi', isset($artikel) ? $artikel->isi : '') }}</textarea>
+                    <textarea class="form-control" id="isi" name="isi" rows="5">{{ old('isi', isset($artikel) ? $artikel->isi : '') }}</textarea>
                 </div>
                 <div class="mb-3">
                     <label for="image" class="form-label">Gambar</label>

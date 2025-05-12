@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="bg-blue-500 min-h-screen flex items-center justify-center p-4">
     <div class="w-full max-w-md">
@@ -21,7 +22,7 @@
             </div>
             @endif
             
-            <form action="{{ route('register.post') }}" method="POST">
+            <form action="{{ route('register.post') }}" method="POST" id="registerForm">
                 @csrf
                 <input type="hidden" name="role" value="orangtua">
                 
@@ -87,5 +88,65 @@
             </form>
         </div>
     </div>
+
+    <script>
+        // Check for form submission success
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            // We'll let the form submit normally, but we'll add client-side validation
+            // to ensure all required fields are filled
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const passwordConfirmation = document.getElementById('password_confirmation').value;
+            
+            if (!name || !email || !password || !passwordConfirmation) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Validation Error',
+                    text: 'Please fill in all required fields',
+                    confirmButtonColor: '#EF4444',
+                });
+                return;
+            }
+            
+            if (password !== passwordConfirmation) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Password Mismatch',
+                    text: 'Password and confirmation do not match',
+                    confirmButtonColor: '#EF4444',
+                });
+                return;
+            }
+            
+            if (password.length < 8) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Password Too Short',
+                    text: 'Password must be at least 8 characters long',
+                    confirmButtonColor: '#EF4444',
+                });
+                return;
+            }
+        });
+    </script>
+    
+    @if (session('success'))
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                icon: 'success',
+                title: 'Registration Successful!',
+                text: 'Please login to continue',
+                confirmButtonColor: '#EF4444',
+            }).then((result) => {
+                window.location.href = "{{ route('login') }}";
+            });
+        });
+    </script>
+    @endif
 </body>
 </html>

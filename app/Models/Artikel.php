@@ -15,6 +15,7 @@ class Artikel extends Model
         'id_artikel',
         'judul',
         'isi',
+        'gambar',
         'author',
         'is_show',
         'created_at',

@@ -21,26 +21,13 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->configureRateLimiting();
-
         $this->routes(function () {
-            Route::middleware('web')->group(base_path('routes/web.php'));
+            Route::middleware('api')
+                ->prefix('api')
+                ->group(base_path('routes/api.php'));
 
-            Route::middleware(['web', 'auth', 'role:admin'])->prefix('admin')->group(base_path('routes/admin.php'));
-
-            Route::middleware(['web', 'auth', 'role:petugas'])->prefix('petugas')->group(base_path('routes/petugas.php'));
-            
-            Route::middleware(['web', 'auth', 'role:orangtua'])->prefix('orangtua')->group(base_path('routes/orangtua.php'));
-        });
-    }
-
-    /**
-     * Configure the rate limiters for the application.
-     */
-    protected function configureRateLimiting(): void
-    {
-        RateLimiter::for('api', function (Request $request) {
-            return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
+            Route::middleware('web')
+                ->group(base_path('routes/web.php'));
         });
     }
 }

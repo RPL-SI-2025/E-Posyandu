@@ -35,9 +35,9 @@ class ArtikelController extends Controller
         Artikel::create([
             'judul' => $request->judul,
             'isi' => $request->isi,
+            'gambar' => $imagePath,
             'author' => 'Admin',
             'is_show' => $request->has('is_show') ? 1 : 0,
-            // 'gambar' => $imagePath, // Uncomment jika ada kolom gambar di tabel
         ]);
 
         return redirect()->route('dashboard.admin.artikel.index')->with('success', 'Artikel berhasil disimpan');
@@ -63,11 +63,14 @@ class ArtikelController extends Controller
         ]);
 
         $artikel = Artikel::findOrFail($id);
-        $artikel->update([
-            'judul' => $request->judul,
-            'isi' => $request->isi,
-            'is_show' => $request->has('is_show') ? 1 : 0,
-        ]);
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('artikel', 'public');
+            $artikel->gambar = $imagePath;
+        }
+        $artikel->judul = $request->judul;
+        $artikel->isi = $request->isi;
+        $artikel->is_show = $request->has('is_show') ? 1 : 0;
+        $artikel->save();
 
         return redirect()->route('dashboard.admin.artikel.index')->with('success', 'Artikel berhasil diperbarui');
     }
