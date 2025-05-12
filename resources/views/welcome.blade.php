@@ -84,7 +84,7 @@
                                             Dashboard
                                         </a>
                                     @else
-                                        <a href="{{ route('login') }}" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-blue-600 bg-white hover:bg-gray-50 border-blue-600">
+                                        <a href="{{ route('login') }}" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-blue-600 bg-white hover:bg-gray-50 border-blue-600" Dusk="Login-button1">
                                             Login
                                         </a>
                                         @if (Route::has('register'))

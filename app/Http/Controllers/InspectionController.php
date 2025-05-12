@@ -115,7 +115,7 @@ class InspectionController extends Controller
         // Update data pemeriksaan
         $inspection->update($validated);
 
-        return response()->json(['message' => 'Inspection updated successfully', 'data' => $inspection]);
+        return redirect()->route('dashboard.admin.inspection.index')->with('success', 'Data pemeriksaan berhasil diperbarui');
     }
 
     /**
@@ -126,6 +126,6 @@ class InspectionController extends Controller
         // Hapus data pemeriksaan
         $inspection->delete();
 
-        return response()->json(['message' => 'Inspection deleted successfully']);
+        return redirect()->route('dashboard.admin.inspection.index')->with('success', 'Data pemeriksaan berhasil dihapus');
     }
 }

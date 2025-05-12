@@ -40,7 +40,7 @@
 
                 {{-- Tombol Filter --}}
                 <div class="dropdown">
-                    <button style="border: none; background: none; padding: 0;" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button style="border: none; background: none; padding: 0;" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false" Dusk="filter-inspection">
                         <img src="{{ asset('assets/filter.png') }}" alt="Filter" width="30">
                     </button>
                     <div class="dropdown-menu p-4" style="min-width: 300px;" aria-labelledby="filterDropdown">
@@ -65,15 +65,16 @@
                             </div>
 
                             <button type="submit" class="btn btn-primary w-100 mb-2">Terapkan Filter</button>
-                            <a href="{{ route('dashboard.admin.inspection.index') }}" class="btn btn-secondary w-100">Hapus Filter</a>
+                            <a href="{{ route('dashboard.admin.inspection.index') }}" class="btn btn-secondary w-100" Dusk='filter-delete'>Hapus Filter</a>
                         </form>
                     </div>
                 </div>
 
                 {{-- Tombol Tambah --}}
-                <a href="{{ route('dashboard.admin.inspection.create') }}">
+                <a href="{{ route('dashboard.admin.inspection.create') }}" dusk="create-inspection">
                     <img src="{{ asset('assets/more.png') }}" alt="Tambah" width="30"> 
                 </a>
+
             </div>
         </div>
 
@@ -118,11 +119,12 @@
                                 
                                 <td class="text-center">
                                     <div class="d-flex justify-content-center align-items-center gap-2">
-                                        <a href="{{ route('dashboard.admin.inspection.edit', $inspection->id) }}">
+                                        <a href="{{ route('dashboard.admin.inspection.edit', $inspection->id) }}" dusk="edit-inspection">
                                             <img src="{{ asset('assets/edit.png') }}" alt="Edit" width="25">
                                         </a>
 
-                                        <form action="{{ route('dashboard.admin.inspection.destroy', $inspection->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
+                                        <form action="{{ route('dashboard.admin.inspection.destroy', $inspection->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus data ini?')" dusk="delete-inspection">
+                                            {{-- CSRF Token --}}
                                             @csrf
                                             @method('DELETE')
                                             <button style="border: none; background: none; padding: 0;" type="submit">
