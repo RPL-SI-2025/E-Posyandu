@@ -1,4 +1,4 @@
-@extends('dashboard.admin.users.app')
+@extends('dashboard.admin.layout.app')
 @include('dashboard.admin.layout.sidebar')
 @section('content')
 <div class="container">
@@ -25,7 +25,7 @@
                 <div class="col-md-8">
                     <label for="search" class="form-label">Cari berdasarkan Nama, Email, atau Telepon:</label>
                     <div class="input-group">
-                        <input type="text" class="form-control" id="search" name="search" 
+                        <input type="text" class="form-control" id="search" name="search"
                                placeholder="Cari..." value="{{ $searchTerm ?? '' }}">
                         <button class="btn btn-outline-secondary" type="submit">
                             <i class="bi bi-search"></i> Cari

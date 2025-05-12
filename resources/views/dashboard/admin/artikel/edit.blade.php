@@ -20,6 +20,15 @@
                     <label for="isi" class="form-label">Konten</label>
                     <textarea class="form-control" id="isi" name="isi" rows="5" required>{{ $artikel->isi }}</textarea>
                 </div>
+                <div class="mb-3">
+                    <label for="image" class="form-label">Gambar</label>
+                    <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                </div>
+                @if($artikel->gambar)
+                    <div class="mb-3">
+                        <img src="{{ asset('storage/' . $artikel->gambar) }}" alt="Gambar Artikel" style="max-width: 200px;">
+                    </div>
+                @endif
                 <div class="form-check mb-3">
                     <input class="form-check-input" type="checkbox" id="is_show" name="is_show" value="1" {{ $artikel->is_show ? 'checked' : '' }}>
                     <label class="form-check-label" for="is_show">Tampilkan Artikel</label>

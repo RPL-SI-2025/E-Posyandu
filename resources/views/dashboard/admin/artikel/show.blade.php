@@ -21,6 +21,11 @@
                 @endif
             </p>
             <hr>
+            @if($artikel->gambar)
+                <div class="mb-3">
+                    <img src="{{ asset('storage/' . $artikel->gambar) }}" alt="Gambar Artikel" style="max-width: 400px;">
+                </div>
+            @endif
             <div>
                 {!! $artikel->isi !!}
             </div>
