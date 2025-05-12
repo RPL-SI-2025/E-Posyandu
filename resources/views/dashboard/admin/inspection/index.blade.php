@@ -5,22 +5,31 @@
 @section('content')
 <main>
     <div class="container-fluid px-4 mt-4">
-        <h3 class="mb-4">Data Pemeriksaan Anak</h3>
+        <h3 class="mb-4">Pemeriksaan Anak</h3>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item">
+                <a href="{{ route('dashboard.admin.index') }}">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item active">Pemeriksaan</li>
+        </ol>
 
-        {{-- Tombol Tambah Data --}}
-        <div class="mb-3 text-end">
-            <a href="{{ route('dashboard.admin.inspection.create') }}" class="btn btn-success">+ Tambah Pemeriksaan</a>
-        </div>
+        <div class="container-fluid px-4 mt-4">
 
-        {{-- Flash message --}}
-        @if(session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
-        @endif
-
-        {{-- Tabel Data Pemeriksaan --}}
+        {{-- Card Daftar Pemeriksaan --}}
         <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-table"></i> Daftar Pemeriksaan</h5>
+                <a href="{{ route('dashboard.admin.inspection.create') }}" class="btn btn-primary">+ Tambah Pemeriksaan</a>
+            </div>
             <div class="card-body">
-                <table class="table table-bordered table-striped mb-0">
+
+                {{-- Flash message --}}
+                @if(session('success'))
+                    <div class="alert alert-success">{{ session('success') }}</div>
+                @endif
+
+                {{-- Tabel --}}
+                <table class="table table-bordered mb-0">
                     <thead class="table-light text-center">
                         <tr>
                             <th>No</th>
@@ -60,13 +69,15 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="9" class="text-center">Belum ada data pemeriksaan</td>
+                                <td colspan="5" class="text-center">Belum ada data pemeriksaan</td>
                             </tr>
                         @endforelse
                     </tbody>
                 </table>
+
             </div>
         </div>
-    </div>
+
+        </div>
 </main>
 @endsection
