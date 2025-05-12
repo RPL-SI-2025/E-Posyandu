@@ -8,7 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Orangtua\DashboardOrangtuaController;
 use App\Http\Controllers\Petugas\DashboardPetugasController;
 
-// Resource route untuk user
+// Resource route untuk user (tanpa auth)
 Route::resource('user', UserController::class);
 
 // Halaman utama
@@ -21,13 +21,13 @@ Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('regi
 Route::post('/register', [AuthController::class, 'register'])->name('register.post');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Dashboard admin
+// Dashboard admin (tanpa middleware)
 Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('dashboard.admin.index');
 
 // Alias agar route('dashboard') tidak error
 Route::get('/dashboard', fn () => redirect()->route('dashboard.admin.index'))->name('dashboard');
 
-// Artikel routes
+// Artikel routes (tanpa middleware)
 Route::get('/admin/artikel', [ArtikelController::class, 'index'])->name('dashboard.admin.artikel.index');
 Route::get('/admin/artikel/create', [ArtikelController::class, 'create'])->name('dashboard.admin.artikel.create');
 Route::post('/admin/artikel', [ArtikelController::class, 'store'])->name('dashboard.admin.artikel.store');
@@ -42,3 +42,5 @@ Route::get('/petugas/dashboard', [DashboardPetugasController::class, 'index'])->
 // Dashboard orangtua
 Route::get('/orangtua/dashboard', [DashboardOrangtuaController::class, 'index'])->name('dashboard.orangtua.index');
 
+// Status Verifikasi
+Route::put('/user/{user}/verifikasi', [UserController::class, 'updateStatus'])->name('user.updateStatus');
