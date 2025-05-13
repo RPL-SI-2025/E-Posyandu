@@ -10,9 +10,14 @@
                         Dashboard
                     </a>
 
+                    <a class="nav-link" href="{{ route('user.index') }}">
+                        <img src="{{ asset('assets/user.png') }}" alt="Logo" style="height: 25px; margin-right: 8px;">
+                        User
+                    </a>
+
                     <a class="nav-link {{ request()->routeIs('dashboard.admin.balita.*') ? 'active' : '' }}" 
                        href="{{ route('dashboard.admin.balita.index') }}">
-                        <img src="{{ asset('assets/home.png') }}" alt="Logo" style="height: 25px; margin-right: 8px;">
+                        <img src="{{ asset('assets/Baby Feet.png') }}" alt="Logo" style="height: 25px; margin-right: 8px;">
                         Balita
                     </a>
 
@@ -22,19 +27,13 @@
                     </a>
 
                     <a class="nav-link" href="#">
-                        <img src="{{ asset('assets/home.png') }}" alt="Logo" style="height: 25px; margin-right: 8px;">
+                        <img src="{{ asset('assets/Schedule.png') }}" alt="Logo" style="height: 25px; margin-right: 8px;">
                         Jadwal Kegiatan
                     </a>
                     <a class="nav-link {{ request()->routeIs('dashboard.admin.inspection.index') ? 'active' : '' }}" href="{{ route('dashboard.admin.inspection.index') }}">
                         <img src="{{ asset('assets/hospital.png') }}" alt="Logo" style="height: 25px; margin-right: 8px;">
                         Kunjungan 
                     </a>
-
-                    <a class="nav-link" href="{{ route('user.index') }}">
-                        <img src="{{ asset('assets/home.png') }}" alt="Logo" style="height: 25px; margin-right: 8px;">
-                        User
-                    </a>
-                    
                 </div>
             </div>
         </nav>
