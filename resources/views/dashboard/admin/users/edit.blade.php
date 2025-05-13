@@ -17,6 +17,17 @@
                         @csrf
                         @method('PUT')
                         @include('dashboard.admin.users.form', ['user' => $user])
+
+                        <!-- Status Verifikasi -->
+                        <div class="mb-3">
+                            <label for="status_akun" class="form-label">Status Verifikasi</label>
+                            <select name="status_akun" id="status_akun" class="form-select">
+                                <option value="waiting" {{ old('status_akun', $user->verifikasi) == 'waiting' ? 'selected' : '' }}>Waiting</option>
+                                <option value="approved" {{ old('status_akun', $user->verifikasi) == 'approved' ? 'selected' : '' }}>Approved</option>
+                                <option value="rejected" {{ old('status_akun', $user->verifikasi) == 'rejected' ? 'selected' : '' }}>Rejected</option>
+                            </select>
+                        </div>
+
                         <div class="text-end mt-4">
                             <a href="{{ route('user.index') }}" class="btn btn-secondary">
                                 <i class="bi bi-x-circle"></i> Batal

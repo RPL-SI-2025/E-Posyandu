@@ -7,30 +7,41 @@
         <a href="{{ route('user.create') }}" class="btn btn-primary">Tambah Akun</a>
     </div>
 
-    <!-- Filter and Search Section -->
+    <!-- Filter dan Pencarian -->
     <div class="card mb-4">
         <div class="card-body">
-            <form action="{{ route('user.index') }}" method="GET" class="row g-3">
-                <div class="col-md-4">
-                    <label for="role" class="form-label">Filter berdasarkan Role:</label>
-                    <select name="role" id="role" class="form-select" onchange="this.form.submit()">
-                        <option value="">Semua Role</option>
-                        @foreach(['admin', 'petugas', 'orangtua'] as $role)
-                            <option value="{{ $role }}" {{ isset($selectedRole) && $selectedRole == $role ? 'selected' : '' }}>
-                                {{ ucfirst($role) }}
-                            </option>
-                        @endforeach
-                    </select>
+            <form action="{{ route('user.index') }}" method="GET" class="d-flex gap-3">
+                <div class="d-flex gap-2">
+                    <div class="col-md-4">
+                        <label for="role" class="form-label">Role:</label>
+                        <select name="role" id="role" class="form-select" onchange="this.form.submit()">
+                            <option value="">Semua Role</option>
+                            @foreach(['admin', 'petugas', 'orangtua'] as $role)
+                                <option value="{{ $role }}" {{ isset($selectedRole) && $selectedRole == $role ? 'selected' : '' }}>
+                                    {{ ucfirst($role) }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="verifikasi" class="form-label">Verifikasi:</label>
+                        <select name="verifikasi" id="verifikasi" class="form-select" onchange="this.form.submit()">
+                            <option value="">Semua Status</option>
+                            <option value="waiting" {{ isset($selectedVerifikasi) && $selectedVerifikasi == 'waiting' ? 'selected' : '' }}>Menunggu</option>
+                            <option value="approved" {{ isset($selectedVerifikasi) && $selectedVerifikasi == 'approved' ? 'selected' : '' }}>Disetujui</option>
+                            <option value="rejected" {{ isset($selectedVerifikasi) && $selectedVerifikasi == 'rejected' ? 'selected' : '' }}>Ditolak</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="col-md-8">
-                    <label for="search" class="form-label">Cari berdasarkan Nama, Email, atau Telepon:</label>
+
+                <div class="col-md-4">
+                    <label for="search" class="form-label">Cari:</label>
                     <div class="input-group">
-                        <input type="text" class="form-control" id="search" name="search"
-                               placeholder="Cari..." value="{{ $searchTerm ?? '' }}">
+                        <input type="text" name="search" class="form-control" placeholder="Cari..." value="{{ $searchTerm ?? '' }}">
                         <button class="btn btn-outline-secondary" type="submit">
                             <i class="bi bi-search"></i> Cari
                         </button>
-                        @if(request()->has('search') || request()->has('role'))
+                        @if(request()->has('search') || request()->has('role') || request()->has('verifikasi'))
                             <a href="{{ route('user.index') }}" class="btn btn-outline-danger">
                                 <i class="bi bi-x-circle"></i> Reset
                             </a>
@@ -41,12 +52,7 @@
         </div>
     </div>
 
-    <!-- Results Count -->
-    <div class="mb-3">
-        <p>Menampilkan {{ $users->count() }} pengguna</p>
-    </div>
-
-    <!-- Users Table -->
+    <!-- Daftar Pengguna -->
     <div class="card">
         <div class="card-body">
             <div class="table-responsive">
@@ -58,12 +64,12 @@
                             <th>Role</th>
                             <th>Telepon</th>
                             <th>Alamat</th>
+                            <th>Verifikasi</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @if($users->count() > 0)
-                            @foreach ($users as $user)
+                        @forelse ($users as $user)
                             <tr>
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->email }}</td>
@@ -75,34 +81,83 @@
                                 <td>{{ $user->phone }}</td>
                                 <td>{{ Str::limit($user->address, 30) }}</td>
                                 <td>
-                                    <div class="btn-group" role="group">
-                                        <a href="{{ route('user.edit', $user->id) }}" class="btn btn-sm btn-warning">
-                                            <i class="bi bi-pencil"></i> Edit
-                                        </a>
-                                        <form action="{{ route('user.destroy', $user->id) }}" method="POST" class="d-inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus pengguna {{ $user->name }}?')">
-                                                <i class="bi bi-trash"></i> Hapus
-                                            </button>
-                                        </form>
+                                    @if($user->verifikasi == 'approved')
+                                        <span class="badge bg-success">Disetujui</span>
+                                    @elseif($user->verifikasi == 'rejected')
+                                        <span class="badge bg-danger">Ditolak</span>
+                                    @else
+                                        <span class="badge bg-secondary">Menunggu</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <div class="dropdown">
+                                        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="bi bi-three-dots-vertical"></i>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <!-- Edit -->
+                                            <li>
+                                                <a href="{{ route('user.edit', $user->id) }}" class="dropdown-item">
+                                                    <i class="bi bi-pencil-square me-2"></i>Edit
+                                                </a>
+                                            </li>
+
+                                            <!-- Verifikasi -->
+                                            @if(auth()->user()->role === 'admin')
+                                                @if($user->verifikasi !== 'approved')
+                                                    <li>
+                                                        <form action="{{ route('user.updateStatus', $user->id) }}" method="POST">
+                                                            @csrf
+                                                            @method('PUT')
+                                                            <input type="hidden" name="status_akun" value="approved">
+                                                            <button class="dropdown-item" type="submit">
+                                                                <i class="bi bi-check-circle me-2"></i>Setujui
+                                                            </button>
+                                                        </form>
+                                                    </li>
+                                                @endif
+
+                                                @if($user->verifikasi !== 'rejected')
+                                                    <li>
+                                                        <form action="{{ route('user.updateStatus', $user->id) }}" method="POST">
+                                                            @csrf
+                                                            @method('PUT')
+                                                            <input type="hidden" name="status_akun" value="rejected">
+                                                            <button class="dropdown-item" type="submit">
+                                                                <i class="bi bi-x-circle me-2"></i>Tolak
+                                                            </button>
+                                                        </form>
+                                                    </li>
+                                                @endif
+                                            @endif
+
+                                            <!-- Delete -->
+                                            <li>
+                                                <form action="{{ route('user.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus pengguna ini?')">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="dropdown-item text-danger">
+                                                        <i class="bi bi-trash me-2"></i>Hapus
+                                                    </button>
+                                                </form>
+                                            </li>
+                                        </ul>
                                     </div>
                                 </td>
                             </tr>
-                            @endforeach
-                        @else
+                        @empty
                             <tr>
-                                <td colspan="6" class="text-center py-4">
+                                <td colspan="7" class="text-center py-4">
                                     <div class="alert alert-info mb-0">
                                         Tidak ada data pengguna yang ditemukan
-                                        @if(request()->has('search') || request()->has('role'))
+                                        @if(request()->has('search') || request()->has('role') || request()->has('verifikasi'))
                                             dengan filter yang dipilih.
                                             <a href="{{ route('user.index') }}" class="alert-link">Reset filter</a>
                                         @endif
                                     </div>
                                 </td>
                             </tr>
-                        @endif
+                        @endforelse
                     </tbody>
                 </table>
             </div>
