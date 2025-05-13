@@ -28,7 +28,7 @@
 
 
                     <a class="nav-link {{ request()->routeIs('dashboard.admin.event.*') ? 'active' : '' }}" href="{{ route('dashboard.admin.event.index') }}">
-                        <img src="{{ asset('assets/home.png') }}" alt="Logo" style="height: 25px; margin-right: 8px;">
+                        <img src="{{ asset('assets/Schedule.png') }}" alt="Logo" style="height: 25px; margin-right: 8px;">
                         Jadwal Kegiatan
                     </a>
                     <a class="nav-link {{ request()->routeIs('dashboard.admin.inspection.index') ? 'active' : '' }}" href="{{ route('dashboard.admin.inspection.index') }}">
