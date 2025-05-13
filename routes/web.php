@@ -9,6 +9,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Orangtua\DashboardOrangtuaController;
 use App\Http\Controllers\Petugas\DashboardPetugasController;
 use App\Http\Controllers\InspectionController;
+use App\Http\Controllers\EventtimeController;
 
 // Resource route untuk user (tanpa auth)
 Route::resource('user', UserController::class);
@@ -65,3 +66,14 @@ Route::get('/orangtua/dashboard', [DashboardOrangtuaController::class, 'index'])
 
 // Status Verifikasi
 Route::put('/user/{user}/verifikasi', [UserController::class, 'updateStatus'])->name('user.updateStatus');
+
+//admin event time
+Route::resource('eventtime', EventtimeController::class)->names([
+    'index' => 'dashboard.admin.event.index',
+    'create' => 'dashboard.admin.event.create',
+    'store' => 'dashboard.admin.event.store',
+    'show' => 'dashboard.admin.event.show',
+    'edit' => 'dashboard.admin.event.edit',
+    'update' => 'dashboard.admin.event.update',
+    'destroy' => 'dashboard.admin.event.destroy',
+]);

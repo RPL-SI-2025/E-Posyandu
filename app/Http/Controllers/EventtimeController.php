@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Eventtime;
 
 class EventtimeController extends Controller
 {
@@ -13,7 +14,9 @@ class EventtimeController extends Controller
     {
         // Mendapatkan semua data eventtime
         $eventtimes = Eventtime::all();
-        return response()->json($eventtimes);
+        //return response()->json($eventtimes);
+        return view('dashboard.admin.event.index', compact('eventtimes'));
+
     }
 
     /**
@@ -22,7 +25,7 @@ class EventtimeController extends Controller
     public function create()
     {
         // Jika menggunakan view untuk form create
-        return view('eventtime.create');
+        return view('dashboard.admin.event.create');
     }
 
     /**
@@ -30,7 +33,6 @@ class EventtimeController extends Controller
      */
     public function store(Request $request)
     {
-        // Validasi input
         $validated = $request->validate([
             'tanggal' => 'required|date',
             'jam_mulai' => 'required|date_format:H:i',
@@ -39,11 +41,12 @@ class EventtimeController extends Controller
             'keterangan' => 'nullable|string',
         ]);
 
-        // Simpan data eventtime
-        $eventtime = Eventtime::create($validated);
+        Eventtime::create($validated);
 
-        return response()->json(['message' => 'Eventtime created successfully', 'data' => $eventtime], 201);
+        return redirect()->route('dashboard.admin.event.index')
+            ->with('success', 'Jadwal kegiatan berhasil ditambahkan.');
     }
+
 
     /**
      * Display the specified resource.
@@ -60,7 +63,7 @@ class EventtimeController extends Controller
     public function edit(Eventtime $eventtime)
     {
         // Jika menggunakan view untuk form edit
-        return view('eventtime.edit', compact('eventtime'));
+        return view('dashboard.admin.event.edit', compact('eventtime'));
     }
 
     /**
@@ -68,7 +71,6 @@ class EventtimeController extends Controller
      */
     public function update(Request $request, Eventtime $eventtime)
     {
-        // Validasi input
         $validated = $request->validate([
             'tanggal' => 'required|date',
             'jam_mulai' => 'required|date_format:H:i',
@@ -77,20 +79,22 @@ class EventtimeController extends Controller
             'keterangan' => 'nullable|string',
         ]);
 
-        // Update data eventtime
         $eventtime->update($validated);
 
-        return response()->json(['message' => 'Eventtime updated successfully', 'data' => $eventtime]);
+        return redirect()->route('dashboard.admin.event.index')
+            ->with('success', 'Jadwal kegiatan berhasil diperbarui.');
     }
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Eventtime $eventtime)
     {
-        // Hapus data eventtime
         $eventtime->delete();
 
-        return response()->json(['message' => 'Eventtime deleted successfully']);
+        return redirect()->route('dashboard.admin.event.index')
+            ->with('success', 'Jadwal kegiatan berhasil dihapus.');
     }
+
 }
