@@ -33,7 +33,7 @@
                     <input class="form-check-input" type="checkbox" id="is_show" name="is_show" value="1" {{ $artikel->is_show ? 'checked' : '' }}>
                     <label class="form-check-label" for="is_show">Tampilkan Artikel</label>
                 </div>
-                <button type="submit" class="btn btn-primary">Update</button>
+                <button type="submit" class="btn btn-primary" dusk="update-article">Update</button>
                 <a href="{{ route('dashboard.admin.artikel.index') }}" class="btn btn-secondary">Batal</a>
             </form>
         </div>
