@@ -9,6 +9,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Orangtua\DashboardOrangtuaController;
 use App\Http\Controllers\Petugas\DashboardPetugasController;
 use App\Http\Controllers\InspectionController;
+use App\Http\Controllers\Orangtua\ReportController;
+use App\Http\Controllers\Orangtua\ProfilesController;
 
 // Resource route untuk user
 Route::resource('user', UserController::class);
@@ -57,9 +59,20 @@ Route::prefix('admin')->name('dashboard.admin.inspection.')->group(function () {
 });
 
 
+
 // Dashboard petugas
 Route::get('/petugas/dashboard', [DashboardPetugasController::class, 'index'])->name('dashboard.petugas.index');
 
 // Dashboard orangtua
 Route::get('/orangtua/dashboard', [DashboardOrangtuaController::class, 'index'])->name('dashboard.orangtua.index');
+Route::get('/orangtua/reports', [ReportController::class, 'index'])->name('dashboard.orangtua.reports.index');
+Route::get('/orangtua/reports/create', [ReportController::class, 'create'])->name('dashboard.orangtua.reports.create');
+Route::post('/orangtua/reports', [ReportController::class, 'store'])->name('dashboard.orangtua.reports.store');
+Route::get('/orangtua/reports/{id}', [ReportController::class, 'show'])->name('dashboard.orangtua.reports.show');
+Route::get('/orangtua/reports/{id}/edit', [ReportController::class, 'edit'])->name('dashboard.orangtua.reports.edit');
+Route::put('/orangtua/reports/{id}', [ReportController::class, 'update'])->name('dashboard.orangtua.reports.update');
+Route::delete('/orangtua/reports/{id}', [ReportController::class, 'destroy'])->name('dashboard.orangtua.reports.destroy');
 
+// Dashboard orangtua Profiles
+Route::get('/orangtua/profiles', [App\Http\Controllers\Orangtua\ProfilesController::class, 'index'])->name('dashboard.orangtua.profiles.index');
+Route::get('/orangtua/profiles/{id}', [App\Http\Controllers\Orangtua\ProfilesController::class, 'show'])->name('dashboard.orangtua.profiles.show');
