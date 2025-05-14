@@ -21,7 +21,17 @@
                             </button>
                             <button type="submit" class="btn btn-success">
                                 <i class="bi bi-check-circle"></i> Simpan
-                            </button>
+                            <!-- Create User Form -->
+<div class="mb-3">
+    <label for="status_akun" class="form-label">Status Verifikasi</label>
+    <select name="status_akun" id="status_akun" class="form-select">
+        <option value="waiting" {{ old('status_akun', 'waiting') == 'waiting' ? 'selected' : '' }}>Waiting</option>
+        <option value="approved" {{ old('status_akun', 'waiting') == 'approved' ? 'selected' : '' }}>Approved</option>
+        <option value="rejected" {{ old('status_akun', 'waiting') == 'rejected' ? 'selected' : '' }}>Rejected</option>
+    </select>
+</div>
+
+</button>
                         </div>
                     </form>
                 </div>

@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Membuat tabel 'users' dengan kolom 'verifikasi'
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -20,16 +21,19 @@ return new class extends Migration
             $table->enum('role', ['admin', 'petugas', 'orangtua'])->default('orangtua');
             $table->string('phone')->nullable();
             $table->text('address')->nullable();
+            $table->boolean('verifikasi')->default(false); // Menambahkan kolom 'verifikasi' untuk status verifikasi pengguna
             $table->rememberToken();
             $table->timestamps();
         });
 
+        // Tabel untuk reset password (password_reset_tokens)
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
         });
 
+        // Tabel untuk sesi (sessions)
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->foreignId('user_id')->nullable()->index();

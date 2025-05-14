@@ -42,8 +42,8 @@ class FuctionalTestCase extends DuskTestCase
                     ->click('@create-inspection')
                     ->pause(2000)
                     ->assertPathIs('/admin/kunjungan/create')
-                    ->select('table_child_id', '1')
-                    ->select('user_id', '1')
+                    ->select('table_child_id', '2')
+                    ->select('user_id', '2')
                     ->type('tanggal_pemeriksaan', '01-05-2025')
                     ->type('berat_badan', 12)
                     ->type('tinggi_badan', 102)
@@ -84,9 +84,9 @@ class FuctionalTestCase extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visit('/admin/kunjungan')
                     ->pause(2000)
-                    ->click('@edit-inspection', '14')
+                    ->click('@edit-inspection', '15')
                     ->pause(2000)
-                    ->assertPathIs('/admin/kunjungan/14/edit')
+                    ->assertPathIs('/admin/kunjungan/15/edit')
                     ->type('berat_badan', 14)
                     ->press('Update')
                     ->pause(2000)
@@ -98,7 +98,7 @@ class FuctionalTestCase extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visit('/admin/kunjungan')
                     ->pause(2000)
-                    ->click('@delete-inspection', '15')
+                    ->click('@delete-inspection', '16')
                     ->acceptDialog()
                     ->pause(2000)
                     ->assertSee('Data pemeriksaan berhasil dihapus');

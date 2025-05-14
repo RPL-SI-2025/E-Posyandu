@@ -16,7 +16,7 @@
                 <i class="fas fa-table me-1"></i>
                 Daftar Artikel
             </div>
-            <a href="{{ route('dashboard.admin.artikel.create') }}" class="btn btn-primary">
+            <a href="{{ route('dashboard.admin.artikel.create') }}" class="btn btn-primary" dusk="create-article">
                 <i class="fas fa-plus"></i> Tambah Artikel
             </a>
         </div>
@@ -45,9 +45,9 @@
                                 @endif
                             </td>
                             <td>
-                                <a href="{{ route('dashboard.admin.artikel.show', $artikel->id_artikel) }}" class="btn btn-info btn-sm">Lihat</a>
-                                <a href="{{ route('dashboard.admin.artikel.edit', $artikel->id_artikel) }}" class="btn btn-warning btn-sm">Edit</a>
-                                <form action="{{ route('dashboard.admin.artikel.destroy', $artikel->id_artikel) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Yakin ingin menghapus artikel ini?')">
+                                <a href="{{ route('dashboard.admin.artikel.show', $artikel->id_artikel) }}" class="btn btn-info btn-sm" dusk="view-article-{{ $artikel->id_artikel }}">Lihat</a>
+                                <a href="{{ route('dashboard.admin.artikel.edit', $artikel->id_artikel) }}" class="btn btn-warning btn-sm" dusk="edit-article-{{ $artikel->id_artikel }}">Edit</a>
+                                <form action="{{ route('dashboard.admin.artikel.destroy', $artikel->id_artikel) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Yakin ingin menghapus artikel ini?')" dusk="delete-article-{{ $artikel->id_artikel }}">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
