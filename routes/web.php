@@ -10,8 +10,14 @@ use App\Http\Controllers\Orangtua\DashboardOrangtuaController;
 use App\Http\Controllers\Petugas\DashboardPetugasController;
 use App\Http\Controllers\InspectionController;
 
-// Resource route untuk user (tanpa auth)
-Route::resource('user', UserController::class);
+Route::get('/user', [UserController::class, 'index'])->name('user.index');
+Route::get('/user/create', [UserController::class, 'create'])->name('user.create');
+Route::post('/user', [UserController::class, 'store'])->name('user.store');
+Route::get('/user/{user}', [UserController::class, 'show'])->name('user.show');
+Route::get('/user/{user}/edit', [UserController::class, 'edit'])->name('user.edit');
+Route::put('/user/{user}', [UserController::class, 'update'])->name('user.update');
+Route::delete('/user/{user}', [UserController::class, 'destroy'])->name('user.destroy');
+Route::patch('/user/{user}/status', [UserController::class, 'updateStatus'])->name('user.updateStatus');
 
 // Halaman utama
 Route::get('/', fn () => view('welcome'))->name('welcome');

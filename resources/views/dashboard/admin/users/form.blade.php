@@ -12,7 +12,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="col-md-6">
         <div class="mb-3">
             <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
@@ -26,11 +26,11 @@
             </div>
         </div>
     </div>
-    
+
     <div class="col-md-6">
         <div class="mb-3">
             <label for="password" class="form-label">
-                Password {{ isset($user) ? '(Kosongkan jika tidak ingin mengubah)' : '<span class="text-danger">*</span>' }}
+                Password {!! isset($user) ? '(Kosongkan jika tidak ingin mengubah)' : '<span class="text-danger">*</span>' !!}
             </label>
             <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-key"></i></span>
@@ -43,11 +43,11 @@
             </div>
         </div>
     </div>
-    
+
     <div class="col-md-6">
         <div class="mb-3">
             <label for="password_confirmation" class="form-label">
-                Konfirmasi Password {{ isset($user) ? '' : '<span class="text-danger">*</span>' }}
+                Konfirmasi Password {!! isset($user) ? '' : '<span class="text-danger">*</span>' !!}
             </label>
             <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-key-fill"></i></span>
@@ -56,7 +56,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="col-md-4">
         <div class="mb-3">
             <label for="role" class="form-label">Role <span class="text-danger">*</span></label>
@@ -76,7 +76,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="col-md-8">
         <div class="mb-3">
             <label for="phone" class="form-label">Telepon</label>
@@ -90,7 +90,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="col-12">
         <div class="mb-3">
             <label for="address" class="form-label">Alamat</label>

@@ -32,7 +32,8 @@
                             <a href="{{ route('user.index') }}" class="btn btn-secondary">
                                 <i class="bi bi-x-circle"></i> Batal
                             </a>
-                            <button type="submit" class="btn btn-success">
+                            <button type="submit" class="btn btn-primary">Update</button>
+
                                 <i class="bi bi-check-circle"></i> Update
                             </button>
                         </div>

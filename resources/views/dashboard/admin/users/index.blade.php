@@ -8,11 +8,11 @@
     </div>
 
     <!-- Filter dan Pencarian -->
-    <div class="card mb-4">
+    <div class="card mb-6">
         <div class="card-body">
-            <form action="{{ route('user.index') }}" method="GET" class="d-flex gap-3">
-                <div class="d-flex gap-2">
-                    <div class="col-md-4">
+            <form action="{{ route('user.index') }}" method="GET" class="d-flex gap-8">
+                <div class="d-flex gap-10">
+                    <div class="col-md-8">
                         <label for="role" class="form-label">Role:</label>
                         <select name="role" id="role" class="form-select" onchange="this.form.submit()">
                             <option value="">Semua Role</option>
@@ -23,7 +23,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-8">
                         <label for="verifikasi" class="form-label">Verifikasi:</label>
                         <select name="verifikasi" id="verifikasi" class="form-select" onchange="this.form.submit()">
                             <option value="">Semua Status</option>
@@ -34,7 +34,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-4">
+                <div class="col-md-4 ms-auto" >
                     <label for="search" class="form-label">Cari:</label>
                     <div class="input-group">
                         <input type="text" name="search" class="form-control" placeholder="Cari..." value="{{ $searchTerm ?? '' }}">
@@ -110,7 +110,8 @@
                                                             @csrf
                                                             @method('PUT')
                                                             <input type="hidden" name="status_akun" value="approved">
-                                                            <button class="dropdown-item" type="submit">
+                                                            <<button dusk="verify-{{ $user->id }}-approve" class="dropdown-item" type="submit">
+
                                                                 <i class="bi bi-check-circle me-2"></i>Setujui
                                                             </button>
                                                         </form>
@@ -123,7 +124,8 @@
                                                             @csrf
                                                             @method('PUT')
                                                             <input type="hidden" name="status_akun" value="rejected">
-                                                            <button class="dropdown-item" type="submit">
+                                                            <button dusk="verify-{{ $user->id }}-reject" class="dropdown-item" type="submit">
+
                                                                 <i class="bi bi-x-circle me-2"></i>Tolak
                                                             </button>
                                                         </form>
@@ -131,12 +133,12 @@
                                                 @endif
                                             @endif
 
-                                            <!-- Delete -->
                                             <li>
                                                 <form action="{{ route('user.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus pengguna ini?')">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="dropdown-item text-danger">
+                                                   <button dusk="delete-{{ $user->id }}" type="submit" class="dropdown-item text-danger">
+
                                                         <i class="bi bi-trash me-2"></i>Hapus
                                                     </button>
                                                 </form>
