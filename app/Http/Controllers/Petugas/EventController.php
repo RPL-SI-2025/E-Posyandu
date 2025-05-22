@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Petugas;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Eventtime;
 
-class EventtimeController extends Controller
+class EventController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,9 +15,7 @@ class EventtimeController extends Controller
     {
         // Mendapatkan semua data eventtime
         $eventtimes = Eventtime::all();
-        //return response()->json($eventtimes);
-        return view('dashboard.admin.event.index', compact('eventtimes'));
-
+        return view('dashboard.petugas.event.index', compact('eventtimes'));
     }
 
     /**
@@ -24,8 +23,7 @@ class EventtimeController extends Controller
      */
     public function create()
     {
-        // Jika menggunakan view untuk form create
-        return view('dashboard.admin.event.create');
+        return view('dashboard.petugas.event.create');
     }
 
     /**
@@ -43,33 +41,30 @@ class EventtimeController extends Controller
 
         Eventtime::create($validated);
 
-        return redirect()->route('dashboard.admin.event.index')
+        return redirect()->route('dashboard.petugas.event.index')
             ->with('success', 'Jadwal kegiatan berhasil ditambahkan.');
     }
-
 
     /**
      * Display the specified resource.
      */
-    public function show(Eventtime $eventtime)
+    public function show(Eventtime $event)
     {
-        // Menampilkan detail eventtime
-        return response()->json($eventtime);
+        return view('dashboard.petugas.event.show', compact('event'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Eventtime $eventtime)
+    public function edit(Eventtime $event)
     {
-        // Jika menggunakan view untuk form edit
-        return view('dashboard.admin.event.edit', compact('eventtime'));
+        return view('dashboard.petugas.event.edit', compact('event'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Eventtime $eventtime)
+    public function update(Request $request, Eventtime $event)
     {
         $validated = $request->validate([
             'tanggal' => 'required|date',
@@ -79,22 +74,20 @@ class EventtimeController extends Controller
             'keterangan' => 'nullable|string',
         ]);
 
-        $eventtime->update($validated);
+        $event->update($validated);
 
-        return redirect()->route('dashboard.admin.event.index')
+        return redirect()->route('dashboard.petugas.event.index')
             ->with('success', 'Jadwal kegiatan berhasil diperbarui.');
     }
-
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Eventtime $eventtime)
+    public function destroy(Eventtime $event)
     {
-        $eventtime->delete();
+        $event->delete();
 
-        return redirect()->route('dashboard.admin.event.index')
+        return redirect()->route('dashboard.petugas.event.index')
             ->with('success', 'Jadwal kegiatan berhasil dihapus.');
     }
-
 }

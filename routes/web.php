@@ -9,6 +9,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Orangtua\DashboardOrangtuaController;
 use App\Http\Controllers\Petugas\DashboardPetugasController;
 use App\Http\Controllers\InspectionController;
+use App\Http\Controllers\Orangtua\ReportController;
+use App\Http\Controllers\Orangtua\ProfilesController;
+use App\Http\Controllers\EventtimeController;
 
 Route::get('/user', [UserController::class, 'index'])->name('user.index');
 Route::get('/user/create', [UserController::class, 'create'])->name('user.create');
@@ -63,11 +66,46 @@ Route::prefix('admin')->name('dashboard.admin.inspection.')->group(function () {
 });
 
 
+
 // Dashboard petugas
 Route::get('/petugas/dashboard', [DashboardPetugasController::class, 'index'])->name('dashboard.petugas.index');
 
+// Petugas event routes
+Route::resource('petugas/event', App\Http\Controllers\Petugas\EventController::class)->names([
+    'index' => 'dashboard.petugas.event.index',
+    'create' => 'dashboard.petugas.event.create',
+    'store' => 'dashboard.petugas.event.store',
+    'show' => 'dashboard.petugas.event.show',
+    'edit' => 'dashboard.petugas.event.edit',
+    'update' => 'dashboard.petugas.event.update',
+    'destroy' => 'dashboard.petugas.event.destroy',
+]);
+
 // Dashboard orangtua
 Route::get('/orangtua/dashboard', [DashboardOrangtuaController::class, 'index'])->name('dashboard.orangtua.index');
+Route::get('/orangtua/reports', [ReportController::class, 'index'])->name('dashboard.orangtua.reports.index');
+Route::get('/orangtua/reports/create', [ReportController::class, 'create'])->name('dashboard.orangtua.reports.create');
+Route::post('/orangtua/reports', [ReportController::class, 'store'])->name('dashboard.orangtua.reports.store');
+Route::get('/orangtua/reports/{id}', [ReportController::class, 'show'])->name('dashboard.orangtua.reports.show');
+Route::get('/orangtua/reports/{id}/edit', [ReportController::class, 'edit'])->name('dashboard.orangtua.reports.edit');
+Route::put('/orangtua/reports/{id}', [ReportController::class, 'update'])->name('dashboard.orangtua.reports.update');
+Route::delete('/orangtua/reports/{id}', [ReportController::class, 'destroy'])->name('dashboard.orangtua.reports.destroy');
+
+
+// Dashboard orangtua Profiles
+Route::get('/orangtua/profiles', [App\Http\Controllers\Orangtua\ProfilesController::class, 'index'])->name('dashboard.orangtua.profiles.index');
+Route::get('/orangtua/profiles/{id}', [App\Http\Controllers\Orangtua\ProfilesController::class, 'show'])->name('dashboard.orangtua.profiles.show');
 
 // Status Verifikasi
 Route::put('/user/{user}/verifikasi', [UserController::class, 'updateStatus'])->name('user.updateStatus');
+
+//admin event time
+Route::resource('eventtime', EventtimeController::class)->names([
+    'index' => 'dashboard.admin.event.index',
+    'create' => 'dashboard.admin.event.create',
+    'store' => 'dashboard.admin.event.store',
+    'show' => 'dashboard.admin.event.show',
+    'edit' => 'dashboard.admin.event.edit',
+    'update' => 'dashboard.admin.event.update',
+    'destroy' => 'dashboard.admin.event.destroy',
+]);
