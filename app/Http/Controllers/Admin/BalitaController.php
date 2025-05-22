@@ -6,12 +6,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Balita;
 use App\Models\User;
+use App\Models\Inspection;
 
 class BalitaController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Balita::with('user');
+        $query = Balita::with(['user', 'latestInspection']);
 
         // Search functionality
         if ($request->has('search')) {
@@ -76,15 +77,30 @@ class BalitaController extends Controller
 
     public function show(Balita $balita)
     {
+        $balita->load(['user', 'inspections' => function($query) {
+            $query->orderBy('tanggal_pemeriksaan', 'asc');
+        }]);
+
+        // Format inspection data for charts
+        $inspectionData = $balita->inspections->map(function($inspection) {
+            return [
+                'tanggal_pemeriksaan' => \Carbon\Carbon::parse($inspection->tanggal_pemeriksaan)->format('d/m/Y'),
+                'berat_badan' => $inspection->berat_badan,
+                'tinggi_badan' => $inspection->tinggi_badan,
+                'lingkar_kepala' => $inspection->lingkar_kepala,
+            ];
+        });
+
         return view('dashboard.admin.balita.show', [
-            'balita' => $balita->load('user')
+            'balita' => $balita,
+            'inspectionData' => $inspectionData
         ]);
     }
 
     public function edit(Balita $balita)
     {
         return view('dashboard.admin.balita.edit', [
-            'balita' => $balita,
+            'balita' => $balita->load('latestInspection'),
             'users' => User::where('role', 'orangtua')->get()
         ]);
     }
@@ -122,6 +138,10 @@ class BalitaController extends Controller
 
     public function destroy(Balita $balita)
     {
+        // Delete related inspections first
+        $balita->inspections()->delete();
+        
+        // Then delete the balita record
         $balita->delete();
         
         return redirect()

@@ -24,16 +24,12 @@
                         <div class="col-md-6">
                             <table class="table">
                                 <tr>
-                                    <th style="width: 200px">ID User (Orang Tua)</th>
-                                    <td>: {{ $balita->user_id }}</td>
+                                    <th style="width: 200px">Nama Anak</th>
+                                    <td>: {{ $balita->nama_anak }}</td>
                                 </tr>
                                 <tr>
                                     <th>Nama Orang Tua</th>
                                     <td>: {{ $balita->user->name ?? 'N/A' }}</td>
-                                </tr>
-                                <tr>
-                                    <th>Nama Anak</th>
-                                    <td>: {{ $balita->nama_anak }}</td>
                                 </tr>
                                 <tr>
                                     <th>NIK</th>
@@ -54,14 +50,41 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th>Tanggal Dibuat</th>
-                                    <td>: {{ \Carbon\Carbon::parse($balita->created_at)->format('d/m/Y H:i') }}</td>
+                                    <th>Berat Badan Terakhir</th>
+                                    <td>: {{ $balita->latestInspection->berat_badan ?? 'Belum ada data' }} kg</td>
                                 </tr>
                                 <tr>
-                                    <th>Terakhir Diupdate</th>
-                                    <td>: {{ \Carbon\Carbon::parse($balita->updated_at)->format('d/m/Y H:i') }}</td>
+                                    <th>Tinggi Badan Terakhir</th>
+                                    <td>: {{ $balita->latestInspection->tinggi_badan ?? 'Belum ada data' }} cm</td>
+                                </tr>
+                                <tr>
+                                    <th>Lingkar Kepala Terakhir</th>
+                                    <td>: {{ $balita->latestInspection->lingkar_kepala ?? 'Belum ada data' }} cm</td>
                                 </tr>
                             </table>
+                        </div>
+                    </div>
+
+                    {{-- Growth Charts --}}
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <h5 class="mb-3">Grafik Pertumbuhan</h5>
+                            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#weight-chart" type="button">Berat Badan</button>
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#height-chart" type="button">Tinggi Badan</button>
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#head-chart" type="button">Lingkar Kepala</button>
+                            </div>
+                            <div class="tab-content mt-3" id="nav-tabContent">
+                                <div class="tab-pane fade show active" id="weight-chart">
+                                    <canvas id="weightChart"></canvas>
+                                </div>
+                                <div class="tab-pane fade" id="height-chart">
+                                    <canvas id="heightChart"></canvas>
+                                </div>
+                                <div class="tab-pane fade" id="head-chart">
+                                    <canvas id="headChart"></canvas>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -79,4 +102,82 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Prepare the data
+    const inspections = @json($balita->inspections);
+    const dates = inspections.map(i => i.tanggal_pemeriksaan);
+    const weights = inspections.map(i => i.berat_badan);
+    const heights = inspections.map(i => i.tinggi_badan);
+    const headCircs = inspections.map(i => i.lingkar_kepala);
+
+    // Weight Chart
+    new Chart(document.getElementById('weightChart'), {
+        type: 'line',
+        data: {
+            labels: dates,
+            datasets: [{
+                label: 'Berat Badan (kg)',
+                data: weights,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: false
+                }
+            }
+        }
+    });
+
+    // Height Chart
+    new Chart(document.getElementById('heightChart'), {
+        type: 'line',
+        data: {
+            labels: dates,
+            datasets: [{
+                label: 'Tinggi Badan (cm)',
+                data: heights,
+                borderColor: 'rgb(255, 99, 132)',
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: false
+                }
+            }
+        }
+    });
+
+    // Head Circumference Chart
+    new Chart(document.getElementById('headChart'), {
+        type: 'line',
+        data: {
+            labels: dates,
+            datasets: [{
+                label: 'Lingkar Kepala (cm)',
+                data: headCircs,
+                borderColor: 'rgb(153, 102, 255)',
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: false
+                }
+            }
+        }
+    });
+</script>
+@endpush
 @endsection 
