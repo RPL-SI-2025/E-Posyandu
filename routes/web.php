@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\BalitaController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Orangtua\DashboardOrangtuaController;
 use App\Http\Controllers\Petugas\DashboardPetugasController;
+use App\Http\Controllers\Petugas\UserPetugasController;
 use App\Http\Controllers\Petugas\InspectionPetugasController;
 use App\Http\Controllers\InspectionController;
 use App\Http\Controllers\Orangtua\ReportController;
@@ -83,6 +84,9 @@ Route::resource('petugas/event', App\Http\Controllers\Petugas\EventController::c
     'update' => 'dashboard.petugas.event.update',
     'destroy' => 'dashboard.petugas.event.destroy',
 ]);
+
+Route::resource('user', UserPetugasController::class);
+
 // Dashboard orangtua
 Route::get('/orangtua/dashboard', [DashboardOrangtuaController::class, 'index'])->name('dashboard.orangtua.index');
 Route::get('/orangtua/reports', [ReportController::class, 'index'])->name('dashboard.orangtua.reports.index');
