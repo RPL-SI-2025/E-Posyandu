@@ -8,7 +8,7 @@
                         <img src="{{ asset('assets/home.png') }}" alt="Logo" style="height: 25px; margin-right: 8px;">
                         Dashboard
                     </a>
-                    <a class="nav-link" href="{{ route('dashboard.admin.balita.index') }}">
+                    <a class="nav-link {{ request()->routeIs('dashboard.petugas.balita.*') ? 'active' : '' }}" href="{{ route('dashboard.petugas.balita.index') }}">
                         <img src="{{ asset('assets/home.png') }}" alt="Logo" style="height: 25px; margin-right: 8px;">
                         Balita
                     </a>
