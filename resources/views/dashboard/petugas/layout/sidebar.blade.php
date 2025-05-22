@@ -20,7 +20,7 @@
                         <img src="{{ asset('assets/home.png') }}" alt="Logo" style="height: 25px; margin-right: 8px;">
                         Jadwal Kegiatan
                     </a>
-                    <a class="nav-link" href="#">
+                    <a class="nav-link {{ request()->routeIs('dashboard.petugas.inspection.index') ? 'active' : '' }}" href="{{ route('dashboard.petugas.inspection.index') }}">
                         <img src="{{ asset('assets/home.png') }}" alt="Logo" style="height: 25px; margin-right: 8px;">
                         Kunjungan
                     </a>
