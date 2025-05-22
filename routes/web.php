@@ -11,6 +11,7 @@ use App\Http\Controllers\Petugas\DashboardPetugasController;
 
 use App\Http\Controllers\Petugas\BalitaController as PetugasBalitaController;
 
+use App\Http\Controllers\Petugas\UserPetugasController;
 use App\Http\Controllers\Petugas\InspectionPetugasController;
 
 use App\Http\Controllers\InspectionController;
@@ -101,6 +102,9 @@ Route::prefix('petugas')->name('dashboard.petugas.balita.')->group(function () {
 });
 
 
+
+
+Route::resource('user', UserPetugasController::class);
 
 // Dashboard orangtua
 Route::get('/orangtua/dashboard', [DashboardOrangtuaController::class, 'index'])->name('dashboard.orangtua.index');
