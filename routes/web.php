@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\BalitaController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Orangtua\DashboardOrangtuaController;
 use App\Http\Controllers\Petugas\DashboardPetugasController;
+use App\Http\Controllers\Petugas\InspectionPetugasController;
 use App\Http\Controllers\InspectionController;
 use App\Http\Controllers\Orangtua\ReportController;
 use App\Http\Controllers\Orangtua\ProfilesController;
@@ -63,7 +64,14 @@ Route::prefix('admin')->name('dashboard.admin.inspection.')->group(function () {
 
 // Dashboard petugas
 Route::get('/petugas/dashboard', [DashboardPetugasController::class, 'index'])->name('dashboard.petugas.index');
-
+Route::prefix('petugas')->name('dashboard.petugas.inspection.')->group(function () {
+    Route::get('/kunjungan', [InspectionPetugasController::class, 'index'])->name('index');
+    Route::get('/kunjungan/create', [InspectionPetugasController::class, 'create'])->name('create');
+    Route::post('/kunjungan', [InspectionPetugasController::class, 'store'])->name('store');
+    Route::get('/kunjungan/{inspection}/edit', [InspectionPetugasController::class, 'edit'])->name('edit');
+    Route::put('/kunjungan/{inspection}', [InspectionPetugasController::class, 'update'])->name('update');
+    Route::delete('/kunjungan/{inspection}', [InspectionPetugasController::class, 'destroy'])->name('destroy');
+});
 // Dashboard orangtua
 Route::get('/orangtua/dashboard', [DashboardOrangtuaController::class, 'index'])->name('dashboard.orangtua.index');
 Route::get('/orangtua/reports', [ReportController::class, 'index'])->name('dashboard.orangtua.reports.index');
