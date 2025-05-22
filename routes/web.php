@@ -64,6 +64,17 @@ Route::prefix('admin')->name('dashboard.admin.inspection.')->group(function () {
 // Dashboard petugas
 Route::get('/petugas/dashboard', [DashboardPetugasController::class, 'index'])->name('dashboard.petugas.index');
 
+// Petugas event routes
+Route::resource('petugas/event', App\Http\Controllers\Petugas\EventController::class)->names([
+    'index' => 'dashboard.petugas.event.index',
+    'create' => 'dashboard.petugas.event.create',
+    'store' => 'dashboard.petugas.event.store',
+    'show' => 'dashboard.petugas.event.show',
+    'edit' => 'dashboard.petugas.event.edit',
+    'update' => 'dashboard.petugas.event.update',
+    'destroy' => 'dashboard.petugas.event.destroy',
+]);
+
 // Dashboard orangtua
 Route::get('/orangtua/dashboard', [DashboardOrangtuaController::class, 'index'])->name('dashboard.orangtua.index');
 Route::get('/orangtua/reports', [ReportController::class, 'index'])->name('dashboard.orangtua.reports.index');
