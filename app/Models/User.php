@@ -54,4 +54,20 @@ protected $attributes = [
         ];
     }
 
+
+    /**
+     * Relasi ke tabel table_child (Orangtua memiliki banyak anak).
+     */
+    public function children()
+    {
+        return $this->hasMany(Child::class, 'user_id');
+    }
+
+    /**
+     * Relasi ke tabel table_inspection (Petugas melakukan banyak pemeriksaan).
+     */
+    public function inspections()
+    {
+        return $this->hasMany(TableInspection::class, 'user_id');
+    }
 }
