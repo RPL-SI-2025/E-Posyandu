@@ -1,18 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Petugas;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Balita;
 use App\Models\User;
-use App\Models\Inspection;
+use Illuminate\Http\Request;
 
 class BalitaController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Balita::with(['user', 'latestInspection']);
+        $query = Balita::with('user');
 
         // Search functionality
         if ($request->has('search')) {
@@ -37,14 +36,14 @@ class BalitaController extends Controller
 
         $balitas = $query->paginate(10)->withQueryString();
 
-        return view('dashboard.admin.balita.index', [
+        return view('dashboard.petugas.balita.index', [
             'balitas' => $balitas
         ]);
     }
 
     public function create()
     {
-        return view('dashboard.admin.balita.create', [
+        return view('dashboard.petugas.balita.create', [
             'users' => User::where('role', 'orangtua')->get()
         ]);
     }
@@ -71,36 +70,36 @@ class BalitaController extends Controller
         Balita::create($validatedData);
 
         return redirect()
-            ->route('dashboard.admin.balita.index')
+            ->route('dashboard.petugas.balita.index')
             ->with('success', 'Data balita berhasil ditambahkan!');
     }
 
     public function show(Balita $balita)
     {
-        $balita->load(['user', 'inspections' => function($query) {
-            $query->orderBy('tanggal_pemeriksaan', 'asc');
-        }]);
+        $balita->load('user');
+        
+        // Get growth data for the chart
+        $growthData = $balita->inspections()
+            ->orderBy('tanggal_pemeriksaan', 'asc')
+            ->get()
+            ->map(function ($inspection) {
+                return [
+                    'date' => $inspection->tanggal_pemeriksaan->format('d/m/Y'),
+                    'berat' => $inspection->berat,
+                    'tinggi' => $inspection->tinggi
+                ];
+            });
 
-        // Format inspection data for charts
-        $inspectionData = $balita->inspections->map(function($inspection) {
-            return [
-                'tanggal_pemeriksaan' => \Carbon\Carbon::parse($inspection->tanggal_pemeriksaan)->format('d/m/Y'),
-                'berat_badan' => $inspection->berat_badan,
-                'tinggi_badan' => $inspection->tinggi_badan,
-                'lingkar_kepala' => $inspection->lingkar_kepala,
-            ];
-        });
-
-        return view('dashboard.admin.balita.show', [
+        return view('dashboard.petugas.balita.show', [
             'balita' => $balita,
-            'inspectionData' => $inspectionData
+            'growthData' => $growthData
         ]);
     }
 
     public function edit(Balita $balita)
     {
-        return view('dashboard.admin.balita.edit', [
-            'balita' => $balita->load('latestInspection'),
+        return view('dashboard.petugas.balita.edit', [
+            'balita' => $balita,
             'users' => User::where('role', 'orangtua')->get()
         ]);
     }
@@ -132,20 +131,16 @@ class BalitaController extends Controller
         $balita->update($validatedData);
 
         return redirect()
-            ->route('dashboard.admin.balita.index')
+            ->route('dashboard.petugas.balita.index')
             ->with('success', 'Data balita berhasil diperbarui!');
     }
 
     public function destroy(Balita $balita)
     {
-        // Delete related inspections first
-        $balita->inspections()->delete();
-        
-        // Then delete the balita record
         $balita->delete();
         
         return redirect()
-            ->route('dashboard.admin.balita.index')
+            ->route('dashboard.petugas.balita.index')
             ->with('success', 'Data balita berhasil dihapus!');
     }
 } 
