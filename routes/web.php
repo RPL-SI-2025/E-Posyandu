@@ -76,8 +76,14 @@ Route::delete('/orangtua/reports/{id}', [ReportController::class, 'destroy'])->n
 
 
 // Dashboard orangtua Profiles
-Route::get('/orangtua/profiles', [App\Http\Controllers\Orangtua\ProfilesController::class, 'index'])->name('dashboard.orangtua.profiles.index');
-Route::get('/orangtua/profiles/{id}', [App\Http\Controllers\Orangtua\ProfilesController::class, 'show'])->name('dashboard.orangtua.profiles.show');
+// Dashboard orangtua Profiles
+Route::get('/orangtua/profiles', [ProfilesController::class, 'index'])->name('dashboard.orangtua.profiles.index');
+Route::get('/orangtua/profiles/create', [ProfilesController::class, 'create'])->name('dashboard.orangtua.profiles.create');
+Route::post('/orangtua/profiles', [ProfilesController::class, 'store'])->name('dashboard.orangtua.profiles.store');
+Route::get('/orangtua/profiles/{id}/edit', [ProfilesController::class, 'edit'])->name('dashboard.orangtua.profiles.edit');
+Route::put('/orangtua/profiles/{id}', [ProfilesController::class, 'update'])->name('dashboard.orangtua.profiles.update');
+Route::get('/orangtua/profiles/{id}', [ProfilesController::class, 'show'])->name('dashboard.orangtua.profiles.show');
+Route::delete('/orangtua/profiles/{id}', [ProfilesController::class, 'destroy'])->name('dashboard.orangtua.profiles.destroy');
 
 // Status Verifikasi
 Route::put('/user/{user}/verifikasi', [UserController::class, 'updateStatus'])->name('user.updateStatus');

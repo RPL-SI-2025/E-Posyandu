@@ -31,7 +31,19 @@
                             <strong>Jenis Kelamin:</strong> {{ $child->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}
                         </li>
                         <li class="list-group-item">
-                            <strong>Usia:</strong> {{ \Carbon\Carbon::parse($child->tanggal_lahir)->diffInMonths(now()) }} bulan
+                            <strong>Usia:</strong> 
+                            @php
+                                $birthDate = \Carbon\Carbon::parse($child->tanggal_lahir);
+                                $now = now();
+                                $diff = $birthDate->diff($now);
+                                $months = ($diff->y * 12) + $diff->m;
+                                $days = $diff->d;
+                            @endphp
+                            @if ($months > 0)
+                                {{ $months }} bulan {{ $days > 0 ? 'lebih ' . $days . ' hari' : '' }}
+                            @else
+                                {{ $days }} hari
+                            @endif
                         </li>
                         @if(isset($child->berat_lahir))
                         <li class="list-group-item">
@@ -103,23 +115,23 @@
                         
                         <!-- Growth Charts -->
                         <div class="row mt-4">
-                            <div class="col-md-6 mb-4">
+                            <div class="col-12 mb-4">
                                 <div class="card">
                                     <div class="card-header">
                                         Grafik Berat Badan
                                     </div>
-                                    <div class="card-body">
-                                        <canvas id="weightChart"></canvas>
+                                    <div class="card-body" style="height: 400px;">
+                                        <canvas id="beratChart"></canvas>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6 mb-4">
+                            <div class="col-12 mb-4">
                                 <div class="card">
                                     <div class="card-header">
                                         Grafik Tinggi Badan
                                     </div>
-                                    <div class="card-body">
-                                        <canvas id="heightChart"></canvas>
+                                    <div class="card-body" style="height: 400px;">
+                                        <canvas id="tinggiChart"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -133,71 +145,107 @@
 @endsection
 
 @section('scripts')
-@if(!$inspections->isEmpty())
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    $(document).ready(function() {
-        $('#inspectionTable').DataTable({
-            responsive: true,
-            order: [[0, 'desc']]
-        });
-        
-        // Prepare data for charts
-        const dates = {!! json_encode($inspections->pluck('tanggal_pemeriksaan')->map(function($date) {
-            return \Carbon\Carbon::parse($date)->format('d-m-Y');
-        })->reverse()->values()) !!};
-        
-        const weights = {!! json_encode($inspections->pluck('berat_badan')->reverse()->values()) !!};
-        const heights = {!! json_encode($inspections->pluck('tinggi_badan')->reverse()->values()) !!};
-        
-        // Weight Chart
-        const weightCtx = document.getElementById('weightChart').getContext('2d');
-        const weightChart = new Chart(weightCtx, {
-            type: 'line',
-            data: {
-                labels: dates,
-                datasets: [{
-                    label: 'Berat Badan (kg)',
-                    data: weights,
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 2,
-                    tension: 0.1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: false
+    @if(!$inspections->isEmpty())
+        <!-- Script Chart.js -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            // Menggunakan $inspections untuk mengambil tanggal pemeriksaan
+            const labels = @json($inspections->pluck('tanggal_pemeriksaan')->map(function ($date) {
+                return \Carbon\Carbon::parse($date)->format('d-m-Y');
+            })->all());
+            const dataBerat = @json($inspections->pluck('berat_badan')->map(function ($value) {
+                return $value ? floatval($value) : null;
+            })->all());
+            const dataTinggi = @json($inspections->pluck('tinggi_badan')->map(function ($value) {
+                return $value ? floatval($value) : null;
+            })->all());
+
+            // Debugging untuk memastikan data tersedia
+            console.log('Labels:', labels);
+            console.log('Data Berat:', dataBerat);
+            console.log('Data Tinggi:', dataTinggi);
+
+            // Grafik Berat Badan
+            const ctxBerat = document.getElementById('beratChart').getContext('2d');
+            new Chart(ctxBerat, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Berat Badan (kg)',
+                        data: dataBerat,
+                        fill: false,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Grafik Pertumbuhan Berat Badan'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Kg'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Tanggal Pemeriksaan'
+                            }
+                        }
                     }
                 }
-            }
-        });
-        
-        // Height Chart
-        const heightCtx = document.getElementById('heightChart').getContext('2d');
-        const heightChart = new Chart(heightCtx, {
-            type: 'line',
-            data: {
-                labels: dates,
-                datasets: [{
-                    label: 'Tinggi Badan (cm)',
-                    data: heights,
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 2,
-                    tension: 0.1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: false
+            });
+
+            // Grafik Tinggi Badan
+            const ctxTinggi = document.getElementById('tinggiChart').getContext('2d');
+            new Chart(ctxTinggi, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Tinggi Badan (cm)',
+                        data: dataTinggi,
+                        fill: false,
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Grafik Pertumbuhan Tinggi Badan'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Cm'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Tanggal Pemeriksaan'
+                            }
+                        }
                     }
                 }
-            }
-        });
-    });
-</script>
-@endif
+            });
+        </script>
+    @endif
 @endsection

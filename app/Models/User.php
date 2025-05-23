@@ -37,9 +37,10 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-protected $attributes = [
-    'verifikasi' => 'waiting', // Default value
-];
+    
+    protected $attributes = [
+        'verifikasi' => 'waiting', // Default value
+    ];
 
     /**
      * The attributes that should be cast to native types.
