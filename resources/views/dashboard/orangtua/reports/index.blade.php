@@ -20,13 +20,28 @@
         <div class="card-body">
             <!-- Filter Tanggal -->
             <div class="row mb-3">
-                <div class="col-md-6">
-                    <form action="{{ route('dashboard.orangtua.reports.index') }}" method="GET" class="d-flex">
-                        <div class="input-group">
+                <div class="col-md-12">
+                    <form action="{{ route('dashboard.orangtua.reports.index') }}" method="GET" class="d-flex flex-wrap">
+                        <div class="input-group me-2 mb-2">
                             <span class="input-group-text">Dari</span>
                             <input type="date" name="start_date" class="form-control" value="{{ request('start_date') }}">
                             <span class="input-group-text">Sampai</span>
                             <input type="date" name="end_date" class="form-control" value="{{ request('end_date') }}">
+                        </div>
+                        
+                        <div class="input-group me-2 mb-2">
+                            <span class="input-group-text">Anak</span>
+                            <select name="child_id" class="form-select">
+                                <option value="">Semua Anak</option>
+                                @foreach($children ?? [] as $child)
+                                    <option value="{{ $child->id }}" {{ request('child_id') == $child->id ? 'selected' : '' }}>
+                                        {{ $child->nama_anak ?? $child->nama }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        
+                        <div class="mb-2">
                             <button type="submit" class="btn btn-primary">Filter</button>
                             <a href="{{ route('dashboard.orangtua.reports.index') }}" class="btn btn-secondary">Reset</a>
                         </div>

@@ -28,9 +28,17 @@ class ReportController extends Controller
             $query->where('tanggal', '<=', $request->end_date);
         }
         
+        // Apply child filter if provided
+        if ($request->has('child_id') && $request->child_id) {
+            $query->where('child_id', $request->child_id);
+        }
+        
         $reports = $query->latest()->get();
         
-        return view('dashboard.orangtua.reports.index', compact('reports'));
+        // Get all children related to this parent for the dropdown
+        $children = Child::where('user_id', $userId)->get();
+        
+        return view('dashboard.orangtua.reports.index', compact('reports', 'children'));
     }
 
     /**
