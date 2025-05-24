@@ -8,11 +8,11 @@
                         <img src="{{ asset('assets/home.png') }}" alt="Logo" style="height: 25px; margin-right: 8px;">
                         Dashboard
                     </a>
-                    <a class="nav-link" href="{{ route('dashboard.admin.balita.index') }}">
+                    <a class="nav-link {{ request()->routeIs('dashboard.petugas.balita.index') ? 'active' : '' }}" href="{{ route('dashboard.petugas.balita.index') }}">
                         <img src="{{ asset('assets/Baby Feet.png') }}" alt="Logo" style="height: 25px; margin-right: 8px;">
                         Balita
                     </a>
-                    <a class="nav-link {{ request()->routeIs('user.index') ? 'active' : '' }}" href="{{ route('user.index') }}">
+                    <a class="nav-link {{ request()->routeIs('dashboard.petugas.user.index') ? 'active' : '' }}" href="{{ route('dashboard.petugas.user.index') }}">
                         <img src="{{ asset('assets/user.png') }}" alt="Logo" style="height: 25px; margin-right: 8px;">
                         Users
                     </a>

@@ -2,6 +2,16 @@
 
 @section('content')
 <div class="row">
+    <h1>Daftar Kegiatan</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item">
+                <a href="{{ route('dashboard.admin.index') }}">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{{ route('dashboard.admin.event.index') }}">Daftar Kegiatan</a>
+            </li>
+            <li class="breadcrumb-item active">Tambah Daftar Kegiatan</li>
+        </ol>
     <!-- Form Tambah Jadwal -->
     <div class="col-md-8">
         <div class="card mb-4">
