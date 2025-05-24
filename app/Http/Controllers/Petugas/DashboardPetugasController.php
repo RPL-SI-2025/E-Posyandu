@@ -3,15 +3,35 @@
 namespace App\Http\Controllers\Petugas;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\Balita;
+use App\Models\Inspection;
 
 class DashboardPetugasController extends Controller
 {
     /**
-     * Tampilkan halaman dashboard untuk Petugas.
+     * Tampilkan halaman dashboard untuk admin.
      */
     public function index()
     {
-        return view('dashboard.petugas.index');
+        // Hitung akun yang masih menunggu verifikasi
+        $jumlahMenungguVerifikasi = User::where('verifikasi', 'waiting')->count();
+
+        // Hitung akun yang disetujui dan ditolak (jika perlu)
+        $jumlahDisetujui = User::where('verifikasi', 'approved')->count();
+        $jumlahDitolak = User::where('verifikasi', 'rejected')->count();
+
+        // Ambil data perkembangan bayi (misalnya ambil 10 terakhir)
+        $perkembanganBayi = Inspection::with('child')
+            ->latest('tanggal_pemeriksaan')
+            ->take(10)
+            ->get();
+
+        return view('dashboard.petugas.index', compact(
+            'jumlahMenungguVerifikasi',
+            'jumlahDisetujui',
+            'jumlahDitolak',
+            'perkembanganBayi'
+        ));
     }
 }

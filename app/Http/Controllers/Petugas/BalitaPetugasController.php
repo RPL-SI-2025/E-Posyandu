@@ -7,7 +7,7 @@ use App\Models\Balita;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class BalitaController extends Controller
+class BalitaPetugasController extends Controller
 {
     public function index(Request $request)
     {

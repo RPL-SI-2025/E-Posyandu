@@ -13,13 +13,13 @@
     </div>
 
     <div class="mb-4">
-        <a href="{{ route('user.create') }}" class="btn btn-primary">Tambah Akun</a>
+        <a href="{{ route('dashboard.petugas.user.create') }}" class="btn btn-primary">Tambah Akun</a>
     </div>
 
     <!-- Filter dan Pencarian -->
     <div class="card mb-4">
         <div class="card-body">
-            <form action="{{ route('user.index') }}" method="GET" class="d-flex gap-3">
+            <form action="{{ route('dashboard.petugas.user.index') }}" method="GET" class="d-flex gap-3">
                 <div class="d-flex gap-2">
                     <div class="col-md-4">
                         <label for="role" class="form-label">Role:</label>
@@ -51,7 +51,7 @@
                             <i class="bi bi-search"></i> Cari
                         </button>
                         @if(request()->has('search') || request()->has('role') || request()->has('verifikasi'))
-                            <a href="{{ route('user.index') }}" class="btn btn-outline-danger">
+                            <a href="{{ route('dashboard.petugas.user.index') }}" class="btn btn-outline-danger">
                                 <i class="bi bi-x-circle"></i> Reset
                             </a>
                         @endif
@@ -106,7 +106,7 @@
                                         <ul class="dropdown-menu">
                                             <!-- Edit -->
                                             <li>
-                                                <a href="{{ route('user.edit', $user->id) }}" class="dropdown-item">
+                                                <a href="{{ route('dashboard.petugas.user.edit', $user->id) }}" class="dropdown-item">
                                                     <i class="bi bi-pencil-square me-2"></i>Edit
                                                 </a>
                                             </li>
@@ -142,7 +142,7 @@
 
                                             <!-- Delete -->
                                             <li>
-                                                <form action="{{ route('user.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus pengguna ini?')">
+                                                <form action="{{ route('dashboard.petugas.user.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus pengguna ini?')">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="dropdown-item text-danger">
@@ -161,7 +161,7 @@
                                         Tidak ada data pengguna yang ditemukan
                                         @if(request()->has('search') || request()->has('role') || request()->has('verifikasi'))
                                             dengan filter yang dipilih.
-                                            <a href="{{ route('user.index') }}" class="alert-link">Reset filter</a>
+                                            <a href="{{ route('dashboard.petugas.user.index') }}" class="alert-link">Reset filter</a>
                                         @endif
                                     </div>
                                 </td>

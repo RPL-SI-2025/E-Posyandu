@@ -17,12 +17,12 @@
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Welcome,</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">Anda memiliki 10 akun yang harus diverifikasi, cek kelola datamu!</div>
-                            <a href="#" class="btn btn-primary btn-sm mt-2">Cek Data</a> {{-- Placeholder link --}}
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">Anda memiliki {{ $jumlahMenungguVerifikasi }} akun yang harus diverifikasi, cek kelola datamu!</div>
+                            <a href="{{ route('dashboard.petugas.user.index') }}" class="btn btn-primary btn-sm mt-2">Cek Data</a> {{-- Placeholder link --}}
                         </div>
                         <div class="col-auto">
                             {{-- Placeholder for image --}}
-                            <img src="{{ asset('assets/illustration.png') }}" alt="Illustration" style="height: 100px;">
+                            <img src="{{ asset('assets/dashboard.png') }}" alt="Illustration" style="height: 130px;">
                         </div>
                     </div>
                 </div>
@@ -33,14 +33,17 @@
             <div class="card border-left-success shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Disetujui</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">20.456</div> {{-- Placeholder count --}}
-                            <div class="text-muted small">+10</div> {{-- Placeholder change --}}
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-check fa-2x text-gray-300"></i>
-                        </div>
+                    <div class="col mr-2">
+                        {{-- Gambar kecil, rata kiri --}}
+                        <img src="{{ asset('assets/setuju.png') }}" alt="Illustration" style="height: 45px;" class="mb-3">
+
+                        {{-- Label Disetujui --}}
+                        <div class="text-xs mb-2" style="font-weight: 400; color: #92949E;">Disetujui</div>
+
+                        {{-- Jumlah --}}
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ number_format($jumlahDisetujui) }}</div>
+                    </div>
+
                     </div>
                 </div>
             </div>
@@ -51,11 +54,14 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Ditolak</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">0</div> {{-- Placeholder count --}}
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-times fa-2x text-gray-300"></i>
+                            {{-- Gambar kecil, rata kiri --}}
+                            <img src="{{ asset('assets/tolak.png') }}" alt="Illustration" style="height: 45px;" class="mb-3">
+
+                            {{-- Label Disetujui --}}
+                            <div class="text-xs mb-2" style="font-weight: 400; color: #92949E;">Ditolak</div>
+
+                            {{-- Jumlah --}}
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ number_format($jumlahDitolak) }}</div>
                         </div>
                     </div>
                 </div>
@@ -66,13 +72,15 @@
             <div class="card border-left-warning shadow h-100 py-2">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
-                        <div class="col mr-2">
-                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Menunggu</div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">10</div> {{-- Placeholder count --}}
-                            <div class="text-muted small">+10</div> {{-- Placeholder change --}}
-                        </div>
-                        <div class="col-auto">
-                            <i class="fas fa-clock fa-2x text-gray-300"></i>
+                    <div class="col mr-2">
+                            {{-- Gambar kecil, rata kiri --}}
+                            <img src="{{ asset('assets/menunggu.png') }}" alt="Illustration" style="height: 45px;" class="mb-3">
+
+                            {{-- Label Disetujui --}}
+                            <div class="text-xs mb-2" style="font-weight: 400; color: #92949E;">Menunggu</div>
+
+                            {{-- Jumlah --}}
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ number_format($jumlahMenungguVerifikasi) }}</div>
                         </div>
                     </div>
                 </div>
@@ -94,59 +102,23 @@
                             <tr>
                                 <th>Nama Bayi</th>
                                 <th>Tanggal Penimbangan</th>
-                                <th>Tinggi/Berat</th>
-                                <th>Lingkar Kepala/Lengan</th>
+                                <th>Tinggi Badan</th>
+                                <th>Berat Badan</th>
+                                <th>Lingkar Kepala</th>
                             </tr>
                         </thead>
                         <tbody>
                             {{-- Placeholder rows --}}
                             <tr>
-                                <td>Aziza Alina</td>
-                                <td>23/02/2025</td>
-                                <td>46cm/3kg</td>
-                                <td>35cm/12cm</td>
-                            </tr>
+                            @foreach ($perkembanganBayi as $data)
                             <tr>
-                                <td>Jasmin Laila</td>
-                                <td>15/02/2025</td>
-                                <td>53cm/4kg</td>
-                                <td>34cm/13cm</td>
+                                <td>{{ $data->child->nama_anak }}</td>
+                                <td>{{ \Carbon\Carbon::parse($data->tanggal_penimbangan)->format('d-m-Y') }}</td>
+                                <td>{{ $data->tinggi_badan }} cm</td>
+                                <td> {{ $data->berat_badan }} kg</td>
+                                <td>{{ $data->lingkar_kepala }} cm</td>
                             </tr>
-                             <tr>
-                                <td>Aziza Alina</td>
-                                <td>23/02/2025</td>
-                                <td>46cm/3kg</td>
-                                <td>35cm/12cm</td>
-                            </tr>
-                            <tr>
-                                <td>Jasmin Laila</td>
-                                <td>15/02/2025</td>
-                                <td>53cm/4kg</td>
-                                <td>34cm/13cm</td>
-                            </tr>
-                             <tr>
-                                <td>Aziza Alina</td>
-                                <td>23/02/2025</td>
-                                <td>46cm/3kg</td>
-                                <td>35cm/12cm</td>
-                            </tr>
-                            <tr>
-                                <td>Jasmin Laila</td>
-                                <td>15/02/2025</td>
-                                <td>53cm/4kg</td>
-                                <td>34cm/13cm</td>
-                            </tr>
-                             <tr>
-                                <td>Aziza Alina</td>
-                                <td>23/02/2025</td>
-                                <td>46cm/3kg</td>
-                                <td>35cm/12cm</td>
-                            </tr>
-                            <tr>
-                                <td>Jasmin Laila</td>
-                                <td>15/02/2025</td>
-                                <td>53cm/4kg</td>
-                                <td>34cm/13cm</td>
+                            @endforeach
                             </tr>
                         </tbody>
                     </table>

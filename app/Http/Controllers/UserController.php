@@ -66,7 +66,7 @@ class UserController extends Controller
         User::create($validated);
 
         // Redirect back to user index with success message
-        return redirect()->route('user.index')->with('success', 'User berhasil ditambahkan.');
+        return redirect()->route('dashboard.admin.user.index')->with('success', 'User berhasil ditambahkan.');
     }
 
     public function show(User $user)
@@ -111,7 +111,7 @@ class UserController extends Controller
         ]);
 
         // Redirect back to the user index with success message
-        return redirect()->route('user.index')->with('success', 'User berhasil diperbarui.');
+        return redirect()->route('dashboard.admin.user.index')->with('success', 'User berhasil diperbarui.');
     }
 
     public function destroy(User $user)
@@ -120,7 +120,7 @@ class UserController extends Controller
         $user->delete();
 
         // Redirect back to user index with success message
-        return redirect()->route('user.index')->with('success', 'User berhasil dihapus.');
+        return redirect()->route('dashboard.admin.user.index')->with('success', 'User berhasil dihapus.');
     }
 
     public function updateStatus(Request $request, User $user)
@@ -135,6 +135,6 @@ class UserController extends Controller
         $user->save();
 
         // Redirect back to user index with success message
-        return redirect()->route('user.index')->with('success', 'Status verifikasi berhasil diperbarui.');
+        return redirect()->route('dashboard.admin.user.index')->with('success', 'Status verifikasi berhasil diperbarui.');
     }
 }

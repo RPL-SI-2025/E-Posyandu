@@ -10,13 +10,12 @@
                         Dashboard
                     </a>
 
-                    <a class="nav-link" href="{{ route('user.index') }}">
+                    <a class="nav-link {{ request()->routeIs('dashboard.admin.user.index') ? 'active' : '' }}" href="{{ route('dashboard.admin.user.index') }}">
                         <img src="{{ asset('assets/user.png') }}" alt="Logo" style="height: 25px; margin-right: 8px;">
                         User
                     </a>
 
-                    <a class="nav-link {{ request()->routeIs('dashboard.admin.balita.*') ? 'active' : '' }}" 
-                       href="{{ route('dashboard.admin.balita.index') }}">
+                    <a class="nav-link {{ request()->routeIs('dashboard.admin.balita.*') ? 'active' : '' }}" href="{{ route('dashboard.admin.balita.index') }}">
                         <img src="{{ asset('assets/Baby Feet.png') }}" alt="Logo" style="height: 25px; margin-right: 8px;">
                         Balita
                     </a>

@@ -1,7 +1,8 @@
 <div class="row g-3">
+    
     <div class="col-md-6">
         <div class="mb-3">
-            <label for="name" class="form-label">Nama <span class="text-danger">*</span></label>
+            <label for="name" class="form-label">Nama</label>
             <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-person"></i></span>
                 <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" 
@@ -15,7 +16,7 @@
     
     <div class="col-md-6">
         <div class="mb-3">
-            <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+            <label for="email" class="form-label">Email</label>
             <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-envelope"></i></span>
                 <input type="email" name="email" id="email" class="form-control @error('email') is-invalid @enderror" 
@@ -59,7 +60,7 @@
     
     <div class="col-md-4">
         <div class="mb-3">
-            <label for="role" class="form-label">Role <span class="text-danger">*</span></label>
+            <label for="role" class="form-label">Role</label>
             <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-person-badge"></i></span>
                 <select name="role" id="role" class="form-select @error('role') is-invalid @enderror" required>

@@ -4,12 +4,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ArtikelController;
-use App\Http\Controllers\Admin\BalitaController as AdminBalitaController;
+use App\Http\Controllers\Admin\BalitaController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Orangtua\DashboardOrangtuaController;
 use App\Http\Controllers\Petugas\DashboardPetugasController;
 
-use App\Http\Controllers\Petugas\BalitaController as PetugasBalitaController;
+use App\Http\Controllers\Petugas\BalitaPetugasController;
 
 use App\Http\Controllers\Petugas\UserPetugasController;
 use App\Http\Controllers\Petugas\InspectionPetugasController;
@@ -20,7 +20,13 @@ use App\Http\Controllers\Orangtua\ProfilesController;
 use App\Http\Controllers\EventtimeController;
 
 // Resource route untuk user (tanpa auth)
-Route::resource('user', UserController::class);
+Route::get('user', [UserController::class, 'index'])->name('dashboard.admin.user.index'); 
+Route::get('user/create', [UserController::class, 'create'])->name('dashboard.admin.user.create'); 
+Route::post('user', [UserController::class, 'store'])->name('dashboard.admin.user.store');
+Route::get('user/{user}', [UserController::class, 'show'])->name('dashboard.admin.user.show'); 
+Route::get('user/{user}/edit', [UserController::class, 'edit'])->name('dashboard.admin.user.edit'); 
+Route::put('user/{user}', [UserController::class, 'update'])->name('dashboard.admin.user.update'); 
+Route::delete('user/{user}', [UserController::class, 'destroy'])->name('dashboard.admin.user.destroy'); 
 
 // Halaman utama
 Route::get('/', fn () => view('welcome'))->name('welcome');
@@ -39,13 +45,13 @@ Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('das
 Route::get('/dashboard', fn () => redirect()->route('dashboard.admin.index'))->name('dashboard');
 
 // Balita routes for admin
-Route::get('/admin/balita', [AdminBalitaController::class, 'index'])->name('dashboard.admin.balita.index');
-Route::get('/admin/balita/create', [AdminBalitaController::class, 'create'])->name('dashboard.admin.balita.create');
-Route::post('/admin/balita', [AdminBalitaController::class, 'store'])->name('dashboard.admin.balita.store');
-Route::get('/admin/balita/{balita}', [AdminBalitaController::class, 'show'])->name('dashboard.admin.balita.show');
-Route::get('/admin/balita/{balita}/edit', [AdminBalitaController::class, 'edit'])->name('dashboard.admin.balita.edit');
-Route::put('/admin/balita/{balita}', [AdminBalitaController::class, 'update'])->name('dashboard.admin.balita.update');
-Route::delete('/admin/balita/{balita}', [AdminBalitaController::class, 'destroy'])->name('dashboard.admin.balita.destroy');
+Route::get('/admin/balita', [BalitaController::class, 'index'])->name('dashboard.admin.balita.index');
+Route::get('/admin/balita/create', [BalitaController::class, 'create'])->name('dashboard.admin.balita.create');
+Route::post('/admin/balita', [BalitaController::class, 'store'])->name('dashboard.admin.balita.store');
+Route::get('/admin/balita/{balita}', [BalitaController::class, 'show'])->name('dashboard.admin.balita.show');
+Route::get('/admin/balita/{balita}/edit', [BalitaController::class, 'edit'])->name('dashboard.admin.balita.edit');
+Route::put('/admin/balita/{balita}', [BalitaController::class, 'update'])->name('dashboard.admin.balita.update');
+Route::delete('/admin/balita/{balita}', [BalitaController::class, 'destroy'])->name('dashboard.admin.balita.destroy');
 
 // Artikel routes (tanpa middleware)
 Route::get('/admin/artikel', [ArtikelController::class, 'index'])->name('dashboard.admin.artikel.index');
@@ -92,20 +98,24 @@ Route::resource('petugas/event', App\Http\Controllers\Petugas\EventController::c
 
 // Petugas balita routes
 Route::prefix('petugas')->name('dashboard.petugas.balita.')->group(function () {
-    Route::get('/balita', [PetugasBalitaController::class, 'index'])->name('index');
-    Route::get('/balita/create', [PetugasBalitaController::class, 'create'])->name('create');
-    Route::post('/balita', [PetugasBalitaController::class, 'store'])->name('store');
-    Route::get('/balita/{balita}', [PetugasBalitaController::class, 'show'])->name('show');
-    Route::get('/balita/{balita}/edit', [PetugasBalitaController::class, 'edit'])->name('edit');
-    Route::put('/balita/{balita}', [PetugasBalitaController::class, 'update'])->name('update');
-    Route::delete('/balita/{balita}', [PetugasBalitaController::class, 'destroy'])->name('destroy');
+    Route::get('/balita', [BalitaPetugasController::class, 'index'])->name('index');
+    Route::get('/balita/create', [BalitaPetugasController::class, 'create'])->name('create');
+    Route::post('/balita', [BalitaPetugasController::class, 'store'])->name('store');
+    Route::get('/balita/{balita}', [BalitaPetugasController::class, 'show'])->name('show');
+    Route::get('/balita/{balita}/edit', [BalitaPetugasController::class, 'edit'])->name('edit');
+    Route::put('/balita/{balita}', [BalitaPetugasController::class, 'update'])->name('update');
+    Route::delete('/balita/{balita}', [BalitaPetugasController::class, 'destroy'])->name('destroy');
 });
 
-
-
-
-Route::resource('user', UserPetugasController::class);
-
+Route::prefix('petugas')->name('dashboard.petugas.user.')->group(function () {
+    Route::get('user', [UserPetugasController::class, 'index'])->name('index'); 
+    Route::get('user/create', [UserPetugasController::class, 'create'])->name('create'); 
+    Route::post('user', [UserPetugasController::class, 'store'])->name('store');
+    Route::get('user/{user}', [UserPetugasController::class, 'show'])->name('show'); 
+    Route::get('user/{user}/edit', [UserPetugasController::class, 'edit'])->name('edit'); 
+    Route::put('user/{user}', [UserPetugasController::class, 'update'])->name('update'); 
+    Route::delete('user/{user}', [UserPetugasController::class, 'destroy'])->name('destroy'); 
+});
 // Dashboard orangtua
 Route::get('/orangtua/dashboard', [DashboardOrangtuaController::class, 'index'])->name('dashboard.orangtua.index');
 Route::get('/orangtua/reports', [ReportController::class, 'index'])->name('dashboard.orangtua.reports.index');
@@ -116,8 +126,6 @@ Route::get('/orangtua/reports/{id}/edit', [ReportController::class, 'edit'])->na
 Route::put('/orangtua/reports/{id}', [ReportController::class, 'update'])->name('dashboard.orangtua.reports.update');
 Route::delete('/orangtua/reports/{id}', [ReportController::class, 'destroy'])->name('dashboard.orangtua.reports.destroy');
 
-
-// Dashboard orangtua Profiles
 // Dashboard orangtua Profiles
 Route::get('/orangtua/profiles', [ProfilesController::class, 'index'])->name('dashboard.orangtua.profiles.index');
 Route::get('/orangtua/profiles/create', [ProfilesController::class, 'create'])->name('dashboard.orangtua.profiles.create');
