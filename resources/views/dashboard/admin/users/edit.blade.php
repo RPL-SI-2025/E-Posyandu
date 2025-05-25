@@ -16,23 +16,50 @@
                     <form action="{{ route('dashboard.admin.user.update', $user->id) }}" method="POST">
                         @csrf
                         @method('PUT')
+                        
+                        {{-- Include form fields --}}
                         @include('dashboard.admin.users.form', ['user' => $user])
 
-                        <!-- Status Verifikasi -->
-                        <div class="mb-3">
-                            <label for="status_akun" class="form-label">Status Verifikasi</label>
-                            <select name="status_akun" id="status_akun" class="form-select">
-                                <option value="waiting" {{ old('status_akun', $user->verifikasi) == 'waiting' ? 'selected' : '' }}>Waiting</option>
-                                <option value="approved" {{ old('status_akun', $user->verifikasi) == 'approved' ? 'selected' : '' }}>Approved</option>
-                                <option value="rejected" {{ old('status_akun', $user->verifikasi) == 'rejected' ? 'selected' : '' }}>Rejected</option>
-                            </select>
+                        {{-- Status Verifikasi Field --}}
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="status_akun" class="form-label">Status Verifikasi <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-check-circle"></i></span>
+                                        <select name="verifikasi" id="status_akun" dusk="status-akun" 
+                                                class="form-select @error('status_akun') is-invalid @enderror" required>
+                                            <option value="">Pilih Status</option>
+                                            <option value="waiting" {{ old('status_akun', $user->verifikasi) == 'waiting' ? 'selected' : '' }}>
+                                                Menunggu
+                                            </option>
+                                            <option value="approved" {{ old('status_akun', $user->verifikasi) == 'approved' ? 'selected' : '' }}>
+                                                Disetujui
+                                            </option>
+                                            <option value="rejected" {{ old('status_akun', $user->verifikasi) == 'rejected' ? 'selected' : '' }}>
+                                                Ditolak
+                                            </option>
+                                        </select>
+                                        @error('status_akun')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="form-text">
+                                        <small class="text-muted">Status verifikasi saat ini: 
+                                            <span class="badge bg-{{ $user->verifikasi === 'approved' ? 'success' : ($user->verifikasi === 'rejected' ? 'danger' : 'secondary') }}">
+                                                {{ $user->verifikasi === 'approved' ? 'Disetujui' : ($user->verifikasi === 'rejected' ? 'Ditolak' : 'Menunggu') }}
+                                            </span>
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="text-end mt-4">
                             <a href="{{ route('dashboard.admin.user.index') }}" class="btn btn-secondary">
                                 <i class="bi bi-x-circle"></i> Batal
                             </a>
-                            <button type="submit" class="btn btn-success">
+                            <button type="submit" class="btn btn-primary">
                                 <i class="bi bi-check-circle"></i> Update
                             </button>
                         </div>
