@@ -226,7 +226,7 @@
                                 <p class="mt-1 text-sm text-gray-500">Project Manager</p>
                             </div>
                             <div class="text-center p-6 bg-white rounded-lg shadow-lg">
-                                <img src="{{ asset('assets/jpg2png/profile.jpg') }}" alt="Admin Profile" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover shadow-md">
+                                <img src="{{ asset('assets/jpg2png/firstki(1).jpg') }}" alt="Admin Profile" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover shadow-md">
                                 <h3 class="mt-2 text-lg font-medium text-gray-900">Firstki Aditya</h3>
                                 <p class="mt-1 text-sm text-gray-500">Fullstack Developer</p>
                             </div>
