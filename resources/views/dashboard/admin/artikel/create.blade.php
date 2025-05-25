@@ -36,8 +36,8 @@
                     <input class="form-check-input" type="checkbox" id="is_show" name="is_show" value="1" checked>
                     <label class="form-check-label" for="is_show">Tampilkan Artikel</label>
                 </div>
-                <button type="submit" class="btn btn-primary">Simpan</button>
-                <a href="{{ route('dashboard.admin.artikel.index') }}" class="btn btn-secondary">Batal</a>
+                <button type="submit" class="btn btn-primary" dusk="save-article">Simpan</button>
+                <a href="{{ route('dashboard.admin.artikel.index') }}" class="btn btn-secondary" dusk="cancel-article">Batal</a>
             </form>
         </div>
     </div>
@@ -49,6 +49,9 @@
 <script>
     ClassicEditor
         .create(document.querySelector('#isi'))
+        .then(editor => {
+            window.editor = editor; // Tambahkan ini
+        })
         .catch(error => {
             console.error(error);
         });

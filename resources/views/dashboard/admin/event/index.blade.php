@@ -3,6 +3,13 @@
 
 @section('content')
 <div class="container mt-4">
+    <h1>Daftar Kegiatan</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item">
+                <a href="{{ route('dashboard.admin.index') }}">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item active">Daftar Kegiatan</li>
+        </ol>
     <div class="row">
         <div class="col-md-12">
             <div class="card">

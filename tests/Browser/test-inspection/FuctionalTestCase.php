@@ -44,10 +44,10 @@ class FuctionalTestCase extends DuskTestCase
                     ->assertPathIs('/admin/kunjungan/create')
                     ->select('table_child_id', '1')
                     ->select('user_id', '1')
-                    ->type('tanggal_pemeriksaan', '01-05-2025')
-                    ->type('berat_badan', 12)
+                    ->type('tanggal_pemeriksaan', '01-07-2025')
+                    ->type('berat_badan', 15)
                     ->type('tinggi_badan', 102)
-                    ->type('lingkar_kepala', 50)
+                    ->type('lingkar_kepala', 51)
                     ->type('catatan', 'test')
                     ->select('eventtime_id', '1')
                     ->press('Simpan')
@@ -84,10 +84,10 @@ class FuctionalTestCase extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visit('/admin/kunjungan')
                     ->pause(2000)
-                    ->click('@edit-inspection', '14')
+                    ->click('@edit-inspection', 17)
                     ->pause(2000)
-                    ->assertPathIs('/admin/kunjungan/14/edit')
-                    ->type('berat_badan', 14)
+                    ->assertPathIs('/admin/kunjungan/17/edit')
+                    ->type('catatan', 'sehat anaknya pertahankan terus')
                     ->press('Update')
                     ->pause(2000)
                     ->assertPathIs('/admin/kunjungan');
@@ -98,7 +98,7 @@ class FuctionalTestCase extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visit('/admin/kunjungan')
                     ->pause(2000)
-                    ->click('@delete-inspection', '15')
+                    ->click('@delete-inspection', 18)
                     ->acceptDialog()
                     ->pause(2000)
                     ->assertSee('Data pemeriksaan berhasil dihapus');
@@ -165,10 +165,10 @@ class FuctionalTestCase extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visit('/admin/kunjungan')
                     ->pause(2000)
-                    ->type('search', 'Dimas Wijaya')
+                    ->type('search', 'Aulia Aminah')
                     ->press('Search')
                     ->pause(2000)
-                    ->assertSee('Dimas Wijaya');
+                    ->assertSee('Aulia Aminah');
         });
     }
 

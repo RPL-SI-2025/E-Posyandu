@@ -30,6 +30,18 @@ class Inspection extends Model
     ];
 
     /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'tanggal_pemeriksaan' => 'date',
+        'berat_badan' => 'decimal:2',
+        'tinggi_badan' => 'decimal:2',
+        'lingkar_kepala' => 'decimal:2',
+    ];
+
+    /**
      * Relasi ke tabel Child (Anak yang diperiksa).
      */
     public function child()

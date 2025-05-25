@@ -8,11 +8,11 @@
                         <img src="{{ asset('assets/home.png') }}" alt="Logo" style="height: 25px; margin-right: 8px;">
                         Dashboard
                     </a>
-                    <a class="nav-link" href="#">
+                    <a class="nav-link {{ request()->routeIs('dashboard.orangtua.profiles.*') ? 'active' : '' }}" href="{{ route('dashboard.orangtua.profiles.index') }}">
                         <img src="{{ asset('assets/home.png') }}" alt="Logo" style="height: 25px; margin-right: 8px;">
                         Profil Balita
                     </a>
-                    <a class="nav-link" href="#">
+                    <a class="nav-link {{ request()->routeIs('dashboard.orangtua.reports.*') ? 'active' : '' }}" href="{{ route('dashboard.orangtua.reports.index') }}">
                         <img src="{{ asset('assets/home.png') }}" alt="Logo" style="height: 25px; margin-right: 8px;">
                         Report Daily
                     </a>
