@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Petugas;
+use App\Http\Controllers\Controller;
 
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class UserPetugasController extends Controller
 {
     public function index(Request $request)
     {
@@ -21,7 +22,7 @@ class UserController extends Controller
             $query->where('verifikasi', $request->verifikasi);
         }
 
-        // Apply search filter if provided (by name, email, or phone)
+        // Apply search filter if provided
         if ($request->filled('search')) {
             $searchTerm = '%' . $request->search . '%';
             $query->where(function ($q) use ($searchTerm) {
@@ -31,10 +32,11 @@ class UserController extends Controller
             });
         }
 
-        // Paginate and keep query string for pagination links
-        $users = $query->paginate(10)->withQueryString();
+        // Get the filtered users
+        $users = $query->get();
 
-        return view('dashboard.admin.users.index', compact('users'))
+        // Return the index view with the filtered results and query parameters
+        return view('dashboard.petugas.user.index', compact('users'))
             ->with('selectedRole', $request->role)
             ->with('searchTerm', $request->search)
             ->with('selectedVerifikasi', $request->verifikasi);
@@ -42,7 +44,7 @@ class UserController extends Controller
 
     public function create()
     {
-        return view('dashboard.admin.users.create');
+        return view('dashboard.petugas.user.create');
     }
 
     public function store(Request $request)
@@ -65,34 +67,38 @@ class UserController extends Controller
         User::create($validated);
 
         // Redirect back to user index with success message
-        return redirect()->route('dashboard.admin.user.index')->with('success', 'User berhasil ditambahkan.');
+        return redirect()->route('user.index')->with('success', 'User berhasil ditambahkan.');
     }
 
     public function show(User $user)
     {
-        return view('dashboard.admin.users.show', compact('user'));
+        return view('dashboard.petugas.user.show', compact('user'));
     }
 
     public function edit(User $user)
     {
-        return view('dashboard.admin.users.edit', compact('user'));
+        return view('dashboard.petugas.user.edit', compact('user'));
     }
 
-public function update(Request $request, User $user)
-{
-    $validated = $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|email|max:255|unique:users,email,' . $user->id,
-        'password' => 'nullable|string|min:8|confirmed',
-        'role' => 'required|string|in:admin,petugas,orangtua',
-        'phone' => 'nullable|string|max:255',
-        'address' => 'nullable|string',
-        'verifikasi' => 'required|in:waiting,approved,rejected', // tambahkan ini
-    ]);
+    public function update(Request $request, User $user)
+    {
+        // Validate incoming request data
+        $validated = $request->validate([
+            'name'        => 'required|string|max:255',
+            'email'       => 'required|email|unique:users,email,' . $user->id,
+            'password'    => 'nullable|string|min:8|confirmed',
+            'role'        => 'required|in:admin,petugas,orangtua',
+            'phone'       => 'nullable|string|max:15',
+            'address'     => 'nullable|string',
+            'status_akun' => 'required|in:waiting,approved,rejected',
+        ]);
 
-    if (!$request->filled('password')) {
-        unset($validated['password']);
-    }
+        // If password is provided, hash it; otherwise, leave it unchanged
+        if ($request->filled('password')) {
+            $validated['password'] = bcrypt($validated['password']);
+        } else {
+            unset($validated['password']);
+        }
 
         // Update the user with the validated data
         $user->update([
@@ -106,13 +112,8 @@ public function update(Request $request, User $user)
         ]);
 
         // Redirect back to the user index with success message
-        return redirect()->route('dashboard.admin.user.index')->with('success', 'User berhasil diperbarui.');
+        return redirect()->route('user.index')->with('success', 'User berhasil diperbarui.');
     }
-    $user->update($validated);
-
-    return redirect()->route('user.index')->with('success', 'Pengguna berhasil diperbarui.');
-}
-
 
     public function destroy(User $user)
     {
@@ -120,8 +121,6 @@ public function update(Request $request, User $user)
         $user->delete();
 
         // Redirect back to user index with success message
-        return redirect()->route('dashboard.admin.user.index')->with('success', 'User berhasil dihapus.');
-        
         return redirect()->route('user.index')->with('success', 'User berhasil dihapus.');
     }
 
@@ -137,7 +136,6 @@ public function update(Request $request, User $user)
         $user->save();
 
         // Redirect back to user index with success message
-        return redirect()->route('dashboard.admin.user.index')->with('success', 'Status verifikasi berhasil diperbarui.');
         return redirect()->route('user.index')->with('success', 'Status verifikasi berhasil diperbarui.');
     }
 }

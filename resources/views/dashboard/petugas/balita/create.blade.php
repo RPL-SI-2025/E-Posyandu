@@ -1,17 +1,13 @@
-@extends('dashboard.admin.layout.app')
+@extends('dashboard.petugas.layout.app')
 
 @section('content')
 <div class="container-fluid px-4">
-        <h1>Tambah Data Balita</h1>
-        <ol class="breadcrumb mb-4">
-            <li class="breadcrumb-item">
-                <a href="{{ route('dashboard.admin.index') }}">Dashboard</a>
-            </li>
-            <li class="breadcrumb-item">
-                <a href="{{ route('dashboard.admin.balita.index') }}">Daftar Balita</a>
-            </li>
-            <li class="breadcrumb-item active">Tambah Data Balita</li>
-        </ol>
+    <h1 class="mt-4">Tambah Data Balita</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="{{ route('dashboard.petugas.index') }}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('dashboard.petugas.balita.index') }}">Daftar Balita</a></li>
+        <li class="breadcrumb-item active">Tambah Data Balita</li>
+    </ol>
     <div class="row mt-4">
         <div class="col-12">
             <div class="card border-0 shadow-sm">
@@ -20,12 +16,12 @@
                         <h5 class="card-title mb-0 text-dark">
                             <i class="fas fa-plus me-2"></i>Tambah Data Balita
                         </h5>
-                        <a href="{{ route('dashboard.admin.balita.index') }}" class="btn btn-secondary">
+                        <a href="{{ route('dashboard.petugas.balita.index') }}" class="btn btn-secondary">
                             <i class="fas fa-arrow-left me-2"></i>Kembali
                         </a>
                     </div>
 
-                    <form action="{{ route('dashboard.admin.balita.store') }}" method="POST">
+                    <form action="{{ route('dashboard.petugas.balita.store') }}" method="POST">
                         @csrf
                         <div class="row">
                             <div class="col-md-6">
