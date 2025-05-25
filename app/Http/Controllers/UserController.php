@@ -78,41 +78,32 @@ class UserController extends Controller
         return view('dashboard.admin.users.edit', compact('user'));
     }
 
-public function update(Request $request, User $user)
-{
-    $validated = $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|email|max:255|unique:users,email,' . $user->id,
-        'password' => 'nullable|string|min:8|confirmed',
-        'role' => 'required|string|in:admin,petugas,orangtua',
-        'phone' => 'nullable|string|max:255',
-        'address' => 'nullable|string',
-        'verifikasi' => 'required|in:waiting,approved,rejected', // tambahkan ini
-    ]);
-
-    if (!$request->filled('password')) {
-        unset($validated['password']);
-    }
-
-        // Update the user with the validated data
-        $user->update([
-            'name'       => $validated['name'],
-            'email'      => $validated['email'],
-            'role'       => $validated['role'],
-            'phone'      => $validated['phone'],
-            'address'    => $validated['address'],
-            'verifikasi' => $validated['status_akun'],
-            'password'   => $validated['password'] ?? $user->password,
+    public function update(Request $request, User $user)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+            'password' => 'nullable|string|min:8|confirmed',
+            'role' => 'required|string|in:admin,petugas,orangtua',
+            'phone' => 'nullable|string|max:255',
+            'address' => 'nullable|string',
+            'verifikasi' => 'required|in:waiting,approved,rejected', // validasi status verifikasi
         ]);
 
-        // Redirect back to the user index with success message
+        // Jika password tidak diisi, jangan update password
+        if (empty($validated['password'])) {
+            unset($validated['password']);
+        } else {
+            // Enkripsi password jika ada input baru
+            $validated['password'] = bcrypt($validated['password']);
+        }
+
+        // Update user dengan data yang sudah divalidasi
+        $user->update($validated);
+
+        // Redirect kembali dengan pesan sukses
         return redirect()->route('dashboard.admin.user.index')->with('success', 'User berhasil diperbarui.');
     }
-    $user->update($validated);
-
-    return redirect()->route('user.index')->with('success', 'Pengguna berhasil diperbarui.');
-}
-
 
     public function destroy(User $user)
     {
@@ -121,8 +112,6 @@ public function update(Request $request, User $user)
 
         // Redirect back to user index with success message
         return redirect()->route('dashboard.admin.user.index')->with('success', 'User berhasil dihapus.');
-        
-        return redirect()->route('user.index')->with('success', 'User berhasil dihapus.');
     }
 
     public function updateStatus(Request $request, User $user)
@@ -138,6 +127,5 @@ public function update(Request $request, User $user)
 
         // Redirect back to user index with success message
         return redirect()->route('dashboard.admin.user.index')->with('success', 'Status verifikasi berhasil diperbarui.');
-        return redirect()->route('user.index')->with('success', 'Status verifikasi berhasil diperbarui.');
     }
 }
