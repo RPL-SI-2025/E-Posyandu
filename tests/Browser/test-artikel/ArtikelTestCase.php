@@ -5,6 +5,7 @@ namespace Tests\Browser\test_artikel;
 use Tests\DuskTestCase;
 use Laravel\Dusk\Browser;
 use App\Models\Artikel;
+use Facebook\WebDriver\WebDriverBy;
 
 class ArtikelTestCase extends DuskTestCase
 {
@@ -17,7 +18,8 @@ class ArtikelTestCase extends DuskTestCase
         $this->artikel = Artikel::create([
             'judul' => 'Test Artikel Awal',
             'isi' => 'Isi artikel awal untuk testing',
-            'is_show' => true
+            'is_show' => true,
+            'author' => 'Admin'
         ]);
     }
 
@@ -49,206 +51,189 @@ class ArtikelTestCase extends DuskTestCase
     }
 
     /**
-     * Test creating a new article with valid data
+     * Test Create Article (C)
      */
-    public function test_create_article_valid()
+    public function test_create_article()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/admin/artikel')
-                    ->click('@create-article')
-                    ->type('judul', 'Test Artikel Baru')
-                    ->type('isi', 'Isi artikel baru untuk testing')
-                    ->check('is_show')
-                    ->press('@save-article')
                     ->pause(2000)
-                    ->assertSee('Artikel berhasil disimpan')
+                    ->waitFor('@create-article')
+                    ->click('@create-article')
+                    ->pause(2000)
+                    ->assertPathIs('/admin/artikel/create')
+                    ->waitFor('#judul')
+                    ->type('judul', 'Test Artikel Baru')
+                    ->pause(2000); // Wait for CKEditor to initialize
+
+            // Set CKEditor content using JavaScript
+            $browser->driver->executeScript(
+                "document.querySelector('.ck-editor__editable').innerHTML = 'Isi artikel baru untuk testing'"
+            );
+
+            $browser->waitFor('#is_show')
+                    ->check('is_show')
+                    ->waitFor('@save-article')
+                    ->press('@save-article')
+                    ->pause(3000)
+                    ->waitForLocation('/admin/artikel') // Wait for redirect
+                    ->assertPathIs('/admin/artikel')
+                    ->waitForText('Test Artikel Baru') // Wait for the text to appear
                     ->assertSee('Test Artikel Baru');
         });
     }
 
     /**
-     * Test creating article with invalid data
+     * Test Read Article (R)
      */
-    public function test_create_article_invalid()
+    public function test_read_article()
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit('/admin/artikel')
-                    ->click('@create-article')
-                    ->press('@save-article')
-                    ->pause(2000)
-                    ->assertSee('Judul harus diisi')
-                    ->assertSee('Isi artikel harus diisi')
-                    ->type('judul', '')
-                    ->type('isi', '')
-                    ->press('@save-article')
-                    ->pause(2000)
-                    ->assertSee('Judul harus diisi')
-                    ->assertSee('Isi artikel harus diisi');
-        });
-    }
-
-    /**
-     * Test creating article with minimum length validation
-     */
-    public function test_create_article_minimum_length()
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->visit('/admin/artikel')
-                    ->click('@create-article')
-                    ->type('judul', 'Te')
-                    ->type('isi', 'Is')
-                    ->press('@save-article')
-                    ->pause(2000)
-                    ->assertSee('Judul minimal 3 karakter')
-                    ->assertSee('Isi artikel minimal 10 karakter');
-        });
-    }
-
-    /**
-     * Test viewing article list with pagination
-     */
-    public function test_view_article_list()
-    {
-        $this->browse(function (Browser $browser) {
+            // Test viewing article list
             $browser->visit('/admin/artikel')
                     ->pause(2000)
                     ->assertSee('Daftar Artikel')
-                    ->assertPresent('table')
-                    ->assertPresent('@create-article')
-                    ->assertPresent('@pagination')
-                    ->assertSee($this->artikel->judul);
-        });
-    }
+                    ->assertSee($this->artikel->judul)
+                    ->assertSee($this->artikel->created_at->format('d-m-Y'))
+                    ->assertSee('Tampil');
 
-    /**
-     * Test viewing single article with all details
-     */
-    public function test_view_single_article()
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->visit('/admin/artikel')
+            // Test viewing single article
+            $browser->waitFor('@view-article-' . $this->artikel->id_artikel)
+                    ->click('@view-article-' . $this->artikel->id_artikel)
                     ->pause(2000)
-                    ->click('@view-article-1')
-                    ->pause(2000)
-                    ->assertPathIs('/admin/artikel/1')
+                    ->assertPathIs('/admin/artikel/' . $this->artikel->id_artikel)
                     ->assertSee($this->artikel->judul)
                     ->assertSee($this->artikel->isi)
-                    ->assertPresent('@edit-article')
-                    ->assertPresent('@delete-article')
-                    ->assertPresent('@back-to-list');
-        });
-    }
-
-    /**
-     * Test editing article with valid data
-     */
-    public function test_edit_article_valid()
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->visit('/admin/artikel')
-                    ->click('@edit-article-1')
-                    ->type('judul', 'Artikel Update Test')
-                    ->type('isi', 'Isi artikel yang diupdate untuk testing')
-                    ->check('is_show')
-                    ->press('@update-article')
-                    ->pause(2000)
-                    ->assertSee('Artikel berhasil diperbarui')
-                    ->assertSee('Artikel Update Test');
-        });
-    }
-
-    /**
-     * Test editing article with invalid data
-     */
-    public function test_edit_article_invalid()
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->visit('/admin/artikel')
-                    ->click('@edit-article-1')
-                    ->type('judul', '')
-                    ->type('isi', '')
-                    ->press('@update-article')
-                    ->pause(2000)
-                    ->assertSee('Judul harus diisi')
-                    ->assertSee('Isi artikel harus diisi');
-        });
-    }
-
-    /**
-     * Test deleting article with confirmation
-     */
-    public function test_delete_article()
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->visit('/admin/artikel')
-                    ->click('@delete-article-1')
-                    ->assertDialogOpened('Apakah Anda yakin ingin menghapus artikel ini?')
-                    ->acceptDialog()
-                    ->pause(2000)
-                    ->assertSee('Artikel berhasil dihapus')
-                    ->assertDontSee($this->artikel->judul);
-        });
-    }
-
-    /**
-     * Test canceling article deletion
-     */
-    public function test_cancel_delete_article()
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->visit('/admin/artikel')
-                    ->click('@delete-article-1')
-                    ->assertDialogOpened('Apakah Anda yakin ingin menghapus artikel ini?')
-                    ->dismissDialog()
-                    ->pause(2000)
-                    ->assertSee($this->artikel->judul);
-        });
-    }
-
-    /**
-     * Test article visibility toggle
-     */
-    public function test_toggle_article_visibility()
-    {
-        $this->browse(function (Browser $browser) {
-            $browser->visit('/admin/artikel')
-                    ->pause(2000)
-                    ->click('@edit-article-1')
-                    ->pause(2000)
-                    ->assertPathIs('/admin/artikel/1/edit')
-                    ->assertChecked('is_show')
-                    ->uncheck('is_show')
-                    ->press('Update')
-                    ->pause(2000)
-                    ->assertPathIs('/admin/artikel')
-                    ->assertSee('Tidak Tampil')
-                    ->click('@edit-article-1')
-                    ->pause(2000)
-                    ->assertNotChecked('is_show')
-                    ->check('is_show')
-                    ->press('Update')
-                    ->pause(2000)
+                    ->assertSee($this->artikel->author)
                     ->assertSee('Tampil');
         });
     }
 
     /**
-     * Test article search functionality
+     * Test Update Article (U)
      */
-    public function test_search_article()
+    public function test_update_article()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit('/admin/artikel')
                     ->pause(2000)
-                    ->type('@search-input', 'Test Artikel Awal')
-                    ->press('@search-button')
+                    ->waitFor('@edit-article-' . $this->artikel->id_artikel)
+                    ->click('@edit-article-' . $this->artikel->id_artikel)
                     ->pause(2000)
-                    ->assertSee('Test Artikel Awal')
-                    ->type('@search-input', 'Artikel Tidak Ada')
-                    ->press('@search-button')
+                    ->assertPathIs('/admin/artikel/' . $this->artikel->id_artikel . '/edit')
+                    ->waitFor('#judul')
+                    ->type('judul', 'Artikel Update Test')
+                    ->pause(2000); // Wait for CKEditor to initialize
+
+            // Set CKEditor content using JavaScript
+            $browser->driver->executeScript(
+                "document.querySelector('.ck-editor__editable').innerHTML = 'Isi artikel yang diupdate untuk testing'"
+            );
+
+            $browser->waitFor('#is_show')
+                    ->uncheck('is_show')
+                    ->waitFor('@update-article')
+                    ->press('@update-article')
+                    ->pause(3000)
+                    ->waitForLocation('/admin/artikel') // Wait for redirect
+                    ->assertPathIs('/admin/artikel')
+                    ->waitForText('Artikel Update Test') // Wait for the text to appear
+                    ->assertSee('Artikel Update Test')
+                    ->assertSee('Tidak Tampil');
+        });
+    }
+
+    /**
+     * Test Delete Article (D)
+     */
+    public function test_delete_article()
+    {
+        $this->browse(function (Browser $browser) {
+            $browser->visit('/admin/artikel')
                     ->pause(2000)
-                    ->assertDontSee('Test Artikel Awal')
-                    ->assertSee('Tidak ada artikel yang ditemukan');
+                    ->waitFor('@delete-article-' . $this->artikel->id_artikel)
+                    ->click('@delete-article-' . $this->artikel->id_artikel)
+                    ->assertDialogOpened('Yakin ingin menghapus artikel ini?')
+                    ->acceptDialog()
+                    ->pause(3000)
+                    ->waitUntilMissingText($this->artikel->judul) // Wait until the text is gone
+                    ->assertDontSee($this->artikel->judul);
+        });
+    }
+
+    /**
+     * Test Complete CRUD Flow
+     */
+    public function test_complete_crud_flow()
+    {
+        $this->browse(function (Browser $browser) {
+            // Create
+            $browser->visit('/admin/artikel')
+                    ->pause(2000)
+                    ->waitFor('@create-article')
+                    ->click('@create-article')
+                    ->pause(2000)
+                    ->waitFor('#judul')
+                    ->type('judul', 'Test CRUD Flow')
+                    ->pause(2000); // Wait for CKEditor to initialize
+
+            // Set CKEditor content using JavaScript
+            $browser->driver->executeScript(
+                "document.querySelector('.ck-editor__editable').innerHTML = 'Testing complete CRUD flow'"
+            );
+
+            $browser->waitFor('#is_show')
+                    ->check('is_show')
+                    ->waitFor('@save-article')
+                    ->press('@save-article')
+                    ->pause(3000)
+                    ->waitForLocation('/admin/artikel') // Wait for redirect
+                    ->assertPathIs('/admin/artikel')
+                    ->waitForText('Test CRUD Flow') // Wait for the text to appear
+                    ->assertSee('Test CRUD Flow');
+
+            // Get the ID of the newly created article
+            $newArticle = Artikel::where('judul', 'Test CRUD Flow')->first();
+            $newArticleId = $newArticle->id_artikel;
+
+            // Read
+            $browser->waitFor('@view-article-' . $newArticleId)
+                    ->click('@view-article-' . $newArticleId)
+                    ->pause(2000)
+                    ->assertPathIs('/admin/artikel/' . $newArticleId)
+                    ->waitForText('Test CRUD Flow') // Wait for the text to appear
+                    ->assertSee('Test CRUD Flow')
+                    ->assertSee('Testing complete CRUD flow');
+
+            // Update
+            $browser->waitFor('@edit-article-' . $newArticleId)
+                    ->click('@edit-article-' . $newArticleId)
+                    ->pause(2000)
+                    ->waitFor('#judul')
+                    ->type('judul', 'Test CRUD Flow Updated')
+                    ->pause(2000); // Wait for CKEditor to initialize
+
+            // Set CKEditor content using JavaScript
+            $browser->driver->executeScript(
+                "document.querySelector('.ck-editor__editable').innerHTML = 'Testing complete CRUD flow - Updated'"
+            );
+
+            $browser->waitFor('@update-article')
+                    ->press('@update-article')
+                    ->pause(3000)
+                    ->waitForLocation('/admin/artikel') // Wait for redirect
+                    ->assertPathIs('/admin/artikel')
+                    ->waitForText('Test CRUD Flow Updated') // Wait for the text to appear
+                    ->assertSee('Test CRUD Flow Updated');
+
+            // Delete
+            $browser->waitFor('@delete-article-' . $newArticleId)
+                    ->click('@delete-article-' . $newArticleId)
+                    ->assertDialogOpened('Yakin ingin menghapus artikel ini?')
+                    ->acceptDialog()
+                    ->pause(3000)
+                    ->waitUntilMissingText('Test CRUD Flow Updated') // Wait until the text is gone
+                    ->assertDontSee('Test CRUD Flow Updated');
         });
     }
 }

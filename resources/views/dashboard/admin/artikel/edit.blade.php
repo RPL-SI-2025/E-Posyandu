@@ -46,6 +46,9 @@
 <script>
     ClassicEditor
         .create(document.querySelector('#isi'))
+        .then(editor => {
+            window.editor = editor; // Tambahkan ini
+        })
         .catch(error => {
             console.error(error);
         });
