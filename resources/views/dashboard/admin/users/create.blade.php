@@ -27,8 +27,6 @@
                                 <i class="bi bi-x-circle"></i> Reset
                             </button>
                             <button type="submit" class="btn btn-primary">Simpan</button>
-
-                                <i class="bi bi-check-circle"></i> Simpan
                             </button>
                         </div>
                     </form>
