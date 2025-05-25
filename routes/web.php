@@ -19,14 +19,6 @@ use App\Http\Controllers\Orangtua\ReportController;
 use App\Http\Controllers\Orangtua\ProfilesController;
 use App\Http\Controllers\EventtimeController;
 
-Route::get('/user', [UserController::class, 'index'])->name('user.index'); // list + filter
-Route::get('/user/create', [UserController::class, 'create'])->name('user.create'); // form tambah
-Route::post('/user', [UserController::class, 'store'])->name('user.store'); // proses tambah
-Route::get('/user/{user}', [UserController::class, 'show'])->name('user.show'); // detail user
-Route::get('/user/{user}/edit', [UserController::class, 'edit'])->name('user.edit'); // form edit
-Route::put('/user/{user}', [UserController::class, 'update'])->name('user.update'); // proses update
-Route::delete('/user/{user}', [UserController::class, 'destroy'])->name('user.destroy'); // hapus user
-Route::patch('/user/{user}/status', [UserController::class, 'updateStatus'])->name('user.updateStatus'); // update verifikasi
 // Resource route untuk user (tanpa auth)
 Route::get('user', [UserController::class, 'index'])->name('dashboard.admin.user.index'); 
 Route::get('user/create', [UserController::class, 'create'])->name('dashboard.admin.user.create'); 
