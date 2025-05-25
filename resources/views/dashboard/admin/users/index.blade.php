@@ -26,6 +26,27 @@
     @endif
     <div class="card mb-4">
         <div class="card-body">
+            <form action="{{ route('user.index') }}" method="GET" class="row g-3">
+                <div class="col-md-3">
+                    <label for="role" class="form-label">Role:</label>
+                    <select name="role" id="role" class="form-select" onchange="this.form.submit()">
+                        <option value="">Semua Role</option>
+                        @foreach(['admin', 'petugas', 'orangtua'] as $role)
+                            <option value="{{ $role }}" {{ request('role') === $role ? 'selected' : '' }}>
+                                {{ ucfirst($role) }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="col-md-3">
+                    <label for="verifikasi" class="form-label">Verifikasi:</label>
+                    <select name="verifikasi" id="verifikasi" class="form-select" onchange="this.form.submit()">
+                        <option value="">Semua Status</option>
+                        <option value="waiting" {{ request('verifikasi') === 'waiting' ? 'selected' : '' }}>Menunggu</option>
+                        <option value="approved" {{ request('verifikasi') === 'approved' ? 'selected' : '' }}>Disetujui</option>
+                        <option value="rejected" {{ request('verifikasi') === 'rejected' ? 'selected' : '' }}>Ditolak</option>
+                    </select>
             <form action="{{ route('dashboard.admin.user.index') }}" method="GET" class="d-flex gap-3">
                 <div class="d-flex gap-2">
                     <div class="col-md-4">
