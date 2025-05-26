@@ -21,7 +21,7 @@ class UserController extends Controller
             $query->where('verifikasi', $request->verifikasi);
         }
 
-        // Apply search filter if provided (by name, email, or phone)
+        // Apply search filter if provided
         if ($request->filled('search')) {
             $searchTerm = '%' . $request->search . '%';
             $query->where(function ($q) use ($searchTerm) {
@@ -31,9 +31,10 @@ class UserController extends Controller
             });
         }
 
-        // Paginate and keep query string for pagination links
-        $users = $query->paginate(10)->withQueryString();
+        // Get the filtered users
+        $users = $query->get();
 
+        // Return the index view with the filtered results and query parameters
         return view('dashboard.admin.users.index', compact('users'))
             ->with('selectedRole', $request->role)
             ->with('searchTerm', $request->search)
@@ -78,26 +79,36 @@ class UserController extends Controller
         return view('dashboard.admin.users.edit', compact('user'));
     }
 
-public function update(Request $request, User $user)
-{
-    $validated = $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|email|max:255|unique:users,email,' . $user->id,
-        'password' => 'nullable|string|min:8|confirmed',
-        'role' => 'required|string|in:admin,petugas,orangtua',
-        'phone' => 'nullable|string|max:255',
-        'address' => 'nullable|string',
-        'verifikasi' => 'required|in:waiting,approved,rejected', // tambahkan ini
-    ]);
+    public function update(Request $request, User $user)
+    {
+        // Validate incoming request data
+        $validated = $request->validate([
+            'name'        => 'required|string|max:255',
+            'email'       => 'required|email|unique:users,email,' . $user->id,
+            'password'    => 'nullable|string|min:8|confirmed',
+            'role'        => 'required|in:admin,petugas,orangtua',
+            'phone'       => 'nullable|string|max:15',
+            'address'     => 'nullable|string',
+            'status_akun' => 'required|in:waiting,approved,rejected',
+        ]);
 
-    if (!$request->filled('password')) {
-        unset($validated['password']);
-    }
+        // If password is provided, hash it; otherwise, leave it unchanged
+        if ($request->filled('password')) {
+            $validated['password'] = bcrypt($validated['password']);
+        } else {
+            unset($validated['password']);
+        }
 
-    $user->update($validated);
-
-    return redirect()->route('user.index')->with('success', 'Pengguna berhasil diperbarui.');
-}
+        // Update the user with the validated data
+        $user->update([
+            'name'       => $validated['name'],
+            'email'      => $validated['email'],
+            'role'       => $validated['role'],
+            'phone'      => $validated['phone'],
+            'address'    => $validated['address'],
+            'verifikasi' => $validated['status_akun'],
+            'password'   => $validated['password'] ?? $user->password,
+        ]);
 
         // Redirect back to the user index with success message
         return redirect()->route('dashboard.admin.user.index')->with('success', 'User berhasil diperbarui.');
@@ -107,8 +118,6 @@ public function update(Request $request, User $user)
     {
         // Delete the user
         $user->delete();
-        
-        return redirect()->route('user.index')->with('success', 'User berhasil dihapus.');
 
         // Redirect back to user index with success message
         return redirect()->route('dashboard.admin.user.index')->with('success', 'User berhasil dihapus.');
@@ -125,7 +134,6 @@ public function update(Request $request, User $user)
         $user->verifikasi = $request->status_akun;
         $user->save();
 
-        return redirect()->route('user.index')->with('success', 'Status verifikasi berhasil diperbarui.');
         // Redirect back to user index with success message
         return redirect()->route('dashboard.admin.user.index')->with('success', 'Status verifikasi berhasil diperbarui.');
     }
