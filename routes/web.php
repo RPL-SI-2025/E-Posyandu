@@ -20,13 +20,15 @@ use App\Http\Controllers\Orangtua\ProfilesController;
 use App\Http\Controllers\EventtimeController;
 
 // Resource route untuk user (tanpa auth)
-Route::get('user', [UserController::class, 'index'])->name('dashboard.admin.user.index'); 
-Route::get('user/create', [UserController::class, 'create'])->name('dashboard.admin.user.create'); 
-Route::post('user', [UserController::class, 'store'])->name('dashboard.admin.user.store');
-Route::get('user/{user}', [UserController::class, 'show'])->name('dashboard.admin.user.show'); 
-Route::get('user/{user}/edit', [UserController::class, 'edit'])->name('dashboard.admin.user.edit'); 
-Route::put('user/{user}', [UserController::class, 'update'])->name('dashboard.admin.user.update'); 
-Route::delete('user/{user}', [UserController::class, 'destroy'])->name('dashboard.admin.user.destroy'); 
+Route::prefix('admin')->name('dashboard.admin.user.')->group(function () {
+    Route::get('/user', [UserController::class, 'index'])->name('index');
+    Route::get('/user/create', [UserController::class, 'create'])->name('create');
+    Route::post('/user', [UserController::class, 'store'])->name('store');
+    Route::get('/user/{user}', [UserController::class, 'show'])->name('show');
+    Route::get('/user/{user}/edit', [UserController::class, 'edit'])->name('edit');
+    Route::put('/user/{user}', [UserController::class, 'update'])->name('update');
+    Route::delete('/{user}', [UserController::class, 'destroy'])->name('destroy');
+});
 
 // Halaman utama
 Route::get('/user', [UserController::class, 'index'])->name('user.index'); // list + filter

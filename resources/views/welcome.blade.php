@@ -80,7 +80,7 @@
                                 </p>
                                 <div class="mt-8 flex justify-center lg:justify-start space-x-4">
                                     @auth
-                                        <a href="{{ url('/dashboard') }}" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
+                                        <a href="{{ route('dashboard.admin.index') }}" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
                                             Dashboard
                                         </a>
                                     @else
@@ -226,7 +226,7 @@
                                 <p class="mt-1 text-sm text-gray-500">Project Manager</p>
                             </div>
                             <div class="text-center p-6 bg-white rounded-lg shadow-lg">
-                                <img src="{{ asset('assets/jpg2png/profile.jpg') }}" alt="Admin Profile" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover shadow-md">
+                                <img src="{{ asset('assets/jpg2png/firstki(1).jpg') }}" alt="Admin Profile" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover shadow-md">
                                 <h3 class="mt-2 text-lg font-medium text-gray-900">Firstki Aditya</h3>
                                 <p class="mt-1 text-sm text-gray-500">Fullstack Developer</p>
                             </div>
