@@ -11,12 +11,10 @@ class UserController extends Controller
     {
         $query = User::query();
 
-        // Apply role filter if provided
         if ($request->filled('role') && in_array($request->role, ['admin', 'petugas', 'orangtua'])) {
             $query->where('role', $request->role);
         }
 
-        // Apply verification status filter if provided
         if ($request->filled('verifikasi') && in_array($request->verifikasi, ['waiting', 'approved', 'rejected'])) {
             $query->where('verifikasi', $request->verifikasi);
         }
@@ -48,7 +46,6 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        // Validate incoming request data
         $validated = $request->validate([
             'name'     => 'required|string|max:255',
             'email'    => 'required|email|unique:users,email',
@@ -58,14 +55,11 @@ class UserController extends Controller
             'address'  => 'nullable|string',
         ]);
 
-        // Encrypt password and set verification status to 'waiting'
         $validated['password'] = bcrypt($validated['password']);
         $validated['verifikasi'] = 'waiting';
 
-        // Create new user
         User::create($validated);
 
-        // Redirect back to user index with success message
         return redirect()->route('dashboard.admin.user.index')->with('success', 'User berhasil ditambahkan.');
     }
 
@@ -116,7 +110,6 @@ class UserController extends Controller
 
     public function destroy(User $user)
     {
-        // Delete the user
         $user->delete();
 
         // Redirect back to user index with success message
@@ -125,12 +118,10 @@ class UserController extends Controller
 
     public function updateStatus(Request $request, User $user)
     {
-        // Validate incoming request data for status update
         $request->validate([
             'status_akun' => 'required|in:approved,rejected',
         ]);
 
-        // Update the verification status of the user
         $user->verifikasi = $request->status_akun;
         $user->save();
 
