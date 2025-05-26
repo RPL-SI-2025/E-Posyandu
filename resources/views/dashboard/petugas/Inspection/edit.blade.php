@@ -68,7 +68,7 @@
                         <label for="tanggal_pemeriksaan" class="form-label">Tanggal Pemeriksaan</label>
                         <input type="date" name="tanggal_pemeriksaan" id="tanggal_pemeriksaan" 
                                class="form-control" 
-                               value="{{ old('tanggal_pemeriksaan', $inspection->tanggal_pemeriksaan) }}" 
+                               value="{{ old('tanggal_pemeriksaan', $inspection->tanggal_pemeriksaan->format('Y-m-d')) }}"
                                required>
                     </div>
 
