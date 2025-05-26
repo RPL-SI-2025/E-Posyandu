@@ -67,18 +67,20 @@ class ArtikelTestCase extends DuskTestCase
                     ->pause(2000); // Wait for CKEditor to initialize
 
             // Set CKEditor content using JavaScript
-            $browser->driver->executeScript(
-                "document.querySelector('.ck-editor__editable').innerHTML = 'Isi artikel baru untuk testing'"
-            );
+            $browser->driver->executeScript("
+                if (window.editor) {
+                    window.editor.setData('Isi artikel baru untuk testing');
+                } else {
+                    document.querySelector('.ck-editor__editable').innerHTML = 'Isi artikel baru untuk testing';
+                }
+            ");
 
             $browser->waitFor('#is_show')
                     ->check('is_show')
                     ->waitFor('@save-article')
                     ->press('@save-article')
-                    ->pause(3000)
-                    ->waitForLocation('/admin/artikel') // Wait for redirect
+                    ->pause(5000) // Increase pause time for form submission
                     ->assertPathIs('/admin/artikel')
-                    ->waitForText('Test Artikel Baru') // Wait for the text to appear
                     ->assertSee('Test Artikel Baru');
         });
     }
@@ -126,18 +128,20 @@ class ArtikelTestCase extends DuskTestCase
                     ->pause(2000); // Wait for CKEditor to initialize
 
             // Set CKEditor content using JavaScript
-            $browser->driver->executeScript(
-                "document.querySelector('.ck-editor__editable').innerHTML = 'Isi artikel yang diupdate untuk testing'"
-            );
+            $browser->driver->executeScript("
+                if (window.editor) {
+                    window.editor.setData('Isi artikel yang diupdate untuk testing');
+                } else {
+                    document.querySelector('.ck-editor__editable').innerHTML = 'Isi artikel yang diupdate untuk testing';
+                }
+            ");
 
             $browser->waitFor('#is_show')
                     ->uncheck('is_show')
                     ->waitFor('@update-article')
                     ->press('@update-article')
-                    ->pause(3000)
-                    ->waitForLocation('/admin/artikel') // Wait for redirect
+                    ->pause(5000) // Increase pause time for form submission
                     ->assertPathIs('/admin/artikel')
-                    ->waitForText('Artikel Update Test') // Wait for the text to appear
                     ->assertSee('Artikel Update Test')
                     ->assertSee('Tidak Tampil');
         });
@@ -156,7 +160,6 @@ class ArtikelTestCase extends DuskTestCase
                     ->assertDialogOpened('Yakin ingin menghapus artikel ini?')
                     ->acceptDialog()
                     ->pause(3000)
-                    ->waitUntilMissingText($this->artikel->judul) // Wait until the text is gone
                     ->assertDontSee($this->artikel->judul);
         });
     }
@@ -178,52 +181,67 @@ class ArtikelTestCase extends DuskTestCase
                     ->pause(2000); // Wait for CKEditor to initialize
 
             // Set CKEditor content using JavaScript
-            $browser->driver->executeScript(
-                "document.querySelector('.ck-editor__editable').innerHTML = 'Testing complete CRUD flow'"
-            );
+            $browser->driver->executeScript("
+                if (window.editor) {
+                    window.editor.setData('Testing complete CRUD flow');
+                } else {
+                    document.querySelector('.ck-editor__editable').innerHTML = 'Testing complete CRUD flow';
+                }
+            ");
 
             $browser->waitFor('#is_show')
                     ->check('is_show')
                     ->waitFor('@save-article')
                     ->press('@save-article')
-                    ->pause(3000)
-                    ->waitForLocation('/admin/artikel') // Wait for redirect
+                    ->pause(5000) // Increase pause time for form submission
                     ->assertPathIs('/admin/artikel')
-                    ->waitForText('Test CRUD Flow') // Wait for the text to appear
                     ->assertSee('Test CRUD Flow');
 
-            // Get the ID of the newly created article
+            // Wait for article to be created and get its ID
+            $browser->pause(2000); // Give extra time for database to update
             $newArticle = Artikel::where('judul', 'Test CRUD Flow')->first();
+
+            if (!$newArticle) {
+                $this->fail('Article was not created successfully');
+            }
+
             $newArticleId = $newArticle->id_artikel;
 
-            // Read
+            // Verify article exists in the list
             $browser->waitFor('@view-article-' . $newArticleId)
-                    ->click('@view-article-' . $newArticleId)
+                    ->assertSee('Test CRUD Flow');
+
+            // Read
+            $browser->click('@view-article-' . $newArticleId)
                     ->pause(2000)
                     ->assertPathIs('/admin/artikel/' . $newArticleId)
-                    ->waitForText('Test CRUD Flow') // Wait for the text to appear
                     ->assertSee('Test CRUD Flow')
                     ->assertSee('Testing complete CRUD flow');
 
             // Update
-            $browser->waitFor('@edit-article-' . $newArticleId)
+            $browser->visit('/admin/artikel') // Go back to list first
+                    ->pause(2000)
+                    ->waitFor('@edit-article-' . $newArticleId)
                     ->click('@edit-article-' . $newArticleId)
                     ->pause(2000)
+                    ->assertPathIs('/admin/artikel/' . $newArticleId . '/edit')
                     ->waitFor('#judul')
                     ->type('judul', 'Test CRUD Flow Updated')
                     ->pause(2000); // Wait for CKEditor to initialize
 
             // Set CKEditor content using JavaScript
-            $browser->driver->executeScript(
-                "document.querySelector('.ck-editor__editable').innerHTML = 'Testing complete CRUD flow - Updated'"
-            );
+            $browser->driver->executeScript("
+                if (window.editor) {
+                    window.editor.setData('Testing complete CRUD flow - Updated');
+                } else {
+                    document.querySelector('.ck-editor__editable').innerHTML = 'Testing complete CRUD flow - Updated';
+                }
+            ");
 
             $browser->waitFor('@update-article')
                     ->press('@update-article')
-                    ->pause(3000)
-                    ->waitForLocation('/admin/artikel') // Wait for redirect
+                    ->pause(5000) // Increase pause time for form submission
                     ->assertPathIs('/admin/artikel')
-                    ->waitForText('Test CRUD Flow Updated') // Wait for the text to appear
                     ->assertSee('Test CRUD Flow Updated');
 
             // Delete
@@ -232,7 +250,6 @@ class ArtikelTestCase extends DuskTestCase
                     ->assertDialogOpened('Yakin ingin menghapus artikel ini?')
                     ->acceptDialog()
                     ->pause(3000)
-                    ->waitUntilMissingText('Test CRUD Flow Updated') // Wait until the text is gone
                     ->assertDontSee('Test CRUD Flow Updated');
         });
     }

@@ -37,10 +37,9 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-    
-    protected $attributes = [
-        'verifikasi' => 'waiting', // Default value
-    ];
+protected $attributes = [
+    'verifikasi' => 'waiting', // Default value
+];
 
     /**
      * The attributes that should be cast to native types.
@@ -59,6 +58,7 @@ class User extends Authenticatable
     /**
      * Relasi ke tabel table_child (Orangtua memiliki banyak anak).
      */
+    
     public function children()
     {
         return $this->hasMany(Child::class, 'user_id');

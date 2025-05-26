@@ -1,8 +1,7 @@
 <div class="row g-3">
-    
     <div class="col-md-6">
         <div class="mb-3">
-            <label for="name" class="form-label">Nama</label>
+            <label for="name" class="form-label">Nama <span class="text-danger">*</span></label>
             <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-person"></i></span>
                 <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" 
@@ -13,10 +12,10 @@
             </div>
         </div>
     </div>
-    
+
     <div class="col-md-6">
         <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
+            <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
             <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-envelope"></i></span>
                 <input type="email" name="email" id="email" class="form-control @error('email') is-invalid @enderror" 
@@ -27,11 +26,11 @@
             </div>
         </div>
     </div>
-    
+
     <div class="col-md-6">
         <div class="mb-3">
             <label for="password" class="form-label">
-                Password {{ isset($user) ? '(Kosongkan jika tidak ingin mengubah)' : '<span class="text-danger">*</span>' }}
+                Password {!! isset($user) ? '(Kosongkan jika tidak ingin mengubah)' : '<span class="text-danger">*</span>' !!}
             </label>
             <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-key"></i></span>
@@ -44,11 +43,11 @@
             </div>
         </div>
     </div>
-    
+
     <div class="col-md-6">
         <div class="mb-3">
             <label for="password_confirmation" class="form-label">
-                Konfirmasi Password {{ isset($user) ? '' : '<span class="text-danger">*</span>' }}
+                Konfirmasi Password {!! isset($user) ? '' : '<span class="text-danger">*</span>' !!}
             </label>
             <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-key-fill"></i></span>
@@ -57,10 +56,10 @@
             </div>
         </div>
     </div>
-    
+
     <div class="col-md-4">
         <div class="mb-3">
-            <label for="role" class="form-label">Role</label>
+            <label for="role" class="form-label">Role <span class="text-danger">*</span></label>
             <div class="input-group">
                 <span class="input-group-text"><i class="bi bi-person-badge"></i></span>
                 <select name="role" id="role" class="form-select @error('role') is-invalid @enderror" required>
@@ -77,7 +76,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="col-md-8">
         <div class="mb-3">
             <label for="phone" class="form-label">Telepon</label>
@@ -91,7 +90,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="col-12">
         <div class="mb-3">
             <label for="address" class="form-label">Alamat</label>
