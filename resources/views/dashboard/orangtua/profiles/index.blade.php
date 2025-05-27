@@ -69,14 +69,14 @@
                                     </ul>
                                 </div>
                                 <div class="card-footer d-flex justify-content-between">
-                                    <a href="{{ route('dashboard.orangtua.profiles.show', $child->id) }}" class="btn btn-primary">
+                                    <a href="{{ route('dashboard.orangtua.profiles.show', $child->id) }}" class="btn btn-primary" dusk="button-view">
                                         <i class="fas fa-chart-line me-1"></i> Lihat Perkembangan
                                     </a>
                                     <div>
-                                        <a href="{{ route('dashboard.orangtua.profiles.edit', $child->id) }}" class="btn btn-warning">
+                                        <a href="{{ route('dashboard.orangtua.profiles.edit', $child->id) }}" class="btn btn-warning" dusk="button-edit">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <form action="{{ route('dashboard.orangtua.profiles.destroy', $child->id) }}" method="POST" class="d-inline">
+                                        <form action="{{ route('dashboard.orangtua.profiles.destroy', $child->id) }}" method="POST" class="d-inline" dusk="button-delete">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus data anak ini?')">

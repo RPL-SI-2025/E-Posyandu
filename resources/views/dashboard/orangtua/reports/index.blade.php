@@ -84,7 +84,7 @@
                                             <!-- <a href="{{ route('dashboard.orangtua.reports.show', $report->id) }}" class="btn btn-info btn-sm">
                                                 <i class="fas fa-eye"></i>
                                             </a> -->
-                                            <a href="{{ route('dashboard.orangtua.reports.edit', $report->id) }}" class="btn btn-warning btn-sm">
+                                            <a href="{{ route('dashboard.orangtua.reports.edit', $report->id) }}" class="btn btn-warning btn-sm" dusk="button-edit">
                                                 <i class="fas fa-edit"></i>
                                             </a>
                                             <!-- <form action="{{ route('dashboard.orangtua.reports.destroy', $report->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus report ini?');">
