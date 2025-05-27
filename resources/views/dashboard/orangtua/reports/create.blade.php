@@ -85,7 +85,7 @@
 
                 <div class="d-flex justify-content-end">
                     <a href="{{ route('dashboard.orangtua.reports.index') }}" class="btn btn-secondary me-2">Batal</a>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <button type="submit" class="btn btn-primary" dusk="button-simpan">Simpan</button>
                 </div>
             </form>
         </div>
