@@ -17,7 +17,7 @@ class ProfilesController extends Controller
     {
         $user = Auth::user();
         $userId = Auth::id();
-        $children = Child::where('user_id', $userId)->get();
+        $children = Child::where('user_id', auth()->id())->get();
         
         return view('dashboard.orangtua.profiles.index', compact('children'));
     }
