@@ -107,7 +107,7 @@
                                                 </a>
                                             </li>
 
-                                            @if(auth()->user()->role === 'admin')
+                                            @if(auth()->check() && auth()->user()->role === 'admin')
                                                 @if($user->verifikasi !== 'approved')
                                                     <li>
                                                         <form action="{{ route('user.updateStatus', $user->id) }}" method="POST">
