@@ -47,17 +47,36 @@ class AuthController extends Controller
 
         // Cek kredensial
         if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
+            $user = Auth::user();
 
-            // Arahkan ke dashboard sesuai role
-            $role = Auth::user()->role;
+            // Cek status verifikasi user
+            if ($user->verifikasi === 'rejected') {
+                Auth::logout();
+                return back()->withErrors([
+                    'email' => 'Akun Anda telah ditolak. Silakan hubungi admin untuk informasi lebih lanjut.',
+                ]);
+            }
 
-            return match ($role) {
-                'admin' => redirect()->route('dashboard.admin.index'),
-                'petugas' => redirect()->route('dashboard.petugas.index'),
-                'orangtua' => redirect()->route('dashboard.orangtua.index'),
-                default => redirect('/'),
-            };
+            if ($user->verifikasi === 'waiting') {
+                Auth::logout();
+                return back()->withErrors([
+                    'email' => 'Akun Anda masih menunggu persetujuan. Silakan tunggu hingga akun Anda disetujui.',
+                ]);
+            }
+
+            // Jika verifikasi approved, lanjutkan login
+            if ($user->verifikasi === 'approved') {
+                $request->session()->regenerate();
+
+                // Arahkan ke dashboard sesuai role
+                $role = $user->role;
+                return match ($role) {
+                    'admin' => redirect()->route('dashboard.admin.index'),
+                    'petugas' => redirect()->route('dashboard.petugas.index'),
+                    'orangtua' => redirect()->route('dashboard.orangtua.index'),
+                    default => redirect('/'),
+                };
+            }
         }
 
         // Jika login gagal
@@ -72,10 +91,10 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
-        
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        
+
         return redirect('/');
     }
 
