@@ -22,7 +22,7 @@
                         </div>
                         <div class="col-auto">
                             {{-- Placeholder for image --}}
-                            <img src="{{ asset('assets/dashboard.png') }}" alt="Illustration" style="height: 130px;">
+                            <img src="{{ asset('assets/dashboard.png') }}" alt="Illustration" style="height: 100px;">
                         </div>
                     </div>
                 </div>
@@ -128,29 +128,36 @@
 
         {{-- Calendar and Upcoming Events --}}
         <div class="col-xl-4">
-            <div class="card mb-4">
-                <div class="card-header">
-                    <i class="fas fa-calendar-alt me-1"></i>
-                    January
-                </div>
-                <div class="card-body">
-                    <div id="calendar"></div>
-                </div>
-            </div>
-
-            <div class="card mb-4">
-                <div class="card-header">
-                    <i class="fas fa-list me-1"></i>
-                    Acara Mendatang
-                </div>
-                <div class="card-body">
-                    <p class="text-center text-muted">Tidak ada acara mendatang</p> {{-- Placeholder --}}
-                    <div class="text-center">
-                        <a href="{{ route('dashboard.petugas.event.create') }}" class="btn btn-primary">Tambah Jadwal</a>
+    <div class="card mb-4">
+        <div class="card-header bg-light fw-bold">
+            <i class="fas fa-calendar-alt me-2"></i>
+            Acara Mendatang
+        </div>
+        <div class="card-body">
+        @if ($acaraMendatang->isEmpty())
+            <p class="text-center text-muted">Tidak ada acara mendatang</p>
+        @else
+            @foreach ($acaraMendatang as $acara)
+                <div class="border rounded p-3 mb-3 shadow-sm bg-white">
+                    <div class="fw-semibold">{{ $acara->keterangan }}</div>
+                    <div class="text-muted small mb-1">
+                        {{ \Carbon\Carbon::parse($acara->tanggal)->translatedFormat('Y-m-d') }}
+                        ({{ \Carbon\Carbon::parse($acara->jam_mulai)->format('H:i:s') }} - {{ \Carbon\Carbon::parse($acara->jam_selesai)->format('H:i:s') }})
                     </div>
+                    @if ($acara->deskripsi)
+                        <div class="fst-italic small text-secondary">{{ $acara->deskripsi }}</div>
+                    @endif
                 </div>
+            @endforeach
+        @endif
+            <div class="text-center mt-3">
+                <a href="{{ route('dashboard.petugas.event.create') }}" class="btn btn-primary">Tambah Jadwal</a>
             </div>
         </div>
+    </div>
+</div>
+
+
     </div>
 
 </div>

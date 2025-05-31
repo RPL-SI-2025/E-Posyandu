@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Balita;
 use App\Models\Inspection;
+use App\Models\Eventtime;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -26,12 +28,18 @@ class DashboardController extends Controller
             ->latest('tanggal_pemeriksaan')
             ->take(10)
             ->get();
+        
+        $acaraMendatang = Eventtime::whereDate('tanggal', '>=', Carbon::today())
+            ->orderBy('tanggal', 'asc')
+            ->take(5)
+            ->get();
 
         return view('dashboard.admin.index', compact(
             'jumlahMenungguVerifikasi',
             'jumlahDisetujui',
             'jumlahDitolak',
-            'perkembanganBayi'
+            'perkembanganBayi',
+            'acaraMendatang'
         ));
     }
 }
