@@ -7,12 +7,12 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Tambah Pengguna Baru</h5>
-                    <a href="{{ route('user.index') }}" class="btn btn-sm btn-secondary">
+                    <a href="{{ route('dashboard.petugas.user.index') }}" class="btn btn-sm btn-secondary">
                         <i class="bi bi-arrow-left"></i> Kembali
                     </a>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('user.store') }}" method="POST">
+                    <form action="{{ route('dashboard.petugas.user.store') }}" method="POST">
                         @csrf
                         @include('dashboard.petugas.user.form')
                         <div class="text-end mt-4">
