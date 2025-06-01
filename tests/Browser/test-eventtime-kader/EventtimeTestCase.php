@@ -90,8 +90,8 @@ class EventtimeTestCase extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visit('/eventtime')
                     ->pause(2000)
-                    ->assertSee('Delete')
-                    ->clickLink('Delete')
+                    ->assertSee('delete')
+                    ->click('@buttom_delete')
                     ->pause(2000)
                     ->assertPathIs('/eventtime');
         });

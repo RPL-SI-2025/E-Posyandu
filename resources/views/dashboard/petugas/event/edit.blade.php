@@ -69,7 +69,7 @@
 
                         <!-- Tombol Simpan dan Hapus -->
                         <div class="d-flex justify-content-between">
-                            <button dusk='button_simpan'type="submit" class="btn btn-primary">Simpan</button>
+                            <button dusk='@buttom_simpan'type="submit" class="btn btn-primary">Simpan</button>
                             <a href="#" onclick="event.preventDefault(); if(confirm('Apakah Anda yakin ingin menghapus data ini?')){ document.getElementById('form-delete').submit(); }" class="btn btn-danger">
                                 Hapus
                             </a>
@@ -77,7 +77,7 @@
                     </form>
 
                     <!-- Form Hapus -->
-                    <form id="form-delete" action="{{ route('dashboard.petugas.event.destroy', $event) }}" method="POST" style="display: none;">
+                    <form button dusk='@buttom_delete'id="form-delete" action="{{ route('dashboard.petugas.event.destroy', $event) }}" method="POST" style="display: none;">
                         @csrf
                         @method('DELETE')
                     </form>
