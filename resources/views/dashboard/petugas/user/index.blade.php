@@ -118,7 +118,7 @@
                                                     @csrf
                                                     @method('PUT')
                                                     <input type="hidden" name="status_akun" value="approved">
-                                                    <button class="dropdown-item" type="submit">
+                                                    <button class="dropdown-item" type="submit" data-testid="verify-{{ $user->id }}-approve">
                                                         <i class="bi bi-check-circle me-2"></i>Setujui
                                                     </button>
                                                 </form>

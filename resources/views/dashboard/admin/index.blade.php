@@ -41,7 +41,7 @@
                         <div class="text-xs mb-2" style="font-weight: 400; color: #92949E;">Disetujui</div>
 
                         {{-- Jumlah --}}
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ number_format($jumlahDisetujui) }}</div>
+                        <div id="count-disetujui" class="h5 mb-0 font-weight-bold text-gray-800">{{ number_format($jumlahDisetujui) }}</div>
                     </div>
 
                     </div>
@@ -61,7 +61,7 @@
                             <div class="text-xs mb-2" style="font-weight: 400; color: #92949E;">Ditolak</div>
 
                             {{-- Jumlah --}}
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ number_format($jumlahDitolak) }}</div>
+                            <div id="count-ditolak" class="h5 mb-0 font-weight-bold text-gray-800">{{ number_format($jumlahDitolak) }}</div>
                         </div>
                     </div>
                 </div>
@@ -80,7 +80,7 @@
                             <div class="text-xs mb-2" style="font-weight: 400; color: #92949E;">Menunggu</div>
 
                             {{-- Jumlah --}}
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ number_format($jumlahMenungguVerifikasi) }}</div>
+                            <div id="count-menunggu" class="h5 mb-0 font-weight-bold text-gray-800">{{ number_format($jumlahMenungguVerifikasi) }}</div>
                         </div>
                     </div>
                 </div>
