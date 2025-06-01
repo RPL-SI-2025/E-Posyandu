@@ -69,7 +69,7 @@
 
                         <!-- Tombol Simpan dan Hapus -->
                         <div class="d-flex justify-content-between">
-                            <button type="submit" class="btn btn-primary">Simpan</button>
+                            <button dusk='button_simpan'type="submit" class="btn btn-primary">Simpan</button>
                             <a href="#" onclick="event.preventDefault(); if(confirm('Apakah Anda yakin ingin menghapus data ini?')){ document.getElementById('form-delete').submit(); }" class="btn btn-danger">
                                 Hapus
                             </a>
