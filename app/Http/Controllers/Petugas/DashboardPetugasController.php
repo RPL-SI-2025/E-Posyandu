@@ -16,12 +16,17 @@ class DashboardPetugasController extends Controller
      */
     public function index()
     {
-        // Hitung akun yang masih menunggu verifikasi
-        $jumlahMenungguVerifikasi = User::where('verifikasi', 'waiting')->count();
+        $jumlahMenungguVerifikasi = User::where('role', 'orangtua')
+            ->where('verifikasi', 'waiting')
+            ->count();
 
-        // Hitung akun yang disetujui dan ditolak (jika perlu)
-        $jumlahDisetujui = User::where('verifikasi', 'approved')->count();
-        $jumlahDitolak = User::where('verifikasi', 'rejected')->count();
+        $jumlahDisetujui = User::where('role', 'orangtua')
+            ->where('verifikasi', 'approved')
+            ->count();
+
+        $jumlahDitolak = User::where('role', 'orangtua')
+            ->where('verifikasi', 'rejected')
+            ->count();
 
         // Ambil data perkembangan bayi (misalnya ambil 10 terakhir)
         $perkembanganBayi = Inspection::with('child')
