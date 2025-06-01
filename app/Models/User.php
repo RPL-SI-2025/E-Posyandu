@@ -25,7 +25,7 @@ class User extends Authenticatable
         'role',       
         'phone',     
         'address',   
-        'status_akun', // Added status_akun to fillable
+        'verifikasi', // Added status_akun to fillable
     ];
 
     /**

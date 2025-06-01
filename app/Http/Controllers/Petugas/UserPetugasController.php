@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Http\Controllers\Petugas;
-use App\Http\Controllers\Controller;
 
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -12,17 +12,13 @@ class UserPetugasController extends Controller
     {
         $query = User::query();
 
-        // Apply role filter if provided
-        if ($request->filled('role') && in_array($request->role, ['admin', 'petugas', 'orangtua'])) {
-            $query->where('role', $request->role);
-        }
+        // Filter hanya user role orangtua
+        $query->where('role', 'orangtua');
 
-        // Apply verification status filter if provided
         if ($request->filled('verifikasi') && in_array($request->verifikasi, ['waiting', 'approved', 'rejected'])) {
             $query->where('verifikasi', $request->verifikasi);
         }
 
-        // Apply search filter if provided
         if ($request->filled('search')) {
             $searchTerm = '%' . $request->search . '%';
             $query->where(function ($q) use ($searchTerm) {
@@ -32,14 +28,13 @@ class UserPetugasController extends Controller
             });
         }
 
-        // Get the filtered users
         $users = $query->get();
 
-        // Return the index view with the filtered results and query parameters
-        return view('dashboard.petugas.user.index', compact('users'))
-            ->with('selectedRole', $request->role)
-            ->with('searchTerm', $request->search)
-            ->with('selectedVerifikasi', $request->verifikasi);
+        return view('dashboard.petugas.user.index', [
+            'users' => $users,
+            'selectedVerifikasi' => $request->verifikasi,
+            'searchTerm' => $request->search,
+        ]);
     }
 
     public function create()
@@ -49,31 +44,26 @@ class UserPetugasController extends Controller
 
     public function store(Request $request)
     {
-        // Validate incoming request data
         $validated = $request->validate([
             'name'     => 'required|string|max:255',
             'email'    => 'required|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
-            'role'     => 'required|in:admin,petugas,orangtua',
             'phone'    => 'nullable|string|max:15',
             'address'  => 'nullable|string',
         ]);
 
-        // Encrypt password and set verification status to 'waiting'
-        $validated['password'] = bcrypt($validated['password']);
-        $validated['verifikasi'] = 'waiting';
+        $validated['password']   = bcrypt($validated['password']);
+        $validated['role']       = 'orangtua';      // otomatis jadi orangtua
+        $validated['verifikasi'] = 'waiting';       // otomatis waiting abu-abu
 
-        // Create new user
         User::create($validated);
 
         // Redirect back to user index with success message
         return redirect()->route('dashboard.petugas.user.index')->with('success', 'User berhasil ditambahkan.');
+
+            ->with('success', 'Akun orangtua berhasil dibuat dengan status verifikasi menunggu.');
     }
 
-    public function show(User $user)
-    {
-        return view('dashboard.petugas.user.show', compact('user'));
-    }
 
     public function edit(User $user)
     {
@@ -82,7 +72,6 @@ class UserPetugasController extends Controller
 
     public function update(Request $request, User $user)
     {
-        // Validate incoming request data
         $validated = $request->validate([
             'name'        => 'required|string|max:255',
             'email'       => 'required|email|unique:users,email,' . $user->id,
@@ -93,14 +82,12 @@ class UserPetugasController extends Controller
             'status_akun' => 'required|in:waiting,approved,rejected',
         ]);
 
-        // If password is provided, hash it; otherwise, leave it unchanged
         if ($request->filled('password')) {
             $validated['password'] = bcrypt($validated['password']);
         } else {
             unset($validated['password']);
         }
 
-        // Update the user with the validated data
         $user->update([
             'name'       => $validated['name'],
             'email'      => $validated['email'],
@@ -111,31 +98,25 @@ class UserPetugasController extends Controller
             'password'   => $validated['password'] ?? $user->password,
         ]);
 
-        // Redirect back to the user index with success message
-        return redirect()->route('user.index')->with('success', 'User berhasil diperbarui.');
+        return redirect()->route('dashboard.petugas.user.index')->with('success', 'User berhasil diperbarui.');
     }
 
     public function destroy(User $user)
     {
-        // Delete the user
         $user->delete();
-
-        // Redirect back to user index with success message
-        return redirect()->route('user.index')->with('success', 'User berhasil dihapus.');
+        return redirect()->route('dashboard.petugas.user.index')->with('success', 'User berhasil dihapus.');
     }
 
     public function updateStatus(Request $request, User $user)
     {
-        // Validate incoming request data for status update
         $request->validate([
             'status_akun' => 'required|in:approved,rejected',
         ]);
 
-        // Update the verification status of the user
+        
         $user->verifikasi = $request->status_akun;
         $user->save();
 
-        // Redirect back to user index with success message
-        return redirect()->route('user.index')->with('success', 'Status verifikasi berhasil diperbarui.');
+        return redirect()->route('dashboard.petugas.user.index')->with('success', 'Status verifikasi berhasil diperbarui.');
     }
 }
