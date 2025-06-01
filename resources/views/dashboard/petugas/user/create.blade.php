@@ -6,7 +6,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Tambah Akun Orang Tua</h5>
+                    <h5 class="mb-0">Tambah Pengguna Baru</h5>
                     <a href="{{ route('dashboard.petugas.user.index') }}" class="btn btn-sm btn-secondary">
                         <i class="bi bi-arrow-left"></i> Kembali
                     </a>

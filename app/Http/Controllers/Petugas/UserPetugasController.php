@@ -58,7 +58,9 @@ class UserPetugasController extends Controller
 
         User::create($validated);
 
-        return redirect()->route('dashboard.petugas.user.index')
+        // Redirect back to user index with success message
+        return redirect()->route('dashboard.petugas.user.index')->with('success', 'User berhasil ditambahkan.');
+
             ->with('success', 'Akun orangtua berhasil dibuat dengan status verifikasi menunggu.');
     }
 
