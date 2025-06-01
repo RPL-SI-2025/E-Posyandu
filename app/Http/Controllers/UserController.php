@@ -105,7 +105,7 @@ class UserController extends Controller
         ]);
 
         // Redirect back to the user index with success message
-        return redirect()->route('dashboard.admin.user.index')->with('success', 'User berhasil diperbarui.');
+        return redirect()->route('dashboard.admin.user.index')->with('success', 'Pengguna berhasil diperbarui.');
     }
 
     public function destroy(User $user)

@@ -27,7 +27,7 @@
                                     <label for="status_akun" class="form-label">Status Verifikasi <span class="text-danger">*</span></label>
                                     <div class="input-group">
                                         <span class="input-group-text"><i class="bi bi-check-circle"></i></span>
-                                        <select name="verifikasi" id="status_akun" dusk="status-akun" 
+                                        <select name="status_akun" id="status_akun" dusk="status-akun" 
                                                 class="form-select @error('status_akun') is-invalid @enderror" required>
                                             <option value="">Pilih Status</option>
                                             <option value="waiting" {{ old('status_akun', $user->verifikasi) == 'waiting' ? 'selected' : '' }}>

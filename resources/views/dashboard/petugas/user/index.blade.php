@@ -12,6 +12,14 @@
         </ol>
     </div>
 
+    <!-- Flash Message -->
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
     <div class="mb-4">
         <a href="{{ route('dashboard.petugas.user.create') }}" class="btn btn-primary">Tambah Akun</a>
     </div>
@@ -22,19 +30,8 @@
             <form action="{{ route('dashboard.petugas.user.index') }}" method="GET" class="d-flex gap-3">
                 <div class="d-flex gap-2">
                     <div class="col-md-4">
-                        <label for="role" class="form-label">Role:</label>
-                        <select name="role" id="role" class="form-select" onchange="this.form.submit()">
-                            <option value="">Semua Role</option>
-                            @foreach(['admin', 'petugas', 'orangtua'] as $role)
-                                <option value="{{ $role }}" {{ isset($selectedRole) && $selectedRole == $role ? 'selected' : '' }}>
-                                    {{ ucfirst($role) }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-4">
                         <label for="verifikasi" class="form-label">Verifikasi:</label>
-                        <select name="verifikasi" id="verifikasi" class="form-select" onchange="this.form.submit()">
+                        <select name="verifikasi" id="verifikasi" class="form-select" onchange="this.form.submit()" style="width: 300px;">
                             <option value="">Semua Status</option>
                             <option value="waiting" {{ isset($selectedVerifikasi) && $selectedVerifikasi == 'waiting' ? 'selected' : '' }}>Menunggu</option>
                             <option value="approved" {{ isset($selectedVerifikasi) && $selectedVerifikasi == 'approved' ? 'selected' : '' }}>Disetujui</option>
@@ -100,7 +97,10 @@
                                 </td>
                                 <td>
                                     <div class="dropdown">
-                                        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <button class="btn btn-sm btn-secondary dropdown-toggle" type="button"
+                                                data-bs-toggle="dropdown"
+                                                aria-expanded="false"
+                                                data-testid="dropdown-{{ $user->id }}">
                                             <i class="bi bi-three-dots-vertical"></i>
                                         </button>
                                         <ul class="dropdown-menu">
@@ -111,41 +111,41 @@
                                                 </a>
                                             </li>
 
-                                            <!-- Verifikasi -->
-                                            @if(auth()->user()->role === 'admin')
-                                                @if($user->verifikasi !== 'approved')
-                                                    <li>
-                                                        <form action="{{ route('user.updateStatus', $user->id) }}" method="POST">
-                                                            @csrf
-                                                            @method('PUT')
-                                                            <input type="hidden" name="status_akun" value="approved">
-                                                            <button class="dropdown-item" type="submit">
-                                                                <i class="bi bi-check-circle me-2"></i>Setujui
-                                                            </button>
-                                                        </form>
-                                                    </li>
-                                                @endif
-
-                                                @if($user->verifikasi !== 'rejected')
-                                                    <li>
-                                                        <form action="{{ route('user.updateStatus', $user->id) }}" method="POST">
-                                                            @csrf
-                                                            @method('PUT')
-                                                            <input type="hidden" name="status_akun" value="rejected">
-                                                            <button class="dropdown-item" type="submit">
-                                                                <i class="bi bi-x-circle me-2"></i>Tolak
-                                                            </button>
-                                                        </form>
-                                                    </li>
-                                                @endif
+                                            <!-- Setujui -->
+                                            @if($user->verifikasi !== 'approved')
+                                            <li>
+                                                <form action="{{ route('dashboard.petugas.user.updateStatus', $user->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <input type="hidden" name="status_akun" value="approved">
+                                                    <button class="dropdown-item" type="submit">
+                                                        <i class="bi bi-check-circle me-2"></i>Setujui
+                                                    </button>
+                                                </form>
+                                            </li>
                                             @endif
 
-                                            <!-- Delete -->
+                                            <!-- Tolak -->
+                                            @if($user->verifikasi !== 'rejected')
+                                            <li>
+                                                <form action="{{ route('dashboard.petugas.user.updateStatus', $user->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <input type="hidden" name="status_akun" value="rejected">
+                                                    <button class="dropdown-item" type="submit">
+                                                        <i class="bi bi-x-circle me-2"></i>Tolak
+                                                    </button>
+                                                </form>
+                                            </li>
+                                            @endif
+
+                                            <!-- Hapus -->
                                             <li>
                                                 <form action="{{ route('dashboard.petugas.user.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus pengguna ini?')">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="dropdown-item text-danger">
+                                                    <button type="submit" class="dropdown-item text-danger"
+                                                            data-testid="hapus-{{ $user->id }}">
                                                         <i class="bi bi-trash me-2"></i>Hapus
                                                     </button>
                                                 </form>

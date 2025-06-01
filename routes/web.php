@@ -126,6 +126,7 @@ Route::prefix('petugas')->group(function () {
     });
 
     // User petugas routes
+    // User petugas routes
     Route::name('dashboard.petugas.user.')->group(function () {
         Route::get('user', [UserPetugasController::class, 'index'])->name('index');
         Route::get('user/create', [UserPetugasController::class, 'create'])->name('create');
@@ -134,8 +135,10 @@ Route::prefix('petugas')->group(function () {
         Route::get('user/{user}/edit', [UserPetugasController::class, 'edit'])->name('edit');
         Route::put('user/{user}', [UserPetugasController::class, 'update'])->name('update');
         Route::delete('user/{user}', [UserPetugasController::class, 'destroy'])->name('destroy');
+        Route::put('user/{user}/update-status', [UserPetugasController::class, 'updateStatus'])->name('updateStatus');
     });
 });
+
 
 // Dashboard orangtua routes
 Route::prefix('orangtua')->name('dashboard.orangtua.')->group(function () {
