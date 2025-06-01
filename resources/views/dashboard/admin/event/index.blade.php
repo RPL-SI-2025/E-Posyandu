@@ -14,7 +14,7 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Daftar Waktu Kegiatan</h5>
+                    <h5 class="mb-0">Jadwal Kegiatan</h5>
                 </div>
                 <div class="card-body">
                     <a href="{{ route('dashboard.admin.event.create') }}" class="btn btn-primary mb-3">Tambah Jadwal</a>

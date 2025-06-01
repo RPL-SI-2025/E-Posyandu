@@ -68,7 +68,7 @@
                     </div>
 
                     <!-- Tombol Simpan -->
-                    <button type="submit" class="btn btn-primary">Simpan Jadwal</button>
+                    <button dusk='button_simpan'type="submit" class="btn btn-primary"><Samp></Samp>impan Jadwal</button>
                 </form>
             </div>
         </div>

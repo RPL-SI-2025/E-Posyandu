@@ -66,7 +66,7 @@
                         </div>
 
                         <!-- Tombol Simpan -->
-                        <button type="submit" class="btn btn-primary">Simpan Jadwal</button>
+                        <button dusk='button_simpan'type="submit" class="btn btn-primary">Simpan Jadwal</button>
                         <a href="{{ route('dashboard.petugas.event.index') }}" class="btn btn-secondary">Kembali</a>
                     </form>
                 </div>
