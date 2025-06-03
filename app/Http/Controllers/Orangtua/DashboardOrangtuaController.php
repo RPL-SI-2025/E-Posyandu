@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use App\Models\Eventtime;
 use App\Models\Artikel;
-use Carbon\Carbon; 
+use Carbon\Carbon;
 
 class DashboardOrangtuaController extends Controller
 {
@@ -20,7 +20,7 @@ class DashboardOrangtuaController extends Controller
     public function index()
     {
         $userId = Auth::id();
-        
+
         // Get children for the logged-in user
         $children = Child::where('user_id', $userId)->get();
         $childrenCount = $children->count();
@@ -47,5 +47,34 @@ class DashboardOrangtuaController extends Controller
             ->get();
 
             return view('dashboard.orangtua.index', compact('childrenCount', 'childrenData', 'latestEvent', 'articles'));
+    }
+
+    /**
+     * Tampilkan halaman berita untuk orangtua.
+     */
+    public function berita()
+    {
+        // You can fetch the news articles here and pass them to the view
+        $articles = Artikel::where('is_show', 1)
+            ->orderBy('created_at', 'desc')
+            ->select('id_artikel', 'judul', 'created_at', 'isi', 'gambar')
+            ->get();
+
+        return view('dashboard.orangtua.berita.index', compact('articles'));
+    }
+
+    /**
+     * Tampilkan halaman detail berita untuk orangtua.
+     */
+    public function showBerita($id)
+    {
+         // You can fetch the news articles here and pass them to the view
+        $articles = Artikel::where('is_show', 1)
+            ->orderBy('created_at', 'desc')
+            ->select('id_artikel', 'judul', 'created_at', 'isi')
+            ->get();
+
+        $article = Artikel::findOrFail($id);
+        return view('dashboard.orangtua.berita.show', compact('article'));
     }
 }

@@ -131,7 +131,9 @@
                                 <h5 class="card-title">{{ $article->judul }}</h5>
                                 <p class="card-text">{{ Str::limit(strip_tags($article->isi), 100) }}</p>
                                 <p class="text-muted small">Oleh: {{ $article->author }} | {{ \Carbon\Carbon::parse($article->created_at)->format('d M Y') }}</p>
-                                <a href="#" class="btn btn-primary btn-sm">Baca Selengkapnya</a>
+                                @if(isset($article->id_artikel) && $article->id_artikel > 0)
+                                    <a href="{{ route('dashboard.orangtua.berita.show', $article->id_artikel) }}" class="btn btn-primary btn-sm">Baca Selengkapnya</a>
+                                @endif
                             </div>
                         </div>
                     </div>
