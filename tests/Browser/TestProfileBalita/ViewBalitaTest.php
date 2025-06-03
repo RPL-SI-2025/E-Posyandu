@@ -16,8 +16,8 @@ class ViewBalitaTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visit('/login')
                     ->assertSee('Login')
-                    ->type('email', 'rinipuspita@gmail.com')
-                    ->type('password', 'rinipuspita')
+                    ->type('email', 'orangtua@gmail.com')
+                    ->type('password', 'orangtua')
                     ->press('Login')
                     ->assertPathIs('/orangtua/dashboard')
                     ->assertSee('Dashboard')
@@ -25,9 +25,9 @@ class ViewBalitaTest extends DuskTestCase
                     ->visit('/orangtua/profiles')
                     ->assertSee('Profil Anak')
                     ->pause(1000)
-                    ->click('@button-view', 1)
+                    ->click('@button-view', 17)
                     ->pause(1000)
-                    ->assertPathIs('/orangtua/profiles/1')
+                    ->assertPathIs('/orangtua/profiles/17')
                     ->assertSee('Perkembangan Anak');
         });
     }

@@ -16,8 +16,8 @@ class DeleteBalitaTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visit('/login')
                     ->assertSee('Login')
-                    ->type('email', 'rinipuspita@gmail.com')
-                    ->type('password', 'rinipuspita')
+                    ->type('email', 'orangtua@gmail.com')
+                    ->type('password', 'orangtua')
                     ->press('Login')
                     ->assertPathIs('/orangtua/dashboard')
                     ->assertSee('Dashboard')
@@ -25,14 +25,13 @@ class DeleteBalitaTest extends DuskTestCase
                     ->visit('/orangtua/profiles')
                     ->assertSee('Profil Anak')
                     ->pause(1000)
-                    ->click('@button-delete', 3)
+                    ->click('@button-delete', 17)
                     ->pause(1000)
-                    ->whenAvailable('#confirm-delete', function ($modal) {
-                        $modal->press('OK');
-                    })
+                    ->assertDialogOpened('Apakah Anda yakin ingin menghapus data anak ini?')  // Mengganti kode konfirmasi
+                    ->acceptDialog()  // Menyelesaikan konfirmasi
                     ->pause(1000)
                     ->assertPathIs('/orangtua/profiles')
-                    ->assertSee('Data anak berhasil dihapus.');;
+                    ->assertSee('Data anak berhasil dihapus.');
         });
     }
 
@@ -41,8 +40,8 @@ class DeleteBalitaTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $browser->visit('/login')
                     ->assertSee('Login')
-                    ->type('email', 'rinipuspita@gmail.com')
-                    ->type('password', 'rinipuspita')
+                    ->type('email', 'orangtua@gmail.com')
+                    ->type('password', 'orangtua')
                     ->press('Login')
                     ->assertPathIs('/orangtua/dashboard')
                     ->assertSee('Dashboard')

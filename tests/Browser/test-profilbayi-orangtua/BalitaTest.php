@@ -58,7 +58,7 @@ class BalitaTest extends DuskTestCase
     public function test_view_profil_balita_list_empty_state()
     {
         $this->browse(function (Browser $browser) {
-            $browser->loginAs(User::where('email', 'orangtua@gmail.com')->first())
+             $browser->loginAs(User::where('email', 'orangtua@gmail.com')->first())
                     ->visit('/orangtua/profiles')
                     ->pause(2000) // Adjust pause if needed
                     ->assertSee('Profil Anak') // Assert main page title
