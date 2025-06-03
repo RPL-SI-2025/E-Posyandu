@@ -7,7 +7,7 @@
         <li class="breadcrumb-item"><a href="{{ route('dashboard.orangtua.index') }}">Dashboard</a></li>
         <li class="breadcrumb-item active">Profil Anak</li>
     </ol>
-    
+
     <div class="card mb-4">
         <div class="card-header">
             <i class="fas fa-child me-1"></i>
@@ -15,7 +15,7 @@
         </div>
         <div class="card-body">
             <div class="mb-3">
-                <a href="{{ route('dashboard.orangtua.profiles.create') }}" class="btn btn-primary">
+                <a href="{{ route('dashboard.orangtua.profiles.create') }}" class="btn btn-primary" dusk="button-tambah-anak">
                     <i class="fas fa-plus"></i> Tambah Anak
                 </a>
             </div>
@@ -24,13 +24,13 @@
                     {{ session('success') }}
                 </div>
             @endif
-            
+
             @if(session('error'))
                 <div class="alert alert-danger">
                     {{ session('error') }}
                 </div>
             @endif
-            
+
             @if($children->isEmpty())
                 <div class="alert alert-info">
                     Anda belum memiliki data anak. Silahkan hubungi petugas posyandu untuk menambahkan data anak Anda.
@@ -52,7 +52,7 @@
                                             <strong>Jenis Kelamin:</strong> {{ $child->jenis_kelamin == 'laki-laki' ? 'Laki-laki' : 'Perempuan' }}
                                         </li>
                                         <li class="list-group-item">
-                                            <strong>Usia:</strong> 
+                                            <strong>Usia:</strong>
                                             @php
                                                 $birthDate = \Carbon\Carbon::parse($child->tanggal_lahir);
                                                 $now = now();

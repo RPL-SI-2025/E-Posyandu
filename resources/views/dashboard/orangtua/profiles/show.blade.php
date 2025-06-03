@@ -8,7 +8,7 @@
         <li class="breadcrumb-item"><a href="{{ route('dashboard.orangtua.profiles.index') }}">Profil Anak</a></li>
         <li class="breadcrumb-item active">{{ $child->nama_anak ?? $child->nama }}</li>
     </ol>
-    
+
     <div class="row">
         <div class="col-xl-4">
             <div class="card mb-4">
@@ -31,7 +31,7 @@
                             <strong>Jenis Kelamin:</strong> {{ $child->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}
                         </li>
                         <li class="list-group-item">
-                            <strong>Usia:</strong> 
+                            <strong>Usia:</strong>
                             @php
                                 $birthDate = \Carbon\Carbon::parse($child->tanggal_lahir);
                                 $now = now();
@@ -59,7 +59,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="col-xl-8">
             <div class="card mb-4">
                 <div class="card-header">
@@ -112,7 +112,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        
+
                         <!-- Growth Charts -->
                         <div class="row mt-4">
                             <div class="col-12 mb-4">
