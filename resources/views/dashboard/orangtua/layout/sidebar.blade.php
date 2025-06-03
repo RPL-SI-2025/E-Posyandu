@@ -16,6 +16,10 @@
                         <img src="{{ asset('assets/home.png') }}" alt="Logo" style="height: 25px; margin-right: 8px;">
                         Report Daily
                     </a>
+                    <a class="nav-link {{ request()->routeIs('dashboard.orangtua.berita.index') ? 'active' : '' }}" href="{{ route('dashboard.orangtua.berita.index') }}">
+                        <img src="{{ asset('assets/home.png') }}" alt="Logo" style="height: 25px; margin-right: 8px;">
+                        Artikel
+                    </a>
                 </div>
             </div>
         </nav>

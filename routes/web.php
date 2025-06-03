@@ -144,6 +144,10 @@ Route::prefix('petugas')->group(function () {
 Route::prefix('orangtua')->name('dashboard.orangtua.')->group(function () {
     Route::get('/dashboard', [DashboardOrangtuaController::class, 'index'])->name('index');
 
+    Route::get('/berita', [DashboardOrangtuaController::class, 'berita'])->name('berita.index');
+
+    Route::get('/berita/{id}', [DashboardOrangtuaController::class, 'showBerita'])->name('berita.show');
+
     // Reports
     Route::prefix('reports')->name('reports.')->group(function () {
         Route::get('/', [ReportController::class, 'index'])->name('index');
