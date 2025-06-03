@@ -15,10 +15,10 @@ class EditBalitaTest extends DuskTestCase
      */
     public function testNormalCaseEditBalita(): void
     {
-        $user = User::where('email', 'rinipuspita@gmail.com')->first();
+        $user = User::where('email', 'orangtua@gmail.com')->first();
 
         if (!$user) {
-            $this->fail('User rinipuspita@gmail.com not found in the database.');
+            $this->fail('User orangtua@gmail.com not found in the database.');
         }
 
         $balita = DB::table('table_child')
@@ -35,8 +35,8 @@ class EditBalitaTest extends DuskTestCase
         $this->browse(function (Browser $browser) use ($balitaId) {
             $browser->visit('/login')
                     ->assertSee('Login')
-                    ->type('email', 'rinipuspita@gmail.com')
-                    ->type('password', 'rinipuspita')
+                    ->type('email', 'orangtua@gmail.com')
+                    ->type('password', 'orangtua')
                     ->press('Login')
                     ->assertPathIs('/orangtua/dashboard')
                     ->assertSee('Dashboard')
@@ -44,9 +44,9 @@ class EditBalitaTest extends DuskTestCase
                     ->visit('/orangtua/profiles')
                     ->assertSee('Profil Anak')
                     ->pause(1000)
-                    ->click('@button-edit', 1)
+                    ->click('@button-edit', 17)
                     ->pause(1000)
-                    ->assertPathIs('/orangtua/profiles/1/edit')
+                    ->assertPathIs('/orangtua/profiles/17/edit')
                     ->assertSee('Edit Data Anak')
                     ->pause(500)
                     ->type('nama_anak', 'Adining Rini Puspita Sari')
@@ -64,10 +64,10 @@ class EditBalitaTest extends DuskTestCase
      */
     public function testExceptionCaseEditBalitaInvalidData(): void
     {
-        $user = User::where('email', 'rinipuspita@gmail.com')->first();
+        $user = User::where('email', 'orangtua@gmail.com')->first();
 
         if (!$user) {
-            $this->fail('User rinipuspita@gmail.com not found in the database.');
+            $this->fail('User orangtua@gmail.com not found in the database.');
         }
 
         $balita = DB::table('table_child')
@@ -84,19 +84,19 @@ class EditBalitaTest extends DuskTestCase
         $this->browse(function (Browser $browser) use ($balitaId) {
             $browser->visit('/login')
                     ->assertSee('Login')
-                    ->type('email', 'rinipuspita@gmail.com')
-                    ->type('password', 'rinipuspita')
+                    ->type('email', 'orangtua@gmail.com')
+                    ->type('password', "orangtua")
                     ->press('Login')
                     ->pause(500)
                     ->assertPathIs('/orangtua/dashboard')
                     ->assertSee('Dashboard')
-                    ->pause(1000) 
+                    ->pause(1000)
                     ->visit('/orangtua/profiles')
                     ->assertSee('Profil Anak')
                     ->pause(1000)
-                    ->click('@button-edit', 1)
+                    ->click('@button-edit', 17)
                     ->pause(1000)
-                    ->assertPathIs('/orangtua/profiles/1/edit')
+                    ->assertPathIs('/orangtua/profiles/17/edit')
                     ->assertSee('Edit Data Anak')
                     ->pause(500)
                     ->type('nama_anak', '')
@@ -104,7 +104,7 @@ class EditBalitaTest extends DuskTestCase
                     ->select('jenis_kelamin', '')
                     ->type('nik', '')
                     ->click('@button-simpan')
-                    ->assertPathIs('/orangtua/profiles/1/edit');
+                    ->assertPathIs('/orangtua/profiles/17/edit');
         });
     }
 }
