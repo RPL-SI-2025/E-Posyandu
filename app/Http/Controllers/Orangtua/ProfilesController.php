@@ -9,7 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
-use Carbon\Carbon; 
+use Carbon\Carbon;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Log;
 
 class ProfilesController extends Controller
 {
@@ -18,7 +20,7 @@ class ProfilesController extends Controller
         $user = Auth::user();
         $userId = Auth::id();
         $children = Child::where('user_id', auth()->id())->get();
-        
+
         return view('dashboard.orangtua.profiles.index', compact('children'));
     }
 
@@ -28,11 +30,11 @@ class ProfilesController extends Controller
         $child = Child::where('id', $id)
             ->where('user_id', $userId)
             ->firstOrFail();
-        
+
             $inspections = Inspection::where('table_child_id', $id)
             ->select(
-                'id', 
-                'tanggal_pemeriksaan', 
+                'id',
+                'tanggal_pemeriksaan',
                 DB::raw('CAST(berat_badan AS DECIMAL(5,2)) as berat_badan'),
                 DB::raw('CAST(tinggi_badan AS DECIMAL(5,2)) as tinggi_badan'),
                 // 'lingkar_kepala',
@@ -41,19 +43,19 @@ class ProfilesController extends Controller
             )
             ->orderBy('tanggal_pemeriksaan', 'desc')
             ->get();
-        
+
             // Format dates and ensure numeric values for charts
             foreach ($inspections as $inspection) {
                 $inspection->formatted_date = Carbon::parse($inspection->tanggal_pemeriksaan)->format('d-m-Y');
-                
+
                 // Ensure weight and height are numeric values
                 $inspection->berat_badan = (float)$inspection->berat_badan;
                 $inspection->tinggi_badan = (float)$inspection->tinggi_badan;
             }
-            
+
             // Debug information
             // dd($inspections->toArray());
-        
+
         return view('dashboard.orangtua.profiles.show', compact('child', 'inspections'));
     }
 
@@ -67,18 +69,27 @@ class ProfilesController extends Controller
     public function store(Request $request)
     {
         $userId = Auth::id();
-        $validated = $request->validate([
-            'nama_anak' => 'required|string|max:255',
-            'tanggal_lahir' => 'required|date|before_or_equal:today',
-            'jenis_kelamin' => 'required|in:laki-laki,perempuan',
-            'nik' => 'nullable|string|max:255|unique:table_child,nik',
-        ]);
 
-        $validated['user_id'] = $userId;
+        try {
+            $validated = $request->validate([
+                'nama_anak' => 'required|string|max:255',
+                'tanggal_lahir' => 'required|date|before_or_equal:today',
+                'jenis_kelamin' => 'required|in:laki-laki,perempuan',
+                'nik' => 'nullable|string|max:255|unique:table_child,nik',
+            ]);
 
-        $child = Child::create($validated);
+            $validated['user_id'] = $userId;
 
-        return redirect()->route('dashboard.orangtua.profiles.index')->with('success', 'Anak berhasil ditambahkan.');
+            $child = Child::create($validated);
+
+            return redirect()->route('dashboard.orangtua.profiles.index')->with('success', 'Anak berhasil ditambahkan.');
+
+        } catch (ValidationException $e) {
+            // Log validation errors
+            Log::error('Child creation validation failed:', $e->errors());
+            // Re-throw the exception or handle as needed, for now, let's re-throw to see the error in test output
+            throw $e;
+        }
     }
 
     // edit baliita
@@ -97,7 +108,7 @@ class ProfilesController extends Controller
         $child = Child::where('id', $id)
             ->where('user_id', $userId)
             ->firstOrFail();
-            
+
         $validated = $request->validate([
             'nama_anak' => 'required|string|max:255',
             'tanggal_lahir' => 'required|date|before_or_equal:today',
@@ -109,9 +120,9 @@ class ProfilesController extends Controller
                 Rule::unique('table_child', 'nik')->ignore($child->id),
             ],
         ]);
-        
+
         $child->update($validated);
-        
+
         return redirect()->route('dashboard.orangtua.profiles.index')
             ->with('success', 'Data anak berhasil diperbarui.');
     }
@@ -122,9 +133,9 @@ class ProfilesController extends Controller
         $child = Child::where('id', $id)
             ->where('user_id', $userId)
             ->firstOrFail();
-        
+
         $child->delete();
-        
+
         return redirect()->route('dashboard.orangtua.profiles.index')
             ->with('success', 'Data anak berhasil dihapus.');
     }
